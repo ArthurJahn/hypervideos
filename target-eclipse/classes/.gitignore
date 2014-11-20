@@ -1,0 +1,9 @@
+/asset/
+/dbdoc/
+/grails/
+/hibernate/
+/hibernate.cfg.xml
+/javascripts/
+/org/
+/spring/
+/uglifyjs/
