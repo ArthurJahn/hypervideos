@@ -1,0 +1,103 @@
+/* CSS declarations go here */
+@import url(http://fonts.googleapis.com/css?family=Muli);
+
+:root {
+  --dark-primary-color:       #455A64;
+  --default-primary-color:    #607D8B;
+  --light-primary-color:      #CFD8DC;
+  --text-primary-color:       #FFFFFF;
+  --accent-color:             #FF9800;
+  --primary-background-color: #CFD8DC;
+  --primary-text-color:       #212121;
+  --secondary-text-color:     #727272;
+  --disabled-text-color:      #BDBDBD;
+  --divider-color:            #B3B3B3;
+  --light-divider-color:      #DCDCDC;
+
+  /* Components */
+
+  /* paper-drawer-panel */
+  --drawer-menu-color:           #ffffff;
+  --drawer-border-color:         1px solid #ccc;
+  --drawer-toolbar-border-color: 1px solid rgba(0, 0, 0, 0.22);
+
+  /* paper-menu */
+  --paper-menu-background-color: #fff;
+  --menu-link-color:             #111111;
+
+  /* paper-input */
+ --paper-input-container-color:       rgba(255, 255, 255, 0.64);
+ --paper-input-container-focus-color: rgba(255, 255, 255, 1);
+ --paper-input-container-input-color: #fff;
+}
+
+body {
+  font-family: 'Muli', sans-serif;
+  margin: 0;
+}
+iron-icon {
+  margin: 5px 13px 5px 7px;
+}
+
+/*------------------------------- drawer panel -------------------------------*/
+#drawerPanel [main] {
+  background-color: #ffffff;/*var(--drawer-menu-color);*/
+}
+
+#drawerPanel [drawer] {
+  background-color: #ffffff;/*var(--drawer-menu-color);*/
+  border-right: 1px solid #B3B3B3;/*var(--divider-color);*/
+}
+
+#drawerPanel[right-drawer] [drawer] {
+  border-left: 1px solid #DCDCDC;/*var(--light-divider-color);*/
+}
+
+/*---------------------------------- main ------------------------------------*/
+#mainHeaderPanel paper-toolbar {
+  background-color: #455A64;/*var(--dark-primary-color);*/
+  height: 65px;
+}
+
+#mainHeaderPanel [main-content] {
+  background-color: #ffffff;/*var(--drawer-menu-color);*/
+  margin: 5px;
+}
+
+/*--------------------------------- drawer -----------------------------------*/
+#drawerHeaderPanel paper-toolbar {
+  background-color: #DCDCDC;/*var(--light-divider-color);*/
+  height: 65px;
+  font-size: 30px;
+  color: #727272;/*var(--secondary-text-color);*/
+  border-bottom: 1px solid #B3B3B3;/*var(--divider-color);*/
+}
+
+#drawerHeaderPanel [menu-content] paper-menu {
+  padding: 0;
+  background-color: #ffffff;/*var(--drawer-menu-color);*/
+}
+
+#drawerHeaderPanel [menu-content] paper-item {
+  border-bottom: 1px solid #DCDCDC;/*var(--light-divider-color);*/
+}
+
+#drawerHeaderPanel [menu-content] paper-item:active {
+  background-color: #DCDCDC;/*var(--light-divider-color);*/
+}
+
+#drawerHeaderPanel #highlighted {
+  background-color: #FF9800;/*var(--accent-color);*/
+  margin: 6px 12px;
+  min-height: 35px;
+  line-height: 30px;
+  border: 0;
+  border-radius: 5px;
+  color: #fff;/*var(--paper-input-container-input-color)*/
+}
+
+#drawerHeaderPanel #logo {
+  height: 35px;
+  width: 30px;
+  margin: 13px 5px 13px 13px;
+}

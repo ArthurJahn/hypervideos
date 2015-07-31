@@ -1,0 +1,39 @@
+<template name="mainMenu">
+  <paper-drawer-panel id="drawerPanel">
+    <!-- SIDEBAR MENU -->
+    <div drawer>
+      <paper-header-panel id="drawerHeaderPanel" mode="seamed">
+        <!-- LOGO -->
+        <paper-toolbar>
+          <iron-icon id="logo" src="img/logo2@2x.png"></iron-icon>
+          Hypervideos
+        </paper-toolbar>
+        <!-- MENU OPTIONS -->
+        <div menu-content>
+          <paper-menu selected="1">
+            <paper-item data-action-id="0">
+              <iron-icon icon="content-cut"></iron-icon>
+              Meus Cursos
+            </paper-item>
+            <paper-item data-action-id="1">
+              <iron-icon icon="content-cut"></iron-icon>
+              Perfil
+            </paper-item>
+            <paper-item data-action-id="2">
+              <iron-icon icon="content-cut"></iron-icon>
+              Explorar
+            </paper-item>
+            <paper-item id="highlighted" data-action-id="3" on-tap={{openPage}}>
+              <iron-icon icon="content-cut"></iron-icon>
+              Novo Curso
+            </paper-item>
+          </paper-menu>
+        </div>
+      </paper-header-panel>
+    </div>
+    <!-- MAIN CONTENT & TOPBAR -->
+    <div main>
+      {{>mainContent}}
+    </div>
+  </paper-drawer-panel>
+</template>
