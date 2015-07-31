@@ -6,7 +6,11 @@
   </paper-toolbar>
   <!-- MAIN CONTENT -->
   <div main-content>
-    {{> content}}
+    {{#if panel "Meus Cursos"}}
+        {{> subjectsPanel}}
+    {{else }}
+        {{> title}}
+    {{/if}}
   </div>
 </paper-header-panel>
 </template>
