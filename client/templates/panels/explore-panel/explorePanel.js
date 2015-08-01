@@ -1,13 +1,13 @@
-// counter starts at 0
-Session.setDefault('counter', 0);
-
-Template.subjectsPanel.helpers({
+Template.explorePanel.helpers({
   counter: function () {
     return Session.get('counter');
+  },
+  show: function () {
+    return Session.get('activePanel') === "2";
   }
 });
 
-Template.subjectsPanel.events({
+Template.explorePanel.events({
   'click button': function () {
     // increment the counter when button is clicked
     Session.set('counter', Session.get('counter') + 1);
