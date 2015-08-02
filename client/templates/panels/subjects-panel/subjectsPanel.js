@@ -7,6 +7,9 @@ Template.subjectsPanel.helpers({
   },
   show: function () {
     return Session.get('activePanel') === "0";
+  },
+  subjects: function () {
+    return Subjects.find();
   }
 });
 

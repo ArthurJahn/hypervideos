@@ -1,6 +1,11 @@
 <template name="subjectsPanel">
   {{#if show}}
-  <button>Click Subjects</button>
-  <p>You've pressed the button {{counter}} times.</p>
+    {{#each subjects}}
+      {{>subject}}
+    {{/each}}
   {{/if}}
+</template>
+<template name="subject">
+  <subject-box name="{{name}}">
+  </subject-box>
 </template>

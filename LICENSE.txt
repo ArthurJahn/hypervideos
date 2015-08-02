@@ -5,14 +5,10 @@ Gist
 Blog
 Help
 ARTHUR JAHN STURZBECHER ArthurJahn
- 
-10  Unwatch 
-  Star 0
- Fork 1VisualizeMobile/AKANiOS
- branch: master  AKANiOS / LICENSE.txt
+
 Matheus Souza Fonsecamatheus-fonseca on Aug 6 Adição da licença GPLv3 ao projeto
 1 contributor
-675 lines (553 sloc)  35.078 kb RawBlameHistory   
+675 lines (553 sloc)  35.078 kb RawBlameHistory
  GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 

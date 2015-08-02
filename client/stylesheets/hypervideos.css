@@ -6,7 +6,7 @@
   --default-primary-color:    #607D8B;
   --light-primary-color:      #CFD8DC;
   --text-primary-color:       #FFFFFF;
-  --accent-color:             #FF9800;
+  --accent-color:             #FFC107;
   --primary-background-color: #CFD8DC;
   --primary-text-color:       #212121;
   --secondary-text-color:     #727272;
@@ -87,7 +87,7 @@ iron-icon {
 }
 
 #drawerHeaderPanel #highlighted {
-  background-color: #FF9800;/*var(--accent-color);*/
+  background-color: #FFC107;/*var(--accent-color);*/
   margin: 6px 12px;
   min-height: 35px;
   line-height: 30px;

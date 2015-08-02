@@ -1,0 +1,42 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-header-panel/paper-header-panel.html">
+
+<dom-module id="subject-box">
+  <style>
+    #mainPanel {
+      float: left;
+      margin: 15px;
+      width: 150px;
+      height: 150px;
+    }
+    #mainPanel paper-toolbar {
+      font-size: 15px;
+      line-height: 10px;
+      height: 33px;
+      width:100%;
+      background-color: #CFD8DC;/*var(--light-primary-color)*/
+    }
+    #mainPanel #hypervideos {
+      height: 110px;
+    }
+  </style>
+  <template>
+    <paper-header-panel id="mainPanel">
+      <paper-toolbar>
+        <p>{{name}}</p>
+      </paper-toolbar>
+      <div id="hypervideos">
+        hypervideos
+      </div>
+    </paper-header-panel>
+  </template>
+  <script>
+  Polymer({
+    is: 'subject-box',
+    properties: {
+      name: { type: String,
+               value: "title" }
+    }
+  });
+  </script>
+</dom-module>
