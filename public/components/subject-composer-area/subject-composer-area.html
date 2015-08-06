@@ -1,0 +1,47 @@
+<dom-module id="subject-composer-area">
+  <style is="custom-style">
+  #touchable-area {
+    position: absolute;
+    top: 75px;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    background-color:rgba(220,220,220,0.3);/*var(--light-divider-color);*/
+  }
+  #hint-text {
+    width: 360px;
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    margin: -170px -180px;
+    padding: 170px 0;
+    border-radius: 50%;
+    background-color:rgba(220,220,220,0.2);/*var(--light-divider-color);*/
+    color: rgba(200,200,200,1);/*var(--light-divider-color);*/
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+  }
+  </style>
+  <template>
+    <div id="touchable-area">
+    </div>
+    <div id="hint-text">Clique para adicionar um hypervideo</div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'subject-composer-area',
+      listeners: {
+        'tap': 'regularTap',
+        'hint-text.tap': 'specialTap'
+      },
+      regularTap: function(e) {
+        alert("Thank you for tapping");
+      },
+      specialTap: function(e) {
+        alert("It was special tapping");
+      }
+    });
+  </script>
+</dom-module>

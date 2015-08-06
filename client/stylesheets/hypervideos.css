@@ -101,3 +101,10 @@ iron-icon {
   width: 30px;
   margin: 13px 5px 13px 13px;
 }
+
+.label-is-highlighted.paper-input-container label{
+  color: #FFC107  !important;/*var(--accent-color);*/
+}
+.focused-line.paper-input-container {
+     background-color: #FFC107  !important;/*var(--accent-color);*/
+}
