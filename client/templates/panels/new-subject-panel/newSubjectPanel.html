@@ -1,5 +1,9 @@
 <template name="newSubjectPanel">
   {{#if show}}
-    
+    {{>subjectName}}
   {{/if}}
+</template>
+<template name="subjectName">
+    <paper-input name="Nome" label="Nome do Curso">
+    </paper-input>
 </template>

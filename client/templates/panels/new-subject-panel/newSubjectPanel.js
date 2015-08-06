@@ -1,15 +1,14 @@
 Template.newSubjectPanel.helpers({
-  counter: function () {
-    return Session.get('counter');
+  saveSubject: function (subject) {
+    return subjects.insert(subject);
   },
   show: function () {
     return Session.get('activePanel') === "3";
+  },
+  createHypervideo: function (subject_id){
+
   }
 });
 
 Template.newSubjectPanel.events({
-  'click button': function () {
-    // increment the counter when button is clicked
-    Session.set('counter', Session.get('counter') + 1);
-  }
 });
