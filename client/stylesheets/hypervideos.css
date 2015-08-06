@@ -61,7 +61,7 @@ iron-icon {
 
 #mainHeaderPanel [main-content] {
   background-color: #ffffff;/*var(--drawer-menu-color);*/
-  margin: 5px;
+  margin: 10px;
 }
 
 /*--------------------------------- drawer -----------------------------------*/
