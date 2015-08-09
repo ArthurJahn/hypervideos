@@ -1,20 +1,34 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../components/hypervideo-node/hypervideo-node.html">
+
 <dom-module id="subject-composer-area">
   <style is="custom-style">
-  #touchable-area {
+  #backcanvas {
     position: absolute;
     top: 75px;
     bottom: 10px;
     left: 10px;
     right: 10px;
-    background-color:rgba(220,220,220,0.3);/*var(--light-divider-color);*/
+    background-color:rgba(220,220,220,0.2);/*var(--light-divider-color);*/
+    overflow: hidden;
+  }
+  #toucharea {
+    position: absolute;
+    top: 100px;
+    bottom: 35px;
+    left: 35px;
+    right: 35px;
+    background-color:rgba(220,220,220,0.1);/*var(--light-divider-color);*/
+    overflow: hidden;
   }
   #hint-text {
     width: 360px;
     position: absolute;
-    top: 55%;
+    top: 45%;
     left: 50%;
-    margin: -170px -180px;
-    padding: 170px 0;
+    margin: -160px -180px;
+    padding: 160px 0;
     border-radius: 50%;
     background-color:rgba(220,220,220,0.2);/*var(--light-divider-color);*/
     color: rgba(200,200,200,1);/*var(--light-divider-color);*/
@@ -24,23 +38,39 @@
   }
   </style>
   <template>
-    <div id="touchable-area">
+    <paper-input name="Nome" label="Nome do Curso">
+    </paper-input>
+    <div id="backcanvas">
     </div>
-    <div id="hint-text">Clique para adicionar um hypervideo</div>
+    <div id="toucharea"
+    on-tap="regularTap">
+      <template is="dom-if" if="{{firstTouch}}">
+        <div id="hint-text">Clique para adicionar um hypervideo</div>
+      </template>
+    </div>
+    <!-- this is where hypervideos will be displayed -->
   </template>
 
   <script>
     Polymer({
       is: 'subject-composer-area',
-      listeners: {
-        'tap': 'regularTap',
-        'hint-text.tap': 'specialTap'
-      },
       regularTap: function(e) {
-        alert("Thank you for tapping");
+        var rect = this.$.toucharea.getBoundingClientRect();
+        var bounds = {width: rect.right - rect.left,
+                      height: rect.bottom - rect.top,
+                      x: rect.left-35,
+                      x: rect.top-35}
+        var touchX = e.detail.x - bounds.left;
+        var touchY = e.detail.y - bounds.top;
+        console.log(rect);
+        var hypervideo = new HypervideoNode(touchX,touchY,bounds);
+        this.hypervideos.push(hypervideo);
+        this.appendChild(hypervideo);
+        this.firstTouch = !(this.hypervideos.length>0);
       },
-      specialTap: function(e) {
-        alert("It was special tapping");
+      ready: function() {
+        this.firstTouch = true;
+        this.hypervideos = new Array();
       }
     });
   </script>

@@ -1,0 +1,138 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="hypervideo-node">
+  <style is="custom-style">
+  #hypervideo {
+    position: absolute;
+    max-height: 50px;
+  }
+  #data {
+    position: absolute;
+    max-width: 46px;
+    max-height: 46px;
+    padding: 1px 17px;
+    line-height: 10px;
+    border-radius: 50%;
+    background-color:#DCDCDC;/*var(--light-divider-color);*/
+    color: #212121;/*var(--light-divider-color);*/
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  #link {
+    position: absolute;
+    left:33px;
+    top:33px;
+    max-width: 16px;
+    max-height: 16px;
+    padding: 2px 4px 4px 3px;
+    line-height: 10px;
+    border-radius: 50%;
+    background-color:#FFC107;/*var(--accent-color);*/
+    color: #FFF;/*var(--light-divider-color);*/
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  #delete {
+    position: absolute;
+    max-width: 16px;
+    max-height: 16px;
+    padding: 3px 6px;
+    line-height: 10px;
+    border-radius: 50%;
+    background-color:#D23216;/*var(--sec-accent-color);*/
+    color: #FFF;/*var(--light-divider-color);*/
+    text-align: center;
+    font-size: 10px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  </style>
+  <template>
+    <div id="hypervideo"
+    class="animated fadeIn"
+    on-mouseover="_onHover"
+    on-mouseout="_onHout">
+      <div id="data"
+      on-tap="_onDataTap"
+      on-track="_onDataTrack">
+        <p class="noselect">H</p>
+      </div>
+      <div id="link">
+        +
+      </div>
+      <div id="delete">
+        x
+      </div>
+    </div>
+  </template>
+  <script>
+    HypervideoNode = Polymer({
+      is: 'hypervideo-node',
+      _onDataTap: function(e) {
+        var rect = this.$.data.getBoundingClientRect();
+        console.log(rect);
+      },
+      _onDataTrack: function(e) {
+        switch (e.detail.state) {
+          case 'start':
+            this._dataTrackStart(e);
+            break;
+          case 'track':
+            this._dataTrackXY(e);
+            break;
+          case 'end':
+            this._dataTrackEnd();
+            break;
+        }
+      },
+      _dataTrackStart: function(e) {
+        this._w = this.$.data.offsetWidth;
+      },
+      _dataTrackXY: function(e) {
+        var ddx = e.detail.ddx || 0;
+        var ddy = e.detail.ddy || 0;
+        this._x+= ddx;
+        this._y+= ddy;
+
+        this._x = (this._x > this._bounds.width)?this._bounds.width : this._x;
+        this._x = (this._x < 20)?20 : this._x;
+        this._y = (this._y > this._bounds.height)?this._bounds.height : this._y;
+        this._y = (this._y < 20)?20 : this._y;
+
+        this.$.hypervideo.style.left = this._x+"px";
+        this.$.hypervideo.style.top = this._y+"px";
+      },
+      _dataTrackEnd: function() {
+        this.fire('hypervideo-changed');
+      },
+      _onHover: function() {
+        this.$.delete.style.display = "block";
+        this.$.link.style.display = "block";
+      },
+      _onHout: function() {
+        this.$.delete.style.display = "none";
+        this.$.link.style.display = "none";
+      },
+      factoryImpl: function(x, y, bounds) {
+        this._bounds = bounds;
+        this._x = x;
+        this._y = y;
+        /*event fired so that Meteor can handle the creation
+        * and persistence of a new instance of hypervideo*/
+        this.fire('hypervideo-created');
+      },
+      attached: function() {
+        Polymer.dom.flush();
+        this._w = this.$.data.clientWidth;
+        this._x -= this._w/2;
+        this._y -= this._w/2;
+        this.$.hypervideo.style.left = this._x+"px";
+        this.$.hypervideo.style.top = this._y+"px";
+      }
+    });
+  </script>
+</dom-module>

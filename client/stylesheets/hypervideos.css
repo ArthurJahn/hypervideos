@@ -7,6 +7,7 @@
   --light-primary-color:      #CFD8DC;
   --text-primary-color:       #FFFFFF;
   --accent-color:             #FFC107;
+  --sec-accent-color:         #D23216;
   --primary-background-color: #CFD8DC;
   --primary-text-color:       #212121;
   --secondary-text-color:     #727272;
@@ -34,6 +35,13 @@
 body {
   font-family: 'Muli', sans-serif;
   margin: 0;
+  /*FIX ME - find a better way to do this*/
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 iron-icon {
   margin: 5px 13px 5px 7px;
@@ -101,10 +109,17 @@ iron-icon {
   width: 30px;
   margin: 13px 5px 13px 13px;
 }
-
 .label-is-highlighted.paper-input-container label{
   color: #FFC107  !important;/*var(--accent-color);*/
 }
 .focused-line.paper-input-container {
      background-color: #FFC107  !important;/*var(--accent-color);*/
+}
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
