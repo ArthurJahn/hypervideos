@@ -59,9 +59,9 @@
         var bounds = {width: rect.right - rect.left,
                       height: rect.bottom - rect.top,
                       x: rect.left-35,
-                      x: rect.top-35}
-        var touchX = e.detail.x - bounds.left;
-        var touchY = e.detail.y - bounds.top;
+                      y: rect.top-100}
+        var touchX = e.detail.x - bounds.x;
+        var touchY = e.detail.y - bounds.y;
         console.log(rect);
         var hypervideo = new HypervideoNode(touchX,touchY,bounds);
         this.hypervideos.push(hypervideo);

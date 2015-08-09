@@ -100,8 +100,8 @@
 
         this._x = (this._x > this._bounds.width)?this._bounds.width : this._x;
         this._x = (this._x < 20)?20 : this._x;
-        this._y = (this._y > this._bounds.height)?this._bounds.height : this._y;
-        this._y = (this._y < 20)?20 : this._y;
+        this._y = (this._y > this._bounds.height+this._bounds.y)?this._bounds.height+this._bounds.y : this._y;
+        this._y = (this._y < this._bounds.y + 20)?this._bounds.y + 20 : this._y;
 
         this.$.hypervideo.style.left = this._x+"px";
         this.$.hypervideo.style.top = this._y+"px";
