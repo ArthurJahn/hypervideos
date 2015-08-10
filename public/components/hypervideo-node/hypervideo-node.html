@@ -5,48 +5,67 @@
   #hypervideo {
     position: absolute;
     max-height: 50px;
+    box-shadow: 2px #212121 3px 0.3;
   }
   #data {
     position: absolute;
-    max-width: 46px;
-    max-height: 46px;
-    padding: 1px 17px;
+    max-width: 50px;
+    max-height: 50px;
+    padding: 25px 23px;
     line-height: 10px;
     border-radius: 50%;
     background-color:#DCDCDC;/*var(--light-divider-color);*/
     color: #212121;/*var(--light-divider-color);*/
     text-align: center;
-    font-size: 18px;
+    font-size: 19px;
     font-weight: bold;
     cursor: pointer;
   }
   #link {
     position: absolute;
-    left:33px;
-    top:33px;
-    max-width: 16px;
+    left:3px;
+    top:-1px;
+    max-width: 96px;
     max-height: 16px;
-    padding: 2px 4px 4px 3px;
+    padding: 3px 4px 4px 4px;
     line-height: 10px;
     border-radius: 50%;
     background-color:#FFC107;/*var(--accent-color);*/
-    color: #FFF;/*var(--light-divider-color);*/
+    color: #FFC107;/*var(--accent-color);*/
     text-align: center;
     font-size: 12px;
     font-weight: bold;
     cursor: pointer;
   }
   #delete {
+    left:-7px;
+    top:14px;
     position: absolute;
-    max-width: 16px;
+    max-width: 96px;
     max-height: 16px;
-    padding: 3px 6px;
+    padding: 3px 5.5px 4px 5.5px;
     line-height: 10px;
     border-radius: 50%;
     background-color:#D23216;/*var(--sec-accent-color);*/
-    color: #FFF;/*var(--light-divider-color);*/
+    color: #D23216;/*var(--sec-accent-color);*/
     text-align: center;
-    font-size: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  #edit {
+    left:21px;
+    top:-6px;
+    position: absolute;
+    max-width: 96px;
+    max-height: 16px;
+    padding: 3px 5px 4px 5px;
+    line-height: 10px;
+    border-radius: 50%;
+    background-color: #12AE28;/*var(--trd-accent-color);*/
+    color: #12AE28;/*var(--trd-accent-color);*/
+    text-align: center;
+    font-size: 12px;
     font-weight: bold;
     cursor: pointer;
   }
@@ -59,23 +78,50 @@
       <div id="data"
       on-tap="_onDataTap"
       on-track="_onDataTrack">
-        <p class="noselect">H</p>
+        H
       </div>
-      <div id="link">
-        +
-      </div>
-      <div id="delete">
-        x
-      </div>
+      <div id="link"
+      class="animated fadeIn"
+      on-tap="_onLinkTap">+</div>
+      <div id="delete"
+      class="animated fadeIn"
+      on-tap="_onDeleteTap">x</div>
+      <div id="edit"
+      class="animated fadeIn"
+      on-tap="_onEditTap">e</div>
     </div>
   </template>
   <script>
     HypervideoNode = Polymer({
       is: 'hypervideo-node',
+      /* Polymer factory implementation */
+      factoryImpl: function(x, y, bounds) {
+        this._bounds = bounds;
+        this._x = x;
+        this._y = y;
+        this._del = false;
+        this._link = false;
+        /*event fired so that Meteor can handle the creation
+        * and persistence of a new instance of hypervideo*/
+        this.fire('hypervideo-created');
+      },
+      /* fired when element is attached to DOM
+      used to get element properties like bounds
+      and position relative to document */
+      attached: function() {
+        Polymer.dom.flush();
+        this._w = this.$.data.clientWidth;
+        this._x -= this._w/2;
+        this._y -= this._w/2;
+        this.$.hypervideo.style.left = this._x+"px";
+        this.$.hypervideo.style.top = this._y+"px";
+      },
+      /* handle taping */
       _onDataTap: function(e) {
         var rect = this.$.data.getBoundingClientRect();
         console.log(rect);
       },
+      /* handle tracking */
       _onDataTrack: function(e) {
         switch (e.detail.state) {
           case 'start':
@@ -91,6 +137,7 @@
       },
       _dataTrackStart: function(e) {
         this._w = this.$.data.offsetWidth;
+        this.$.data.style.cursor = "move";
       },
       _dataTrackXY: function(e) {
         var ddx = e.detail.ddx || 0;
@@ -108,30 +155,51 @@
       },
       _dataTrackEnd: function() {
         this.fire('hypervideo-changed');
+        this.$.data.style.cursor = "pointer";
       },
-      _onHover: function() {
+      /* handle hovering */
+      _onHover: function(e) {
         this.$.delete.style.display = "block";
         this.$.link.style.display = "block";
+        this.$.edit.style.display = "block";
+        if(e.target.id !== "data") {
+          e.target.style.color = "#FFF";
+        }
       },
-      _onHout: function() {
+      _onHout: function(e) {
         this.$.delete.style.display = "none";
         this.$.link.style.display = "none";
+        this.$.edit.style.display = "none";
+        if(e.target.id !== "data") {
+          e.target.style.color = e.target.style.backgroundColor;
+        }
+        this._resetButtons();
       },
-      factoryImpl: function(x, y, bounds) {
-        this._bounds = bounds;
-        this._x = x;
-        this._y = y;
-        /*event fired so that Meteor can handle the creation
-        * and persistence of a new instance of hypervideo*/
-        this.fire('hypervideo-created');
+      _onLinkTap: function(e) {
+        if(this._link) {
+          //Create logic to connect elements
+          //dispach parent event to create links
+          this._link = false;
+        }
+        else {
+          this._link = true;
+        }
       },
-      attached: function() {
-        Polymer.dom.flush();
-        this._w = this.$.data.clientWidth;
-        this._x -= this._w/2;
-        this._y -= this._w/2;
-        this.$.hypervideo.style.left = this._x+"px";
-        this.$.hypervideo.style.top = this._y+"px";
+      _onDeleteTap: function(e) {
+        if(this._del) {
+          //Create logic to delete element
+          this._del = false;
+        }
+        else {
+          this._del = true;
+        }
+      },
+      _onEditTap: function(e) {
+
+      },
+      _resetButtons: function() {
+        this._del = false;
+        this._link = false;
       }
     });
   </script>
