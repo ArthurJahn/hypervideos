@@ -9,3 +9,5 @@ autopublish
 insecure
 sanjo:jasmine
 meteorhacks:kadira
+iron:router
+accounts-password

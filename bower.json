@@ -16,6 +16,7 @@
   "dependencies": {
     "polymer": "Polymer/polymer#^1.0.0",
     "iron-elements": "polymerelements/iron-elements#~1.0.3",
-    "paper-elements": "polymerelements/paper-elements#~1.0.2"
+    "paper-elements": "polymerelements/paper-elements#~1.0.2",
+    "gold-elements": "PolymerElements/gold-elements#~1.0.1"
   }
 }

@@ -13,3 +13,12 @@ if (Meteor.isServer) {
   }
 });
 }
+Router.route('/register');
+Router.route('/login');
+Router.route('/', {
+  name: "mainMenu",
+  template: "mainMenu",
+  subjects: function() {
+    return Subjects.find();
+  }
+});
