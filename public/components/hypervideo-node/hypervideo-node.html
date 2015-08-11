@@ -5,7 +5,6 @@
   #hypervideo {
     position: absolute;
     max-height: 50px;
-    box-shadow: 2px #212121 3px 0.3;
   }
   #data {
     position: absolute;
@@ -20,6 +19,7 @@
     font-size: 19px;
     font-weight: bold;
     cursor: pointer;
+    z-index: 1;
   }
   #link {
     position: absolute;
@@ -36,11 +36,12 @@
     font-size: 12px;
     font-weight: bold;
     cursor: pointer;
+    z-index: 2;
   }
   #delete {
+    position: absolute;
     left:-7px;
     top:14px;
-    position: absolute;
     max-width: 96px;
     max-height: 16px;
     padding: 3px 5.5px 4px 5.5px;
@@ -52,11 +53,12 @@
     font-size: 12px;
     font-weight: bold;
     cursor: pointer;
+    z-index: 2;
   }
   #edit {
+    position: absolute;
     left:21px;
     top:-6px;
-    position: absolute;
     max-width: 96px;
     max-height: 16px;
     padding: 3px 5px 4px 5px;
@@ -68,6 +70,17 @@
     font-size: 12px;
     font-weight: bold;
     cursor: pointer;
+    z-index: 2;
+  }
+  #subvideos {
+    position: absolute;
+    left:25px;
+    top:25px;
+    width: 120px;
+    height: 70px;
+    background: #212121;
+    display: none;
+    z-index: 0;
   }
   </style>
   <template>
@@ -75,6 +88,8 @@
     class="animated fadeIn"
     on-mouseover="_onHover"
     on-mouseout="_onHout">
+      <div id="subvideos">
+      </div>
       <div id="data"
       on-tap="_onDataTap"
       on-track="_onDataTrack">
@@ -118,8 +133,12 @@
       },
       /* handle taping */
       _onDataTap: function(e) {
-        var rect = this.$.data.getBoundingClientRect();
-        console.log(rect);
+        if(this.$.subvideos.style.display !== "block") {
+          this.$.subvideos.style.display = "block";
+        }
+        else {
+          this.$.subvideos.style.display = "none";
+        }
       },
       /* handle tracking */
       _onDataTrack: function(e) {
@@ -154,7 +173,7 @@
         this.$.hypervideo.style.top = this._y+"px";
       },
       _dataTrackEnd: function() {
-        this.fire('hypervideo-changed');
+        this.fire('hypervideo-repositioned');
         this.$.data.style.cursor = "pointer";
       },
       /* handle hovering */
@@ -173,7 +192,6 @@
         if(e.target.id !== "data") {
           e.target.style.color = e.target.style.backgroundColor;
         }
-        this._resetButtons();
       },
       _onLinkTap: function(e) {
         if(this._link) {
@@ -193,14 +211,11 @@
         else {
           this._del = true;
         }
+        this.fire('hypervideo-deleted');
       },
       _onEditTap: function(e) {
-
+        this.fire('hypervideo-changed');
       },
-      _resetButtons: function() {
-        this._del = false;
-        this._link = false;
-      }
     });
   </script>
 </dom-module>
