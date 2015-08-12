@@ -66,10 +66,9 @@
                       y: rect.top-100}
         var touchX = e.detail.x - bounds.x;
         var touchY = e.detail.y - bounds.y;
-        console.log(rect);
         var hypervideo = new HypervideoNode(touchX,touchY,bounds);
-        this.hypervideos.push(hypervideo);
         this.appendChild(hypervideo);
+        this.hypervideos.push(hypervideo);
         this.firstTouch = !(this.hypervideos.length>0);
       },
       ready: function() {

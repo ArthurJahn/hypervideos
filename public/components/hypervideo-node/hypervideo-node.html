@@ -116,9 +116,7 @@
         this._y = y;
         this._del = false;
         this._link = false;
-        /*event fired so that Meteor can handle the creation
-        * and persistence of a new instance of hypervideo*/
-        this.fire('hypervideo-created');
+        this._hypervideo = null;
       },
       /* fired when element is attached to DOM
       used to get element properties like bounds
@@ -130,6 +128,10 @@
         this._y -= this._w/2;
         this.$.hypervideo.style.left = this._x+"px";
         this.$.hypervideo.style.top = this._y+"px";
+        /*event fired so that Meteor can handle the creation
+        * and persistence of a new instance of hypervideo*/
+        this.fire('hypervideo-created');
+        console.log(this._hypervideo);
       },
       /* handle taping */
       _onDataTap: function(e) {

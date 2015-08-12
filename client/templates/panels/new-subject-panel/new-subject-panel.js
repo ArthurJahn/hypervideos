@@ -11,4 +11,9 @@ Template.newSubjectPanel.helpers({
 });
 
 Template.newSubjectPanel.events({
+  'hypervideo-created hypervideo-node': function(e, template) {
+    var hypervideo = new Hypervideo();
+    console.log(e.target);
+    e.target._hypervideo = new Hypervideo();
+  }
 });
