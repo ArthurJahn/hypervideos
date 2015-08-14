@@ -41,13 +41,16 @@
   }
   </style>
   <template>
-    <paper-input name="Nome" label="Nome do Curso">
+    <paper-input id="subjectName"
+    name="name"
+    label="Nome do Curso"
+    on-change="_updateSubject">
     </paper-input>
     <div id="backcanvas">
       <canvas></canvas>
     </div>
     <div id="toucharea"
-    on-tap="regularTap">
+    on-tap="composerTap">
       <template is="dom-if" if="{{firstTouch}}">
         <div id="hint-text">Clique para adicionar um hypervideo</div>
       </template>
@@ -58,7 +61,16 @@
   <script>
     Polymer({
       is: 'subject-composer-area',
-      regularTap: function(e) {
+      composerTap: function(e) {
+        this._updateSubject(e);
+        this._createHypervideo(e);
+        this.firstTouch = !(this._subject.hypervideos.length>0);
+      },
+      ready: function() {
+        this.firstTouch = true;
+        this._subject = null;
+      },
+      _createHypervideo: function(e) {
         var rect = this.$.toucharea.getBoundingClientRect();
         var bounds = {width: rect.right - rect.left,
                       height: rect.bottom - rect.top,
@@ -66,14 +78,23 @@
                       y: rect.top-100}
         var touchX = e.detail.x - bounds.x;
         var touchY = e.detail.y - bounds.y;
-        var hypervideo = new HypervideoNode(touchX,touchY,bounds);
-        this.appendChild(hypervideo);
-        this.hypervideos.push(hypervideo);
-        this.firstTouch = !(this.hypervideos.length>0);
+        var subjectId = this._subject._id;
+        var hypervideoNode = new HypervideoNode(touchX,touchY,bounds,subjectId);
+        this.appendChild(hypervideoNode);
+        this._subject.hypervideos.push(hypervideoNode._hypervideo._id);
       },
-      ready: function() {
-        this.firstTouch = true;
-        this.hypervideos = new Array();
+      _updateSubject: function(e) {
+        if(this._subject === null) {
+          this.fire('subject-created');
+        }
+        if(this._subject && this.$.subjectName.value === "") {
+          this.$.subjectName.value = this._subject.name;
+          this.$.subjectName.focus();
+        } else if (this.$.subjectName.value !== this._subject.name) {
+          this._subject.name = this.$.subjectName.value;
+          this.fire('subject-changed');
+        }
+        console.log(this._subject);
       }
     });
   </script>

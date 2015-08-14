@@ -110,13 +110,14 @@
     HypervideoNode = Polymer({
       is: 'hypervideo-node',
       /* Polymer factory implementation */
-      factoryImpl: function(x, y, bounds) {
+      factoryImpl: function(x, y, bounds, subjectId) {
         this._bounds = bounds;
         this._x = x;
         this._y = y;
         this._del = false;
         this._link = false;
         this._hypervideo = null;
+        this._subjectId = subjectId;
       },
       /* fired when element is attached to DOM
       used to get element properties like bounds
@@ -157,7 +158,6 @@
         }
       },
       _dataTrackStart: function(e) {
-        this._w = this.$.data.offsetWidth;
         this.$.data.style.cursor = "move";
       },
       _dataTrackXY: function(e) {
@@ -175,8 +175,12 @@
         this.$.hypervideo.style.top = this._y+"px";
       },
       _dataTrackEnd: function() {
-        this.fire('hypervideo-repositioned');
+        this._hypervideo.x = this._x;
+        this._hypervideo.y = this._y;
+
         this.$.data.style.cursor = "pointer";
+
+        this.fire('hypervideo-changed');
       },
       /* handle hovering */
       _onHover: function(e) {
@@ -216,7 +220,7 @@
         this.fire('hypervideo-deleted');
       },
       _onEditTap: function(e) {
-        this.fire('hypervideo-changed');
+        //open subvideos editing tab
       },
     });
   </script>

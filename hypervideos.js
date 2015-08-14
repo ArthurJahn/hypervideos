@@ -1,17 +1,11 @@
 if (Meteor.isServer) {
   Meteor.startup(function () {
+    // FIX ME - only for tests
     // code to run on server at startup
-    if (Subjects.find().count() === 0) {
-      var data = [
-      {name: "Meteor Principles"},
-      {name: "Meteor 2"}
-    ];
-    _.each(data, function(subject) {
-      console.log("inserting...");
-      var subject_id = Subjects.insert({name: subject.name});
-    });
-  }
-});
+    if (Subjects.find().count() !== 0) {
+      Subjects.remove({});
+    }
+  });
 }
 Router.route('/register');
 Router.route('/login');

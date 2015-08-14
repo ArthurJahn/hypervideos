@@ -3,6 +3,11 @@ Session.setDefault('title', 'Novo Curso');
 //Used in panel logic
 Session.setDefault('activePanel', '3');
 
+Template.mainMenu.helpers({
+  activePanel: function() {
+    return Session.get('activePanel');
+  }
+});
 
 Template.mainMenu.events({
   'click #subjects': function () {
