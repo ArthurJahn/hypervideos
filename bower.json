@@ -18,6 +18,7 @@
     "iron-elements": "polymerelements/iron-elements#~1.0.3",
     "paper-elements": "polymerelements/paper-elements#~1.0.2",
     "gold-elements": "PolymerElements/gold-elements#~1.0.1",
-    "neon-animation": "PolymerElements/neon-animation#~1.0.6"
+    "neon-animation": "PolymerElements/neon-animation#~1.0.6",
+    "fu-area": "pkaske/fu-area#master"
   }
 }
