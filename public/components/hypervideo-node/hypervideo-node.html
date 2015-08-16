@@ -88,19 +88,20 @@
     class="animated fadeIn"
     on-mouseover="_onHover"
     on-mouseout="_onHout">
-      <div id="subvideos">
-      </div>
+      <div id="subvideos"></div>
+
       <div id="data"
       on-tap="_onDataTap"
-      on-track="_onDataTrack">
-        H
-      </div>
+      on-track="_onDataTrack">H</div>
+
       <div id="link"
       class="animated fadeIn"
       on-tap="_onLinkTap">+</div>
+
       <div id="delete"
       class="animated fadeIn"
       on-tap="_onDeleteTap">x</div>
+
       <div id="edit"
       class="animated fadeIn"
       on-tap="_onEditTap">e</div>
@@ -109,7 +110,7 @@
   <script>
     HypervideoNode = Polymer({
       is: 'hypervideo-node',
-      /* Polymer factory implementation */
+      // Polymer factory implementation
       factoryImpl: function(options) {
         this._bounds = options.bounds;
         this._x = options.x;
@@ -117,11 +118,11 @@
         this._del = false;
         this._hypervideo = null;
         this._subjectId = options.subjectId;
-        this.linking = options.linking;
+        this.connectId = options.connectId;
       },
-      /* fired when element is attached to DOM
-      used to get element properties like bounds
-      and position relative to document */
+      // fired when element is attached to DOM
+      // used to get element properties like bounds
+      // and position relative to document
       attached: function() {
         Polymer.dom.flush();
         this._w = this.$.data.clientWidth;
@@ -129,28 +130,28 @@
         this._y -= this._w/2;
         this.$.hypervideo.style.left = this._x+"px";
         this.$.hypervideo.style.top = this._y+"px";
-        /*event fired so that Meteor can handle the creation
-        * and persistence of a new instance of hypervideo*/
+        // event fired so that Meteor can handle the creation
+        // and persistence of a new instance of hypervideo
         this.fire('hypervideo-created');
         this.id = this._hypervideo._id;
-        console.log(this._hypervideo);
+        console.log(this.id);
       },
       properties: {
-        linking: {
+        connectId: {
           type: String,
           notify: true,
-          observer: "handleLinking"
+          observer: "handleConnectId"
         }
       },
-      /* handle taping */
+      // handle taping
       _onDataTap: function(e) {
-        if(this.linking) {
-
+        if(this.connectId) {
+          this._onLinkTap(e);
         } else {
           this._showPreview();
         }
       },
-      /* handle tracking */
+      // handle tracking
       _onDataTrack: function(e) {
         switch (e.detail.state) {
           case 'start':
@@ -188,7 +189,7 @@
 
         this.fire('hypervideo-changed');
       },
-      /* handle hovering */
+      // handle hovering
       _onHover: function(e) {
         this.$.delete.style.display = "block";
         this.$.link.style.display = "block";
@@ -205,17 +206,19 @@
           e.target.style.color = e.target.style.backgroundColor;
         }
       },
+      // Toggle connectId mode
       _onLinkTap: function(e) {
-        if(this.linking && this.linking === this.id){
-            this.linking = null;
+        if(this.connectId && this.connectId === this.id){
+            this.connectId = null;
         } else {
-          this.linking = this.id
+          this.connectId = this.id
         }
-        this.handleLinking();
+        this.handleConnectId();
       },
+      // Delete Node
       _onDeleteTap: function(e) {
         if(this._del) {
-          //Create logic to delete element
+          // Create logic to delete element
           this._del = false;
         }
         else {
@@ -223,11 +226,13 @@
         }
         this.fire('hypervideo-deleted');
       },
+
       _onEditTap: function(e) {
-        //open subvideos editing tab
+        this.parentNode.toggle();
+
       },
-      handleLinking: function() {
-        if(this.linking) {
+      handleConnectId: function() {
+        if(this.connectId) {
           this.$.data.style.background = "#FFC107";
         }
         else {
@@ -241,6 +246,12 @@
         else {
           this.$.subvideos.style.display = "none";
         }
+      },
+      getPos(){
+        return {
+          x: this._x,
+          y: this._y,
+        };
       }
     });
   </script>

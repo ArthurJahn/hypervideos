@@ -1,6 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../components/hypervideo-node/hypervideo-node.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
 
 <dom-module id="subject-composer-area">
   <style is="custom-style">
@@ -39,15 +41,20 @@
     font-size: 22px;
     font-weight: bold;
   }
+  #overlay {
+    width: 500px;
+    height: 500px;
+  }
   </style>
   <template>
+    <paper-dialog id="overlay" layered backdrop transition="core-transition-center"><h1>subvideos virão aqui.</h1></paper-dialog>
     <paper-input id="subjectName"
     name="name"
     label="Nome do Curso"
     on-change="_updateSubject">
     </paper-input>
     <div id="backcanvas">
-      <canvas></canvas>
+      <canvas id="canvas"></canvas>
     </div>
     <div id="toucharea"
     on-tap="composerTap">
@@ -72,18 +79,18 @@
         this.hypervideos = new Array();
       },
       properties: {
-        linking: {
+        connectId: {
           type: String,
           value: null,
           notify: true,
-          observer: "linkingChanged"
+          observer: "connectIdChanged"
         }
       },
-      linkingChanged: function (newLinking) {
+      connectIdChanged: function (newConnectId) {
         var length = (this.hypervideos) ? this.hypervideos.length : 0;
         for(var i=0; i<length; i++) {
           var hypervideo = this.hypervideos[i];
-          hypervideo.linking = newLinking;
+          hypervideo.connectId = newConnectId;
         }
       },
       _createHypervideo: function(e) {
@@ -92,11 +99,12 @@
         var yOffset = 100;//depends on initial definition in toucharea css
         // defines bounds and offset of dragging limits for a hypervideoNode
         var rect = self.$.toucharea.getBoundingClientRect();
-        var bounds = {width: rect.right - rect.left,
-                      height: rect.bottom - rect.top,
-                      x: rect.left-xOffset,
-                      y: rect.top-yOffset}
-        console.log("a: " + xOffset);
+        var bounds = {
+          width: rect.right - rect.left,
+          height: rect.bottom - rect.top,
+          x: rect.left-xOffset,
+          y: rect.top-yOffset
+        }
         var touchX = e.detail.x - bounds.x;
         var touchY = e.detail.y - bounds.y;
         var subjectId = self._subject._id;
@@ -105,24 +113,15 @@
           y : touchY,
           bounds: bounds,
           subjectId: subjectId,
-          linking: this.linking 
+          connectId: this.connectId
         }
         var hypervideoNode = new HypervideoNode(options);
 
-        hypervideoNode.addEventListener("linking-changed", function(ev){
-          // inside event listener methods, the target object
-          // is the reference for 'this'
-          var hnInstance = this;
-          self.linking = hnInstance.linking;
-          if(self.linking) {
-            if(!self._firstId) {
-              self._firstId = self.linking;
-            } else {
-              self._createLink(self._firstId, self.linking);
-            }
-          } else {
-            self._firstId = self.linking;
-          }
+        hypervideoNode.addEventListener("connect-id-changed", function(ev){
+          self._connectListener(this);
+        });
+        hypervideoNode.addEventListener("deleting-changed", function(ev){
+          self._deletingListener(this);
         });
         self.appendChild(hypervideoNode);
         //FIX-ME : Verify use of querySelectorAll and remove this array
@@ -142,17 +141,75 @@
           }
         }
       },
-      _createLink: function(firstId, secondId) {
+      _connect: function(firstId, secondId) {
         var canCreate = true;
         if(firstId !== secondId) {
           var connection = {first: firstId, second: secondId};
           if(this._subject.addConnection(connection)){
-            this.linking = null;
+            this.connectId = null;
             this._firstId= null;
           }
         }
-        console.log(this._subject);
+        this._drawConnections();
       },
+      _drawConnections: function() {
+        var self = this;
+        var canvasScale = 3;
+        var lineWidth = 3;
+        var connections = self._subject.connections;
+        var canvas = self.$.canvas;
+        canvas.width  = canvasScale * canvas.offsetWidth;
+        canvas.height = canvasScale * canvas.offsetHeight;
+
+        var ctx = canvas.getContext("2d");
+        ctx.beginPath();
+        for(var i=0; i< connections.length; i++) {
+          var conn = connections[i];
+          //FIX ME find a better way to do it...
+          var firstPos = self._findHypervideoNode(conn.first).getPos();
+          var secondPos = self._findHypervideoNode(conn.second).getPos();
+          var canvasXOffset = -25;
+          var canvasYOffset = 50;
+          var x1 = canvasScale * (firstPos.x - canvasXOffset);
+          var y1 = canvasScale * (firstPos.y - canvasYOffset);
+          var x2 = canvasScale * (secondPos.x - canvasXOffset);
+          var y2 = canvasScale * (secondPos.y - canvasYOffset);
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+        }
+        ctx.lineWidth = lineWidth;
+        ctx.stroke();
+      },
+      //hypervideo listener functions
+      _connectListener: function(hnInstance) {
+        var self = this;
+        self.connectId = hnInstance.connectId;
+        if(self.connectId) {
+          if(!self._firstId) {
+            self._firstId = self.connectId;
+          } else {
+            self._connect(self._firstId, self.connectId);
+          }
+        } else {
+          self._firstId = self.connectId;
+        }
+      },
+      _deletingListener: function(hnInstance) {
+        var self = this;
+        self.deleting = hnInstance.deleting;
+
+      },
+      _findHypervideoNode: function(id) {
+        var self = this;
+        for(var i=0; i<self.hypervideos.length; i++) {
+          if (self.hypervideos[i].id === id) {
+              return self.hypervideos[i];
+          }
+        }
+      },
+      toggle: function() {
+        this.$.overlay.open();
+		  }
     });
   </script>
 </dom-module>
