@@ -35,7 +35,6 @@ Template.newSubjectPanel.events({
   },
   'subject-changed subject-composer-area': function(e, template) {
     var subject = e.target.subject;
-    console.log("salvou!");
     subject.save();
   }
 });

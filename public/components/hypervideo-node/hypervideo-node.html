@@ -133,7 +133,8 @@
         // event fired so that Meteor can handle the creation
         // and persistence of a new instance of hypervideo
         this.fire('hypervideo-created');
-        this.id = this._hypervideo._id;
+        this.id = "_"+this._hypervideo._id;
+        this.hypervideoId = this._hypervideo._id;
         console.log(this.id);
       },
       properties: {
@@ -212,10 +213,14 @@
       },
       // Toggle connectId mode
       _onLinkTap: function(e) {
-        if(this.connectId && this.connectId === this.id){
+        if(this.connectId && this.connectId === this.hypervideoId){
+            console.log(this.connectId);
+            console.log(this.hypervideoId);
             this.connectId = null;
         } else {
-          this.connectId = this.id
+          console.log(this.hypervideoId);
+          console.log(this.connectId);
+          this.connectId = this.hypervideoId;
         }
         this.handleConnectId();
       },
@@ -252,7 +257,7 @@
           x: this._x,
           y: this._y,
         };
-      },
+      }
     });
   </script>
 </dom-module>

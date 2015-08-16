@@ -42,12 +42,12 @@
     font-weight: bold;
   }
   #overlay {
-    width: 500px;
+    width: 80%;
     height: 500px;
   }
   </style>
   <template>
-    <paper-dialog id="overlay" layered backdrop transition="core-transition-center"><h1>subvideos virão aqui.</h1></paper-dialog>
+    <paper-dialog id="overlay" entry-animation="scale-up-animation" exit-animation="scale-down-animation" with-backdrop><h1>subvideos virão aqui.</h1></paper-dialog>
     <paper-input id="subjectName"
     name="name"
     label="Nome do Curso"
@@ -129,7 +129,7 @@
           self._deletingListener(this);
         });
         self.appendChild(hypervideoNode);
-        self.subject.addHypervideo(hypervideoNode.id);
+        self.subject.addHypervideo(hypervideoNode.hypervideoId);
       },
       _updateSubject: function(e) {
         if(this.subject === null) {
@@ -188,6 +188,7 @@
       _connectListener: function(hnInstance) {
         var self = this;
         self.connectId = hnInstance.connectId;
+
         if(self.connectId) {
           if(!self._firstId) {
             self._firstId = self.connectId;
@@ -201,14 +202,14 @@
       _deletingListener: function(hnInstance) {
         var self = this;
         self.deleting = hnInstance.deleting;
-        self.subject.removeHypervideo(hnInstance.id);
+        self.subject.removeHypervideo(hnInstance.hypervideoId);
         self.removeChild(hnInstance);
         self._resetConnecting();
         console.log(self.subject);
       },
       _findHypervideoNode: function(id) {
         var self = this;
-        return self.querySelector('#'+id);
+        return self.querySelector('#_'+id);
       },
       toggle: function() {
         this.$.overlay.open();
