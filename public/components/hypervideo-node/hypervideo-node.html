@@ -110,14 +110,14 @@
     HypervideoNode = Polymer({
       is: 'hypervideo-node',
       /* Polymer factory implementation */
-      factoryImpl: function(x, y, bounds, subjectId) {
-        this._bounds = bounds;
-        this._x = x;
-        this._y = y;
+      factoryImpl: function(options) {
+        this._bounds = options.bounds;
+        this._x = options.x;
+        this._y = options.y;
         this._del = false;
-        this._link = false;
         this._hypervideo = null;
-        this._subjectId = subjectId;
+        this._subjectId = options.subjectId;
+        this.linking = options.linking;
       },
       /* fired when element is attached to DOM
       used to get element properties like bounds
@@ -132,15 +132,22 @@
         /*event fired so that Meteor can handle the creation
         * and persistence of a new instance of hypervideo*/
         this.fire('hypervideo-created');
+        this.id = this._hypervideo._id;
         console.log(this._hypervideo);
+      },
+      properties: {
+        linking: {
+          type: String,
+          notify: true,
+          observer: "handleLinking"
+        }
       },
       /* handle taping */
       _onDataTap: function(e) {
-        if(this.$.subvideos.style.display !== "block") {
-          this.$.subvideos.style.display = "block";
-        }
-        else {
-          this.$.subvideos.style.display = "none";
+        if(this.linking) {
+
+        } else {
+          this._showPreview();
         }
       },
       /* handle tracking */
@@ -177,7 +184,6 @@
       _dataTrackEnd: function() {
         this._hypervideo.x = this._x;
         this._hypervideo.y = this._y;
-
         this.$.data.style.cursor = "pointer";
 
         this.fire('hypervideo-changed');
@@ -200,14 +206,12 @@
         }
       },
       _onLinkTap: function(e) {
-        if(this._link) {
-          //Create logic to connect elements
-          //dispach parent event to create links
-          this._link = false;
+        if(this.linking && this.linking === this.id){
+            this.linking = null;
+        } else {
+          this.linking = this.id
         }
-        else {
-          this._link = true;
-        }
+        this.handleLinking();
       },
       _onDeleteTap: function(e) {
         if(this._del) {
@@ -222,6 +226,22 @@
       _onEditTap: function(e) {
         //open subvideos editing tab
       },
+      handleLinking: function() {
+        if(this.linking) {
+          this.$.data.style.background = "#FFC107";
+        }
+        else {
+          this.$.data.style.background = "#DCDCDC";
+        }
+      },
+      _showPreview: function() {
+        if(this.$.subvideos.style.display !== "block") {
+          this.$.subvideos.style.display = "block";
+        }
+        else {
+          this.$.subvideos.style.display = "none";
+        }
+      }
     });
   </script>
 </dom-module>

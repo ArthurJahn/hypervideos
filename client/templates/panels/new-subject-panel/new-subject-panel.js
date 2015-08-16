@@ -28,6 +28,7 @@ Template.newSubjectPanel.events({
     var subject = new Subject();
     subject.name = Subjects.defaultName;
     subject.hypervideos = [];
+    subject.connections = [];
     subject.setEditing();
     subject.save();
     e.target._subject = subject;
