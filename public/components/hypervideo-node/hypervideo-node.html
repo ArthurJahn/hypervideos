@@ -141,6 +141,10 @@
           type: String,
           notify: true,
           observer: "handleConnectId"
+        },
+        deleting: {
+          type: Boolean,
+          notify: true,
         }
       },
       // handle taping
@@ -217,14 +221,10 @@
       },
       // Delete Node
       _onDeleteTap: function(e) {
-        if(this._del) {
-          // Create logic to delete element
-          this._del = false;
+        if(!this.deleting) {
+          this.fire('hypervideo-deleted');
+          this.deleting = true;
         }
-        else {
-          this._del = true;
-        }
-        this.fire('hypervideo-deleted');
       },
 
       _onEditTap: function(e) {
@@ -252,7 +252,7 @@
           x: this._x,
           y: this._y,
         };
-      }
+      },
     });
   </script>
 </dom-module>

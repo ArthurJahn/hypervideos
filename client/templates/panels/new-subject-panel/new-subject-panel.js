@@ -31,10 +31,11 @@ Template.newSubjectPanel.events({
     subject.connections = [];
     subject.setEditing();
     subject.save();
-    e.target._subject = subject;
+    e.target.subject = subject;
   },
   'subject-changed subject-composer-area': function(e, template) {
-    var subject = e.target._subject;
+    var subject = e.target.subject;
+    console.log("salvou!");
     subject.save();
   }
 });

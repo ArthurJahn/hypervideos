@@ -4,6 +4,7 @@ if (Meteor.isServer) {
     // code to run on server at startup
     if (Subjects.find().count() !== 0) {
       Subjects.remove({});
+      Hypervideos.remove({});
     }
   });
 }
