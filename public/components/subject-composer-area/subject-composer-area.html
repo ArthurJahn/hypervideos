@@ -16,7 +16,7 @@
   #backcanvas canvas{
     width: 100%;
     height: 100%;
-    background-color:rgba(220,220,220,0.2);/*var(--light-divider-color);*/
+    background-color:rgba(246,246,246,1);/*var(--light-divider-color);*/
   }
   #toucharea {
     position: absolute;
@@ -42,29 +42,33 @@
     font-weight: bold;
   }
   #overlay {
-    width: 80%;
-    height: 500px;
+    width: 100%;
+    height: 550px;
   }
   </style>
   <template>
-    <paper-dialog id="overlay" entry-animation="scale-up-animation" exit-animation="scale-down-animation" with-backdrop><h1>subvideos virão aqui.</h1></paper-dialog>
+    <paper-dialog id="overlay"
+      entry-animation="scale-up-animation"
+      exit-animation="scale-down-animation"
+      with-backdrop>
+      <h1>subvideos virão aqui.</h1>
+    </paper-dialog>
     <paper-input id="subjectName"
-    name="name"
-    label="Nome do Curso"
-    on-change="_updateSubject">
+      name="name"
+      label="Nome do Curso"
+      on-change="_updateSubject">
     </paper-input>
     <div id="backcanvas">
       <canvas id="canvas"></canvas>
     </div>
     <div id="toucharea"
-    on-tap="composerTap">
+      on-tap="composerTap">
       <template is="dom-if" if="{{firstTouch}}">
         <div id="hint-text">Clique para adicionar um hypervideo</div>
       </template>
     </div>
     <!-- this is where hypervideos will be displayed -->
   </template>
-
   <script>
     Polymer({
       is: 'subject-composer-area',
@@ -76,14 +80,31 @@
       ready: function() {
         this.firstTouch = true;
         this.subject = null;
-        this.hypervideos = new Array();
       },
       properties: {
+        // when connecting hypervideos this
+        // variable catches the ids for connecting
         connectId: {
           type: String,
           value: null,
           notify: true,
           observer: "connectIdChanged"
+        },
+        // if any hypervideo is being dragged
+        // this variable handles the redraw of connections
+        dragging: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          observer: "draggingChanged"
+        },
+        // if any hypervideo is being deleted
+        // this variable handles the confirmation request
+        deleting: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          observer: "deletingChanged"
         },
         subject: {
           type: Object,
@@ -96,6 +117,22 @@
         for(var i=0; i<length; i++) {
           var hypervideo = list[i];
           hypervideo.connectId = newConnectId;
+        }
+      },
+      draggingChanged: function (newDragging) {
+        var self = this;
+        if(self.dragging) {
+          self._drawInterval = setInterval(function() {
+            self._drawConnections();
+          }, 40);
+        } else {
+          clearInterval(self._drawInterval);
+        }
+      },
+      deletingChanged: function (newDeleting) {
+        var self = this;
+        if(self.deleting) {
+          self._drawConnections();
         }
       },
       _createHypervideo: function(e) {
@@ -127,6 +164,9 @@
         });
         hypervideoNode.addEventListener('deleting-changed', function(ev){
           self._deletingListener(this);
+        });
+        hypervideoNode.addEventListener('dragging-changed', function(ev){
+          self._draggingListener(this);
         });
         self.appendChild(hypervideoNode);
         self.subject.addHypervideo(hypervideoNode.hypervideoId);
@@ -202,10 +242,15 @@
       _deletingListener: function(hnInstance) {
         var self = this;
         self.deleting = hnInstance.deleting;
+        console.log(self.deleting);
         self.subject.removeHypervideo(hnInstance.hypervideoId);
         self.removeChild(hnInstance);
         self._resetConnecting();
-        console.log(self.subject);
+        self._drawConnections();
+      },
+      _draggingListener: function(hnInstance) {
+        var self = this;
+        self.dragging = hnInstance.dragging;
       },
       _findHypervideoNode: function(id) {
         var self = this;

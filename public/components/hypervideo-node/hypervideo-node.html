@@ -1,12 +1,15 @@
+//Polymer web component capable of creating and editing the content of an
+// hypervideo.
+
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <dom-module id="hypervideo-node">
   <style is="custom-style">
-  #hypervideo {
+  #wrapper {
     position: absolute;
     max-height: 50px;
   }
-  #data {
+  #icon {
     position: absolute;
     max-width: 50px;
     max-height: 50px;
@@ -21,7 +24,7 @@
     cursor: pointer;
     z-index: 1;
   }
-  #link {
+  #connect {
     position: absolute;
     left:3px;
     top:-1px;
@@ -84,19 +87,19 @@
   }
   </style>
   <template>
-    <div id="hypervideo"
+    <div id="wrapper"
     class="animated fadeIn"
     on-mouseover="_onHover"
     on-mouseout="_onHout">
       <div id="subvideos"></div>
 
-      <div id="data"
-      on-tap="_onDataTap"
-      on-track="_onDataTrack">H</div>
+      <div id="icon"
+      on-tap="_onIconTap"
+      on-track="_onIconTrack">H</div>
 
-      <div id="link"
+      <div id="connect"
       class="animated fadeIn"
-      on-tap="_onLinkTap">+</div>
+      on-tap="_onConnectTap">+</div>
 
       <div id="delete"
       class="animated fadeIn"
@@ -110,33 +113,7 @@
   <script>
     HypervideoNode = Polymer({
       is: 'hypervideo-node',
-      // Polymer factory implementation
-      factoryImpl: function(options) {
-        this._bounds = options.bounds;
-        this._x = options.x;
-        this._y = options.y;
-        this._del = false;
-        this._hypervideo = null;
-        this._subjectId = options.subjectId;
-        this.connectId = options.connectId;
-      },
-      // fired when element is attached to DOM
-      // used to get element properties like bounds
-      // and position relative to document
-      attached: function() {
-        Polymer.dom.flush();
-        this._w = this.$.data.clientWidth;
-        this._x -= this._w/2;
-        this._y -= this._w/2;
-        this.$.hypervideo.style.left = this._x+"px";
-        this.$.hypervideo.style.top = this._y+"px";
-        // event fired so that Meteor can handle the creation
-        // and persistence of a new instance of hypervideo
-        this.fire('hypervideo-created');
-        this.id = "_"+this._hypervideo._id;
-        this.hypervideoId = this._hypervideo._id;
-        console.log(this.id);
-      },
+      //tag properties
       properties: {
         connectId: {
           type: String,
@@ -146,34 +123,81 @@
         deleting: {
           type: Boolean,
           notify: true,
+        },
+        dragging: {
+          type: Boolean,
+          notify: true,
         }
       },
-      // handle taping
-      _onDataTap: function(e) {
+      // Polymer factory implementation
+      factoryImpl: function(options) {
+        this._bounds = options.bounds;
+        this._x = options.x;
+        this._y = options.y;
+        this._hypervideo = null;
+        this._subjectId = options.subjectId;
+        this.connectId = options.connectId;
+      },
+      // fired when element is attached to DOM
+      // used to get element properties like bounds
+      // and position relative to document
+      attached: function() {
+        Polymer.dom.flush();
+        this._w = this.$.icon.clientWidth;
+        this._x -= this._w/2;
+        this._y -= this._w/2;
+        this.$.wrapper.style.left = this._x+"px";
+        this.$.wrapper.style.top = this._y+"px";
+        // event fired so that Meteor can handle the creation
+        // and persistence of a new instance of hypervideo
+        this.fire('hypervideo-created');
+        this.id = "_"+this._hypervideo._id;
+        this.hypervideoId = this._hypervideo._id;
+        console.log(this.id);
+      },
+//=============== Public Methods =================//
+      handleConnectId: function() {
         if(this.connectId) {
-          this._onLinkTap(e);
+          this.$.icon.style.background = "#FFC107";
+        }
+        else {
+          this.$.icon.style.background = "#DCDCDC";
+        }
+      },
+      getPos(){
+        return {
+          x: this._x,
+          y: this._y,
+        };
+      },
+//=============== Private Methods ================//
+      // handle taping
+      _onIconTap: function(e) {
+        if(this.connectId) {
+          this._onConnectTap(e);
         } else {
           this._showPreview();
         }
       },
       // handle tracking
-      _onDataTrack: function(e) {
+      _onIconTrack: function(e) {
         switch (e.detail.state) {
           case 'start':
-            this._dataTrackStart(e);
+            this._iconTrackStart(e);
             break;
           case 'track':
-            this._dataTrackXY(e);
+            this._iconTrackXY(e);
             break;
           case 'end':
-            this._dataTrackEnd();
+            this._iconTrackEnd();
             break;
         }
       },
-      _dataTrackStart: function(e) {
-        this.$.data.style.cursor = "move";
+      _iconTrackStart: function(e) {
+        this.$.icon.style.cursor = "move";
+        this.dragging = true;
       },
-      _dataTrackXY: function(e) {
+      _iconTrackXY: function(e) {
         var ddx = e.detail.ddx || 0;
         var ddy = e.detail.ddy || 0;
         this._x+= ddx;
@@ -184,35 +208,35 @@
         this._y = (this._y > this._bounds.height+this._bounds.y)?this._bounds.height+this._bounds.y : this._y;
         this._y = (this._y < this._bounds.y + 20)?this._bounds.y + 20 : this._y;
 
-        this.$.hypervideo.style.left = this._x+"px";
-        this.$.hypervideo.style.top = this._y+"px";
+        this.$.wrapper.style.left = this._x+"px";
+        this.$.wrapper.style.top = this._y+"px";
       },
-      _dataTrackEnd: function() {
+      _iconTrackEnd: function() {
         this._hypervideo.x = this._x;
         this._hypervideo.y = this._y;
-        this.$.data.style.cursor = "pointer";
-
+        this.$.icon.style.cursor = "pointer";
+        this.dragging = false;
         this.fire('hypervideo-changed');
       },
       // handle hovering
       _onHover: function(e) {
         this.$.delete.style.display = "block";
-        this.$.link.style.display = "block";
+        this.$.connect.style.display = "block";
         this.$.edit.style.display = "block";
-        if(e.target.id !== "data") {
+        if(e.target.id !== "icon") {
           e.target.style.color = "#FFF";
         }
       },
       _onHout: function(e) {
         this.$.delete.style.display = "none";
-        this.$.link.style.display = "none";
+        this.$.connect.style.display = "none";
         this.$.edit.style.display = "none";
-        if(e.target.id !== "data") {
+        if(e.target.id !== "icon") {
           e.target.style.color = e.target.style.backgroundColor;
         }
       },
-      // Toggle connectId mode
-      _onLinkTap: function(e) {
+      // Toggle connect mode
+      _onConnectTap: function(e) {
         if(this.connectId && this.connectId === this.hypervideoId){
             console.log(this.connectId);
             console.log(this.hypervideoId);
@@ -231,18 +255,8 @@
           this.deleting = true;
         }
       },
-
       _onEditTap: function(e) {
-        this.parentNode.toggle();
-
-      },
-      handleConnectId: function() {
-        if(this.connectId) {
-          this.$.data.style.background = "#FFC107";
-        }
-        else {
-          this.$.data.style.background = "#DCDCDC";
-        }
+        this.parentNode.toggle(this);
       },
       _showPreview: function() {
         if(this.$.subvideos.style.display !== "block") {
@@ -251,12 +265,6 @@
         else {
           this.$.subvideos.style.display = "none";
         }
-      },
-      getPos(){
-        return {
-          x: this._x,
-          y: this._y,
-        };
       }
     });
   </script>
