@@ -64,6 +64,11 @@ iron-icon {
 #mainHeaderPanel paper-toolbar {
   background-color: #455A64;/*var(--dark-primary-color);*/
   height: 65px;
+  padding: 0 0 0 20px;
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 15px;
 }
 #mainHeaderPanel [main-content] {
   background-color: #ffffff;/*var(--drawer-menu-color);*/

@@ -5,86 +5,86 @@
 
 <dom-module id="hypervideo-node">
   <style is="custom-style">
-  #wrapper {
-    position: absolute;
-    max-height: 50px;
-  }
-  #icon {
-    position: absolute;
-    max-width: 50px;
-    max-height: 50px;
-    padding: 25px 23px;
-    line-height: 10px;
-    border-radius: 50%;
-    background-color:#DCDCDC;/*var(--light-divider-color);*/
-    color: #212121;/*var(--light-divider-color);*/
-    text-align: center;
-    font-size: 19px;
-    font-weight: bold;
-    cursor: pointer;
-    z-index: 1;
-  }
-  #connect {
-    position: absolute;
-    left:3px;
-    top:-1px;
-    max-width: 96px;
-    max-height: 16px;
-    padding: 3px 4px 4px 4px;
-    line-height: 10px;
-    border-radius: 50%;
-    background-color:#FFC107;/*var(--accent-color);*/
-    color: #FFC107;/*var(--accent-color);*/
-    text-align: center;
-    font-size: 12px;
-    font-weight: bold;
-    cursor: pointer;
-    z-index: 2;
-  }
-  #delete {
-    position: absolute;
-    left:-7px;
-    top:14px;
-    max-width: 96px;
-    max-height: 16px;
-    padding: 3px 5.5px 4px 5.5px;
-    line-height: 10px;
-    border-radius: 50%;
-    background-color:#D23216;/*var(--sec-accent-color);*/
-    color: #D23216;/*var(--sec-accent-color);*/
-    text-align: center;
-    font-size: 12px;
-    font-weight: bold;
-    cursor: pointer;
-    z-index: 2;
-  }
-  #edit {
-    position: absolute;
-    left:21px;
-    top:-6px;
-    max-width: 96px;
-    max-height: 16px;
-    padding: 3px 5px 4px 5px;
-    line-height: 10px;
-    border-radius: 50%;
-    background-color: #12AE28;/*var(--trd-accent-color);*/
-    color: #12AE28;/*var(--trd-accent-color);*/
-    text-align: center;
-    font-size: 12px;
-    font-weight: bold;
-    cursor: pointer;
-    z-index: 2;
-  }
-  #subvideos {
-    position: absolute;
-    left:25px;
-    top:25px;
-    width: 120px;
-    height: 70px;
-    background: #212121;
-    display: none;
-    z-index: 0;
-  }
+    #wrapper {
+      position: absolute;
+      max-height: 50px;
+    }
+    #icon {
+      position: absolute;
+      max-width: 50px;
+      max-height: 50px;
+      padding: 25px 23px;
+      line-height: 10px;
+      border-radius: 50%;
+      background-color:#DCDCDC;/*var(--light-divider-color);*/
+      color: #212121;/*var(--light-divider-color);*/
+      text-align: center;
+      font-size: 19px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 1;
+    }
+    #connect {
+      position: absolute;
+      left:3px;
+      top:-1px;
+      max-width: 96px;
+      max-height: 16px;
+      padding: 3px 4px 4px 4px;
+      line-height: 10px;
+      border-radius: 50%;
+      background-color:#FFC107;/*var(--accent-color);*/
+      color: #FFC107;/*var(--accent-color);*/
+      text-align: center;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 2;
+    }
+    #delete {
+      position: absolute;
+      left:-7px;
+      top:14px;
+      max-width: 96px;
+      max-height: 16px;
+      padding: 3px 5.5px 4px 5.5px;
+      line-height: 10px;
+      border-radius: 50%;
+      background-color:#D23216;/*var(--sec-accent-color);*/
+      color: #D23216;/*var(--sec-accent-color);*/
+      text-align: center;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 2;
+    }
+    #edit {
+      position: absolute;
+      left:21px;
+      top:-6px;
+      max-width: 96px;
+      max-height: 16px;
+      padding: 3px 5px 4px 5px;
+      line-height: 10px;
+      border-radius: 50%;
+      background-color: #12AE28;/*var(--trd-accent-color);*/
+      color: #12AE28;/*var(--trd-accent-color);*/
+      text-align: center;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 2;
+    }
+    #subvideos {
+      position: absolute;
+      left:25px;
+      top:25px;
+      width: 120px;
+      height: 70px;
+      background: #212121;
+      display: none;
+      z-index: 0;
+    }
   </style>
   <template>
     <div id="wrapper"
@@ -157,10 +157,24 @@
       },
 //=============== Public Methods =================//
       handleConnectId: function() {
+        var className = this.$.icon.className;
         if(this.connectId) {
           this.$.icon.style.background = "#FFC107";
+          if (this.connectId === this.hypervideoId) {
+            console.log("id igual");
+            if(!this._shaking){
+              this._shaking = true;
+              this.$.icon.className = className.concat(" animated infinite shake");
+            }
+          }
+          else {
+            this._shaking = false;
+            this.$.icon.className = className.replace(" animated infinite shake","");
+          }
         }
         else {
+          this._shaking = false;
+          this.$.icon.className = className.replace(" animated infinite shake","");
           this.$.icon.style.background = "#DCDCDC";
         }
       },
@@ -238,12 +252,8 @@
       // Toggle connect mode
       _onConnectTap: function(e) {
         if(this.connectId && this.connectId === this.hypervideoId){
-            console.log(this.connectId);
-            console.log(this.hypervideoId);
-            this.connectId = null;
+          this.connectId = null;
         } else {
-          console.log(this.hypervideoId);
-          console.log(this.connectId);
           this.connectId = this.hypervideoId;
         }
         this.handleConnectId();

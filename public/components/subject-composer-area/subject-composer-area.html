@@ -3,6 +3,7 @@
 <link rel="import" href="../../components/hypervideo-node/hypervideo-node.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../../components/hypervideo-composer-area/hypervideo-composer-area.html">
 
 <dom-module id="subject-composer-area">
   <style is="custom-style">
@@ -51,7 +52,7 @@
       entry-animation="scale-up-animation"
       exit-animation="scale-down-animation"
       with-backdrop>
-      <h1>subvideos virão aqui.</h1>
+      <hypervideo-composer-area></hypervideo-composer-area>
     </paper-dialog>
     <paper-input id="subjectName"
       name="name"
@@ -186,13 +187,13 @@
       },
       _connect: function(firstId, secondId) {
         var self = this;
-        var canCreate = true;
         if(firstId !== secondId) {
           var connection = {first: firstId, second: secondId};
           if(self.subject.addConnection(connection)){
             self._resetConnecting();
-            this.fire('subject-changed');
+            self.fire('subject-changed');
           }
+          self._resetConnecting();
         }
         self._drawConnections();
       },
