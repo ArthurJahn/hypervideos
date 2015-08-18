@@ -26,8 +26,11 @@ Template.newSubjectPanel.events({
   },
   'hypervideo-deleted hypervideo-node': function(e, template) {
     var hypervideo = e.target._hypervideo;
-    //remove Hypervideo
+    var subject = Subjects.findOne({_id: hypervideo.subjectId});
+    subject.removeHypervideo(hypervideo._id);
+    hypervideo.remove();
   },
+
   'subject-created subject-composer-area': function(e, template) {
     var subject = new Subject();
     subject.name = Subjects.defaultName;
