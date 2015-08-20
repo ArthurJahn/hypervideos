@@ -1,8 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../../components/hypervideo-node/hypervideo-node.html">
-<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
-<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
 <link rel="import" href="../../bower_components/fu-area/fu-area.html">
 
 <dom-module id="hypervideo-composer-area">
@@ -19,12 +18,12 @@
     height: 100%;
     background-color:rgba(246,246,246,1);/*var(--light-divider-color);*/
   }
-  #toucharea {
+  #fileInputArea {
     position: absolute;
-    top: 100px;
-    bottom: 35px;
-    left: 35px;
-    right: 35px;
+    top: 10px;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
     background-color:rgba(220,220,220,0.1);/*var(--light-divider-color);*/
     overflow: hidden;
   }
@@ -46,23 +45,35 @@
     width: 100%;
     height: 550px;
   }
+  #hypervideoName {
+    width: 150px;
+    margin: 0 10px;
+    float: left;
+  }
   </style>
   <template>
-    <paper-input id="subjectName"
-      name="name"
-      label="Nome do Curso"
-      on-change="_updateSubject">
-    </paper-input>
-    <div id="backcanvas">
-      <canvas id="canvas"></canvas>
-    </div>
-    <fu-area id="toucharea"
-      on-tap="composerTap">
-      <template is="dom-if" if="{{firstTouch}}">
-        <div id="hint-text">Clique para adicionar um hypervideo</div>
-      </template>
-    </fu-area>
-    <!-- this is where hypervideos will be displayed -->
+    <paper-drawer-panel id=drawer>
+      <div drawer>
+        <fu-area id="fileInputArea"
+          on-tap="composerTap">
+          <template is="dom-if" if="{{firstTouch}}">
+            <div id="hint-text">Clique para adicionar um hypervideo</div>
+          </template>
+        </fu-area>
+      </div>
+      <div main>
+        <paper-input id="hypervideoName"
+          name="name"
+          label="Nome do Curso"
+          on-change="_updateSubject">
+        </paper-input>
+        <div id="backcanvas">
+          <canvas id="canvas"></canvas>
+        </div>
+        <paper-button dialog-confirm autofocus>Fechar</paper-button>
+        <!-- this is where hypervideos will be displayed -->
+      </div>
+    </paper-drawer-panel>
   </template>
   <script>
     Polymer({

@@ -51,7 +51,7 @@
     <paper-dialog id="overlay"
       entry-animation="scale-up-animation"
       exit-animation="scale-down-animation"
-      with-backdrop>
+      with-backdrop modal>
       <hypervideo-composer-area></hypervideo-composer-area>
     </paper-dialog>
     <paper-input id="subjectName"
@@ -156,7 +156,7 @@
           y : touchY,
           bounds: bounds,
           subjectId: subjectId,
-          connectId: this.connectId
+          connectId: self.connectId
         }
         var hypervideoNode = new HypervideoNode(options);
 
@@ -243,7 +243,6 @@
       _deletingListener: function(hnInstance) {
         var self = this;
         self.deleting = hnInstance.deleting;
-        console.log(self.deleting);
         self.subject.removeHypervideo(hnInstance.hypervideoId);
         self.removeChild(hnInstance);
         self._resetConnecting();

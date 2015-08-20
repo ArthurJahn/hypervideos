@@ -153,7 +153,6 @@
         this.fire('hypervideo-created');
         this.id = "_"+this._hypervideo._id;
         this.hypervideoId = this._hypervideo._id;
-        console.log(this.id);
       },
 //=============== Public Methods =================//
       handleConnectId: function() {
@@ -161,7 +160,6 @@
         if(this.connectId) {
           this.$.icon.style.background = "#FFC107";
           if (this.connectId === this.hypervideoId) {
-            console.log("id igual");
             if(!this._shaking){
               this._shaking = true;
               this.$.icon.className = className.concat(" animated infinite shake");
