@@ -1,0 +1,110 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="upload-file">
+  <style media="screen">
+    .wrapper {
+      position: relative;
+      height: 35px;
+      color: red;
+      width: 92%;
+      padding: 5px 10px 0 10px;
+    }
+    p {
+      margin: 0px;
+      padding: 10px 5px 0 0;
+      max-width: 80%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    progress {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      appearance: none;
+      position: absolute;
+      height: 5px;
+      width: 92%;
+      background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
+    }
+    progress::-webkit-progress-bar {
+      background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
+    }
+    progress::-webkit-progress-value {
+      background-color: #CFD8DC;/*var(--light-primary-color)*/
+    }
+    progress::-moz-progress-bar {
+      background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
+    }
+    progress::-moz-progress-value {
+      background-color: #CFD8DC;/*var(--light-primary-color)*/
+    }
+    .waiting {
+      position: absolute;
+      top: 10px; left: 10px; bottom: 0; right: 10px;
+      background-image: linear-gradient(
+        -45deg,
+        rgba(220, 220, 220, .2) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(220, 220, 220, .2) 50%,
+        rgba(220, 220, 220, .2) 75%,
+        transparent 75%,
+        transparent
+      );
+      z-index: 1;
+      background-size: 50px 50px;
+      animation: move 2s linear infinite;
+      overflow: hidden;
+    }
+    @keyframes move {
+      0% {
+        background-position: 0 0;
+      }
+      100% {
+        background-position: 50px 50px;
+      }
+    }
+  </style>
+  <template>
+    <div class="wrapper">
+      <p>{{file.data.blob.name}}</p>
+      <progress value="{{progress}}" max="100">
+      </progress>
+      <template is="dom-if" if="{{waiting}}">
+        <div class="waiting"></div>
+      </template>
+    </div>
+  </template>
+  <script>
+    UploadFile = Polymer({
+      is: 'upload-file',
+      properties: {
+        file: Object,
+        progress: Number,
+        waiting: {
+          type: Boolean,
+          value: true
+        }
+      },
+      ready: function () {
+        var self = this;
+        console.log(self.file);
+        self._setProgress();
+      },
+      _setProgress: function() {
+        var self = this;
+        self._progressInterval = setInterval(function() {
+          self.progress = self.file.uploadProgress();
+          if(self.progress !== 0) {
+            self.waiting = false;
+          }
+          if(self.progress === 100) {
+            clearInterval(self._progressInterval);
+            self.fire('upload-complete');
+          }
+        },100);
+      }
+    });
+  </script>
+</dom-module>

@@ -2,6 +2,7 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
+<link rel="import" href="../../components/upload-file/upload-file.html">
 
 <dom-module id="hypervideo-composer-area">
   <style is="custom-style">
@@ -39,8 +40,8 @@
     height: 100%;
   }
   .box .row.content {
-    flex: 1 .1 auto;
-    overflow: auto;
+    flex: 1 .01 auto;
+    overflow: scroll;
   }
   .box .row.footer {
     flex: 0 1 auto;
@@ -82,10 +83,6 @@
     top: 50%;
     margin:-20px 0 0 -100px;
   }
-  #files {
-    height: 35px;
-    background: #d2d2d2;
-  }
   </style>
   <template>
     <paper-drawer-panel id=drawer>
@@ -94,8 +91,7 @@
           <div class="row content">
             <!-- Here will be displayed uploaded videos -->
             <template id="files" is="dom-repeat" items="{{fileObjects}}" as="videoFile">
-              <div class="video">{{videoFile.data.blob.name}}</div>
-              <div class="video">{{getProgress(videoFile)}}</div>
+              <upload-file file="{{videoFile}}" on-upload-complete="log"></upload-file>
             </template>
           </div>
           <div id="fileInputArea"
@@ -108,7 +104,7 @@
             </input>
             <div id="hint-text">
               <span>
-                clique para fazer upload de vídeos
+                Clique para fazer upload de vídeos
               </span>
             </div>
           </div>
@@ -139,17 +135,16 @@
       properties: {
         fileObjects: {
           type: Array,
-          observer: "log"
+          value: function() {
+              return [];
+          }
+        },
+        filesProgress: {
+          type: Array,
         }
       },
-      log: function() {
-        var files = this.fileObjects;
-        for(var i=0;i<files.length;i++){
-          console.log(files[i].data.blob.name);
-        }
-      },
-      getProgress: function(FSfile) {
-        return FSfile.uploadProgress();
+      log: function(e) {
+        console.log("completou!!");
       },
       composerTap: function(e) {
       },

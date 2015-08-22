@@ -40,21 +40,18 @@ Template.newSubjectPanel.events({
   },
   'upload-videos hypervideo-composer-area': function(event, template) {
     var composer = event.target;
-    composer.fileObjects = [];
     FS.Utility.eachFile(event, function(file) {
-      if(file.size < 50000000){
-        Videos.insert(file, function (err, fileObj) {
-          if (err){
-             // handle error
-          } else {
-             // handle success depending what you need to do
-             var list = composer.fileObjects.splice(0, composer.fileObjects.length);
-             list.push(fileObj);
-             composer.fileObjects = list;
-             console.log(composer.fileObjects);
-          }
-        });
-      }
+      Videos.insert(file, function (err, fileObj) {
+        if (err){
+           console.log(fileObj);
+        } else {
+           // handle success depending what you need to do
+           var list = composer.fileObjects.splice(0, composer.fileObjects.length);
+           list.push(fileObj);
+           composer.fileObjects = list;
+           console.log(composer.fileObjects);
+        }
+      });
    });
  }
 });
