@@ -13,3 +13,5 @@ iron:router
 accounts-password
 jagi:astronomy
 meteorhacks:kadira-profiler
+cfs:standard-packages
+cfs:gridfs

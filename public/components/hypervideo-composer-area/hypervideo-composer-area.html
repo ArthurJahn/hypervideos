@@ -2,7 +2,6 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
-<link rel="import" href="../../bower_components/fu-area/fu-area.html">
 
 <dom-module id="hypervideo-composer-area">
   <style is="custom-style">
@@ -18,60 +17,111 @@
     height: 100%;
     background-color:rgba(246,246,246,1);/*var(--light-divider-color);*/
   }
-  #fileInputArea {
-    position: absolute;
-    top: 10px;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
-    background-color:rgba(220,220,220,0.1);/*var(--light-divider-color);*/
+  .options {
+    position: relative;
+    width: 100%;
+  }
+  #hypervideoName {
+    width: 70%;
+    margin: 0 10px;
+    float: left;
+  }
+  #toggleDrawer,
+  #closeButton {
+    float: right;
+    max-width: 30px;
+    width: 20%;
+    font-size: 12px;
+  }
+  .box {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .box .row.content {
+    flex: 1 .1 auto;
+    overflow: auto;
+  }
+  .box .row.footer {
+    flex: 0 1 auto;
+    min-height: 80px;
     overflow: hidden;
   }
-  #hint-text {
-    width: 360px;
+  #fileInputArea {
+    color: transparent;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color:rgba(220,220,220,0);/*var(--light-divider-color);*/
+    overflow: hidden;
+  }
+  #inputfile{
+    opacity: 0;
     position: absolute;
-    top: 45%;
-    left: 50%;
-    margin: -160px -180px;
-    padding: 160px 0;
-    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+  }
+  #hint-text {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    right: 10px;
+    bottom: 10px;
     background-color:rgba(220,220,220,0.2);/*var(--light-divider-color);*/
     color: rgba(200,200,200,1);/*var(--light-divider-color);*/
     text-align: center;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: bold;
+    z-index: 0;
   }
-  #overlay {
-    width: 100%;
-    height: 550px;
-  }
-  #hypervideoName {
-    width: 150px;
-    margin: 0 10px;
-    float: left;
+  #hint-text span {
+    position: absolute;
+    width: 200px;
+    left: 50%;
+    top: 50%;
+    margin:-20px 0 0 -100px;
   }
   </style>
   <template>
     <paper-drawer-panel id=drawer>
       <div drawer>
-        <fu-area id="fileInputArea"
-          on-tap="composerTap">
-          <template is="dom-if" if="{{firstTouch}}">
-            <div id="hint-text">Clique para adicionar um hypervideo</div>
-          </template>
-        </fu-area>
+        <div class="box">
+          <div class="row content">
+            <!-- Here will be displayed uploaded videos -->
+          </div>
+          <div id="fileInputArea"
+            class="row footer"
+            on-tap="composerTap">
+            <input id="inputfile"
+              type="file" multiple
+              accept="video/*"
+              on-change="loadFiles">
+            </input>
+            <div id="hint-text">
+              <span>
+                clique para fazer upload de vídeos
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
       <div main>
-        <paper-input id="hypervideoName"
-          name="name"
-          label="Nome do Curso"
-          on-change="_updateSubject">
-        </paper-input>
+        <div class="options">
+          <paper-button id="closeButton"
+          dialog-confirm autofocus>Fechar</paper-button>
+          <paper-input id="hypervideoName"
+            name="name"
+            label="Nome do Curso"
+            on-change="_updateSubject">
+          </paper-input>
+          <paper-button id="toggleDrawer"
+          on-tap="toggleDrawer">videos</paper-button>
+        </div>
         <div id="backcanvas">
           <canvas id="canvas"></canvas>
         </div>
-        <paper-button dialog-confirm autofocus>Fechar</paper-button>
-        <!-- this is where hypervideos will be displayed -->
+        <!-- this is where subvideos will be displayed -->
       </div>
     </paper-drawer-panel>
   </template>
@@ -79,12 +129,19 @@
     Polymer({
       is: 'hypervideo-composer-area',
       composerTap: function(e) {
-        // this._updateSubject(e);
-        // this._createHypervideo(e);
-        // this.firstTouch = !(this.subject.hypervideos.length>0);
+      },
+      toggleDrawer: function() {
+        this.$.drawer.togglePanel();
       },
       ready: function() {
         this.firstTouch = true;
+        this.$.drawer.forceNarrow = true;
+        this.$.drawer.openDrawer();
+      },
+      loadFiles: function(e) {
+        this.files = e.target.files;
+        console.log(this.files);
+        this.fire('upload-videos');
       }
     });
   </script>

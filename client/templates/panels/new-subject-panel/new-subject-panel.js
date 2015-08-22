@@ -37,5 +37,20 @@ Template.newSubjectPanel.events({
   'subject-changed subject-composer-area': function(e, template) {
     var subject = e.target.subject;
     subject.save();
-  }
+  },
+  'upload-videos hypervideo-composer-area': function(event, template) {
+    var composer;
+    FS.Utility.eachFile(event, function(file) {
+      if(file.size < 16000000){
+        Videos.insert(file, function (err, fileObj) {
+          if (err){
+             // handle error
+          } else {
+             console.log("lalala" + fileObj._id);
+             // handle success depending what you need to do
+          }
+        });
+      }
+   });
+ }
 });
