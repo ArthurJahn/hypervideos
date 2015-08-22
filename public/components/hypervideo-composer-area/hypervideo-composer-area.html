@@ -82,6 +82,10 @@
     top: 50%;
     margin:-20px 0 0 -100px;
   }
+  #files {
+    height: 35px;
+    background: #d2d2d2;
+  }
   </style>
   <template>
     <paper-drawer-panel id=drawer>
@@ -89,6 +93,10 @@
         <div class="box">
           <div class="row content">
             <!-- Here will be displayed uploaded videos -->
+            <template id="files" is="dom-repeat" items="{{fileObjects}}" as="videoFile">
+              <div class="video">{{videoFile.data.blob.name}}</div>
+              <div class="video">{{getProgress(videoFile)}}</div>
+            </template>
           </div>
           <div id="fileInputArea"
             class="row footer"
@@ -128,6 +136,21 @@
   <script>
     Polymer({
       is: 'hypervideo-composer-area',
+      properties: {
+        fileObjects: {
+          type: Array,
+          observer: "log"
+        }
+      },
+      log: function() {
+        var files = this.fileObjects;
+        for(var i=0;i<files.length;i++){
+          console.log(files[i].data.blob.name);
+        }
+      },
+      getProgress: function(FSfile) {
+        return FSfile.uploadProgress();
+      },
       composerTap: function(e) {
       },
       toggleDrawer: function() {
@@ -142,7 +165,8 @@
         this.files = e.target.files;
         console.log(this.files);
         this.fire('upload-videos');
-      }
+      },
+
     });
   </script>
 </dom-module>
