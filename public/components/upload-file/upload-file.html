@@ -1,11 +1,13 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 
 <dom-module id="upload-file">
   <style media="screen">
-    .wrapper {
+    #wrapper {
       position: relative;
       height: 35px;
-      color: red;
+      color: #D23216;/*--sec-accent-color*/
       width: 92%;
       padding: 5px 10px 0 10px;
     }
@@ -16,6 +18,10 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+    iron-icon {
+      float: right;
+      margin-top: -22px;
     }
     progress {
       -webkit-appearance: none;
@@ -39,6 +45,7 @@
     progress::-moz-progress-value {
       background-color: #CFD8DC;/*var(--light-primary-color)*/
     }
+    /* if upload is waiting to begin */
     .waiting {
       position: absolute;
       top: 10px; left: 10px; bottom: 0; right: 10px;
@@ -67,12 +74,15 @@
     }
   </style>
   <template>
-    <div class="wrapper">
+    <div id="wrapper">
       <p>{{file.data.blob.name}}</p>
       <progress value="{{progress}}" max="100">
       </progress>
       <template is="dom-if" if="{{waiting}}">
         <div class="waiting"></div>
+      </template>
+      <template is="dom-if" if="{{uploaded}}">
+        <iron-icon icon="done"></iron-icon>
       </template>
     </div>
   </template>
@@ -85,6 +95,10 @@
         waiting: {
           type: Boolean,
           value: true
+        },
+        uploaded: {
+          type: Boolean,
+          value: false
         }
       },
       ready: function () {
@@ -101,6 +115,9 @@
           }
           if(self.progress === 100) {
             clearInterval(self._progressInterval);
+            self.querySelector('progress').style.opacity = 0;
+            self.uploaded = true;
+            self.$.wrapper.style.color = "#12AE28";//--trd-accent-color
             self.fire('upload-complete');
           }
         },100);
