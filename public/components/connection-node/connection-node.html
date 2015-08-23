@@ -1,0 +1,42 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+<dom-module id="connection-node">
+  <style is="custom-style">
+    iron-icon {
+      height: 20px;
+      width: 20px;
+      color: #fff;
+      background: #D23216;/*--sec-accent-color*/
+      border-radius: 50%;
+      margin: 0;
+    }
+  </style>
+  <template>
+    <iron-icon icon="close" on-tap="remove"></iron-icon>
+  </template>
+  <script>
+    ConnectionNode = Polymer({
+      is: 'connection-node',
+      properties: {
+        connection: Object,
+      },
+      ready: function () {
+
+      },
+      remove: function() {
+        this.fire('connection-removed');
+      },
+      factoryImpl: function(conn, x, y){
+        this.connection = conn;
+        this.moveToPos(x,y);
+      },
+      moveToPos: function(x,y) {
+        this.style.position = "absolute";
+        this.style.left = x + "px";
+        this.style.top = y + "px";
+      }
+    });
+  </script>
+</dom-module>

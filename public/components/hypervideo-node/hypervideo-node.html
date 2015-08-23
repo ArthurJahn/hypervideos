@@ -85,8 +85,18 @@
       display: none;
       z-index: 0;
     }
+    #overlay {
+      width: 100%;
+      height: 550px;
+    }
   </style>
   <template>
+    <paper-dialog id="overlay"
+      entry-animation="scale-up-animation"
+      exit-animation="scale-down-animation"
+      with-backdrop modal>
+      <hypervideo-composer-area id="hypervideocomposer"></hypervideo-composer-area>
+    </paper-dialog>
     <div id="wrapper"
     class="animated fadeIn"
     on-mouseover="_onHover"
@@ -264,7 +274,7 @@
         }
       },
       _onEditTap: function(e) {
-        this.parentNode.toggle(this);
+        this.toggle();
       },
       _showPreview: function() {
         if(this.$.subvideos.style.display !== "block") {
@@ -273,7 +283,11 @@
         else {
           this.$.subvideos.style.display = "none";
         }
-      }
+      },
+      toggle: function() {
+        this.$.hypervideocomposer.hypervideoId = this.hypervideoId;
+        this.$.overlay.open();
+      },
     });
   </script>
 </dom-module>

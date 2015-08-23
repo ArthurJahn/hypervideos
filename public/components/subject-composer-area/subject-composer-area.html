@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../components/hypervideo-node/hypervideo-node.html">
+<link rel="import" href="../../components/connection-node/connection-node.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
 <link rel="import" href="../../components/hypervideo-composer-area/hypervideo-composer-area.html">
@@ -42,18 +43,8 @@
     font-size: 22px;
     font-weight: bold;
   }
-  #overlay {
-    width: 100%;
-    height: 550px;
-  }
   </style>
   <template>
-    <paper-dialog id="overlay"
-      entry-animation="scale-up-animation"
-      exit-animation="scale-down-animation"
-      with-backdrop modal>
-      <hypervideo-composer-area></hypervideo-composer-area>
-    </paper-dialog>
     <paper-input id="subjectName"
       name="name"
       label="Nome do Curso"
@@ -221,6 +212,10 @@
           var y2 = canvasScale * (secondPos.y - canvasYOffset);
           ctx.moveTo(x1, y1);
           ctx.lineTo(x2, y2);
+          if(self.connectId === conn.first ||
+          self.connectId === conn.second) {
+              self._showConnection(conn, firstPos, secondPos);
+          }
         }
         ctx.lineWidth = lineWidth;
         ctx.stroke();
@@ -256,14 +251,28 @@
         var self = this;
         return self.querySelector('#_'+id);
       },
-      toggle: function() {
-        this.$.overlay.open();
-		  },
       _resetConnecting: function(){
         var self = this;
         self.connectId = null;
         self._firstId = null;
       },
+      _showConnection: function(connection, firstPos, secondPos) {
+        var self = this;
+        if(self.connectId) {
+          var xmid = (firstPos.x + secondPos.x)/2;
+          var ymid = (firstPos.y + secondPos.y)/2;
+          var connNode = new ConnectionNode(connection, xmid, ymid);
+          self.appendChild(connNode);
+        }
+        else {
+          var list = self.querySelectorAll('connection-node');
+          var length = list.length;
+          for(var i=0; i<length; i++) {
+            var connNode = list[i];
+            self.removeChild(connNode);
+          }
+        }
+      }
     });
   </script>
 </dom-module>
