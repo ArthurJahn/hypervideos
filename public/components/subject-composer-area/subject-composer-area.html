@@ -104,11 +104,12 @@
         }
       },
       connectIdChanged: function (newConnectId) {
-        var list = this.querySelectorAll('hypervideo-node');
+        var list = this.querySelectorAll('hypervideo-node, connection-node');
         var length = list.length;
         for(var i=0; i<length; i++) {
-          var hypervideo = list[i];
-          hypervideo.connectId = newConnectId;
+          var element = list[i];
+          element.connectId = newConnectId;
+          console.log("no for: " + element.connectId);
         }
       },
       draggingChanged: function (newDragging) {
@@ -161,6 +162,7 @@
           self._draggingListener(this);
         });
         self.appendChild(hypervideoNode);
+        //handle
         self.subject.addHypervideo(hypervideoNode.hypervideoId);
       },
       _updateSubject: function(e) {
@@ -181,6 +183,8 @@
         if(firstId !== secondId) {
           var connection = {first: firstId, second: secondId};
           if(self.subject.addConnection(connection)){
+            var connNode = new ConnectionNode(connection);
+            self.appendChild(connNode);
             self._resetConnecting();
             self.fire('subject-changed');
           }
@@ -192,29 +196,35 @@
         var self = this;
         var canvasScale = 3;
         var lineWidth = 4;
-        var connections = self.subject.connections;
+        var connections = self.querySelectorAll('connection-node');
+        console.log(connections);
+        var conns = self.subject.connections;
         var canvas = self.$.canvas;
         canvas.width  = canvasScale * canvas.offsetWidth;
         canvas.height = canvasScale * canvas.offsetHeight;
-        var canvasXOffset = -25;
-        var canvasYOffset = 40;
+        var canvasXOffset = 10;
+        var canvasYOffset = 75;
         var ctx = canvas.getContext("2d");
 
         ctx.beginPath();
         for(var i=0; i< connections.length; i++) {
-          var conn = connections[i];
+          var conn = connections[i].connection;
           //FIX ME find a better way to do it...
-          var firstPos = self._findHypervideoNode(conn.first).getPos();
-          var secondPos = self._findHypervideoNode(conn.second).getPos();
-          var x1 = canvasScale * (firstPos.x - canvasXOffset);
-          var y1 = canvasScale * (firstPos.y - canvasYOffset);
-          var x2 = canvasScale * (secondPos.x - canvasXOffset);
-          var y2 = canvasScale * (secondPos.y - canvasYOffset);
-          ctx.moveTo(x1, y1);
-          ctx.lineTo(x2, y2);
-          if(self.connectId === conn.first ||
-          self.connectId === conn.second) {
-              self._showConnection(conn, firstPos, secondPos);
+          var first = self._findHypervideoNode(conn.first);
+          var second = self._findHypervideoNode(conn.second);
+          if(first && second) {
+            var firstPos = first.getPos();
+            var secondPos = second.getPos();
+            var x1 = canvasScale * (firstPos.x - canvasXOffset);
+            var y1 = canvasScale * (firstPos.y - canvasYOffset);
+            var x2 = canvasScale * (secondPos.x - canvasXOffset);
+            var y2 = canvasScale * (secondPos.y - canvasYOffset);
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            self._showConnection(conn, firstPos, secondPos);
+          }
+          else {
+            self.removeChild(connections[i]);
           }
         }
         ctx.lineWidth = lineWidth;
@@ -240,6 +250,7 @@
         self.deleting = hnInstance.deleting;
         self.subject.removeHypervideo(hnInstance.hypervideoId);
         self.removeChild(hnInstance);
+
         self._resetConnecting();
         self._drawConnections();
       },
@@ -258,20 +269,19 @@
       },
       _showConnection: function(connection, firstPos, secondPos) {
         var self = this;
-        if(self.connectId) {
-          var xmid = (firstPos.x + secondPos.x)/2;
-          var ymid = (firstPos.y + secondPos.y)/2;
-          var connNode = new ConnectionNode(connection, xmid, ymid);
-          self.appendChild(connNode);
-        }
-        else {
-          var list = self.querySelectorAll('connection-node');
-          var length = list.length;
-          for(var i=0; i<length; i++) {
-            var connNode = list[i];
-            self.removeChild(connNode);
+        var xmid = (firstPos.x + secondPos.x)/2;
+        var ymid = (firstPos.y + secondPos.y)/2;
+        var list = self.querySelectorAll('connection-node');
+        for(var i=0; i<list.length; i++) {
+          var connNode = list[i];
+          if(connNode.connection === connection) {
+              connNode.setPos(xmid, ymid);
+              return;
           }
         }
+      },
+      _removeConnection: function() {
+
       }
     });
   </script>

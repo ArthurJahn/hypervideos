@@ -4,7 +4,7 @@
 
 <dom-module id="connection-node">
   <style is="custom-style">
-    iron-icon {
+    #icon {
       height: 20px;
       width: 20px;
       color: #fff;
@@ -14,29 +14,46 @@
     }
   </style>
   <template>
-    <iron-icon icon="close" on-tap="remove"></iron-icon>
+    <iron-icon id="icon" icon="close" on-tap="remove"></iron-icon>
   </template>
   <script>
     ConnectionNode = Polymer({
       is: 'connection-node',
       properties: {
         connection: Object,
+        connectId: {
+          type: String,
+          observer: "toggle"
+        }
       },
       ready: function () {
-
+        this.style.position = "absolute";
+      },
+      toggle: function() {
+        if(this.connectId === this.connection.first ||
+          this.connectId === this.connection.second) {
+          this.style.display = "block";
+        } else {
+          this.style.display = "none";
+        }
       },
       remove: function() {
         this.fire('connection-removed');
       },
-      factoryImpl: function(conn, x, y){
+      factoryImpl: function(conn){
         this.connection = conn;
-        this.moveToPos(x,y);
       },
-      moveToPos: function(x,y) {
-        this.style.position = "absolute";
-        this.style.left = x + "px";
-        this.style.top = y + "px";
-      }
+      moveToPos: function() {
+        this.style.left = this._x + "px";
+        this.style.top = this._y + "px";
+      },
+      setPos: function(x,y) {
+        this._w = this.$.icon.offsetWidth;// || 20;
+        console.log(this.$.icon.offsetWidth);
+        this._x = x - this._w/2;
+        this._y = y - this._w/2;
+        this.moveToPos();
+      },
     });
   </script>
 </dom-module>
