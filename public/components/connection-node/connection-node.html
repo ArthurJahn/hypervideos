@@ -24,7 +24,8 @@
         connectId: {
           type: String,
           observer: "toggle"
-        }
+        },
+        OwnerId: String,
       },
       ready: function () {
         this.style.position = "absolute";
@@ -39,9 +40,11 @@
       },
       remove: function() {
         this.fire('connection-removed');
+        this.connection.first = null;
       },
-      factoryImpl: function(conn){
+      factoryImpl: function(conn, ownerId){
         this.connection = conn;
+        this.ownerId = ownerId;
       },
       moveToPos: function() {
         this.style.left = this._x + "px";

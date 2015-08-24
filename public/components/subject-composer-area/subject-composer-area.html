@@ -183,7 +183,10 @@
         if(firstId !== secondId) {
           var connection = {first: firstId, second: secondId};
           if(self.subject.addConnection(connection)){
-            var connNode = new ConnectionNode(connection);
+            var connNode = new ConnectionNode(connection,self.subject._id);
+            connNode.addEventListener('connection-removed', function(ev){
+              self._connectionListener(this);
+            });
             self.appendChild(connNode);
             self._resetConnecting();
             self.fire('subject-changed');
@@ -280,8 +283,10 @@
           }
         }
       },
-      _removeConnection: function() {
-
+      _connectionListener: function(connInstance) {
+        var self = this;
+        self.removeChild(connInstance);
+        self._drawConnections();
       }
     });
   </script>

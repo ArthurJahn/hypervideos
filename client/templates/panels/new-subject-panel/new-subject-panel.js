@@ -38,9 +38,9 @@ Template.newSubjectPanel.events({
     var subject = e.target.subject;
     subject.save();
   },
-  'upload-videos hypervideo-composer-area': function(event, template) {
-    var composer = event.target;
-    FS.Utility.eachFile(event, function(file) {
+  'upload-videos hypervideo-composer-area': function(e, template) {
+    var composer = e.target;
+    FS.Utility.eachFile(e, function(file) {
       Videos.insert(file, function (err, fileObj) {
         if (err){
            console.log(fileObj);
@@ -53,5 +53,10 @@ Template.newSubjectPanel.events({
         }
       });
    });
+ },
+ 'connection-removed connection-node': function(e, template) {
+   var conn = e.target.connection;
+   var subject = Subjects.findOne({_id : e.target.ownerId});
+   subject.removeConnection(conn);
  }
 });
