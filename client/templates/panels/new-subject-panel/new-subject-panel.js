@@ -5,26 +5,8 @@ Template.newSubjectPanel.helpers({
 });
 
 Template.newSubjectPanel.events({
-  'hypervideo-created hypervideo-node': function(e, template) {
-    var hypervideo = new Hypervideo();
-    hypervideo.name = Hypervideos.defaultName;
-    hypervideo.x = e.target._x;
-    hypervideo.y = e.target._y;
-    hypervideo.subjectId = e.target._subjectId;
-    hypervideo.save();
-    e.target._hypervideo = hypervideo;
-  },
-  'hypervideo-changed hypervideo-node': function(e, template) {
-    var hypervideo = e.target._hypervideo;
-    hypervideo.save();
-  },
-  'hypervideo-deleted hypervideo-node': function(e, template) {
-    var hypervideo = e.target._hypervideo;
-    var subject = Subjects.findOne({_id: hypervideo.subjectId});
-    subject.removeHypervideo(hypervideo._id);
-    hypervideo.remove();
-  },
 
+// ======================== Subject Controll Methods =========================//
   'subject-created subject-composer-area': function(e, template) {
     var subject = new Subject();
     subject.name = Subjects.defaultName;
@@ -38,6 +20,32 @@ Template.newSubjectPanel.events({
     var subject = e.target.subject;
     subject.save();
   },
+  'connection-removed connection-node': function(e, template) {
+    var conn = e.target.connection;
+    var subject = Subjects.findOne({_id : e.target.ownerId});
+    subject.removeConnection(conn);
+  },
+
+// ======================= Hypervideo Controll Methods =======================//
+    'hypervideo-created hypervideo-node': function(e, template) {
+      var hypervideo = new Hypervideo();
+      hypervideo.name = Hypervideos.defaultName;
+      hypervideo.x = e.target._x;
+      hypervideo.y = e.target._y;
+      hypervideo.subjectId = e.target._subjectId;
+      hypervideo.save();
+      e.target._hypervideo = hypervideo;
+    },
+    'hypervideo-changed hypervideo-node': function(e, template) {
+      var hypervideo = e.target._hypervideo;
+      hypervideo.save();
+    },
+    'hypervideo-deleted hypervideo-node': function(e, template) {
+      var hypervideo = e.target._hypervideo;
+      var subject = Subjects.findOne({_id: hypervideo.subjectId});
+      subject.removeHypervideo(hypervideo._id);
+      hypervideo.remove();
+    },
   'upload-videos hypervideo-composer-area': function(e, template) {
     var composer = e.target;
     FS.Utility.eachFile(e, function(file) {
@@ -54,9 +62,7 @@ Template.newSubjectPanel.events({
       });
    });
  },
- 'connection-removed connection-node': function(e, template) {
-   var conn = e.target.connection;
-   var subject = Subjects.findOne({_id : e.target.ownerId});
-   subject.removeConnection(conn);
- }
+
+ // ======================== Subvideo Controll Methods =======================//
+
 });
