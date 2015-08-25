@@ -51,8 +51,7 @@
         this.style.top = this._y + "px";
       },
       setPos: function(x,y) {
-        this._w = this.$.icon.offsetWidth;// || 20;
-        console.log(this.$.icon.offsetWidth);
+        this._w = this.$.icon.offsetWidth;
         this._x = x - this._w/2;
         this._y = y - this._w/2;
         this.moveToPos();

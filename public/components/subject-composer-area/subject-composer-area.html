@@ -125,7 +125,6 @@
         for(var i=0; i<length; i++) {
           var element = list[i];
           element.connectId = newConnectId;
-          console.log("no for: " + element.connectId);
         }
       },
       draggingChanged: function (newDragging) {
@@ -207,7 +206,6 @@
         var canvasScale = 3;
         var lineWidth = 4;
         var connections = self.querySelectorAll('connection-node');
-        console.log(connections);
         var conns = self.subject.connections;
         var canvas = self.$.canvas;
         canvas.width  = canvasScale * canvas.offsetWidth;
