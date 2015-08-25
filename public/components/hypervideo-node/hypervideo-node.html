@@ -1,7 +1,19 @@
-//Polymer web component capable of creating and editing the content of an
-// hypervideo.
+<!--
+  This compoenent handles de creation and edition of the content of
+  a Hypervideo. It encapsulate the options of a node of the Subject,
+  like creating, moving, edtiting, deleting, and connecting. It's
+  content composition is handled by a custom component:
+    - hypervideo composer area.
 
+  This needed component was created in order to uncouple the view. They
+  are listed below in costom implemented components.
+-->
+
+<!-- Polymer components used -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<!-- Custom implemented components -->
+<link rel="import" href="../../components/hypervideo-composer-area/hypervideo-composer-area.html">
 
 <dom-module id="hypervideo-node">
   <style is="custom-style">
@@ -75,7 +87,7 @@
       cursor: pointer;
       z-index: 2;
     }
-    #subvideos {
+    #preview {
       position: absolute;
       left:25px;
       top:25px;
@@ -85,72 +97,80 @@
       display: none;
       z-index: 0;
     }
-    #overlay {
+    #composerdialog {
       width: 100%;
       height: 550px;
     }
   </style>
   <template>
-    <paper-dialog id="overlay"
+    <paper-dialog id="composerdialog"
       entry-animation="scale-up-animation"
       exit-animation="scale-down-animation"
       with-backdrop modal>
-      <hypervideo-composer-area id="hypervideocomposer"></hypervideo-composer-area>
+      <hypervideo-composer-area id="hypervideocomposer">
+      </hypervideo-composer-area>
     </paper-dialog>
     <div id="wrapper"
     class="animated fadeIn"
-    on-mouseover="_onHover"
-    on-mouseout="_onHout">
-      <div id="subvideos"></div>
-
+    on-mouseover="onHover"
+    on-mouseout="onHout">
+      <div id="preview">
+      </div>
       <div id="icon"
-      on-tap="_onIconTap"
-      on-track="_onIconTrack">H</div>
+      on-tap="onIconTap"
+      on-track="onIconTrack">H</div>
 
       <div id="connect"
       class="animated fadeIn"
-      on-tap="_onConnectTap">+</div>
+      on-tap="onConnectTap">+</div>
 
       <div id="delete"
       class="animated fadeIn"
-      on-tap="_onDeleteTap">x</div>
+      on-tap="onDeleteTap">x</div>
 
       <div id="edit"
       class="animated fadeIn"
-      on-tap="_onEditTap">e</div>
+      on-tap="onEditTap">e</div>
     </div>
   </template>
   <script>
     HypervideoNode = Polymer({
+//======================== Polymer Component Methods =========================//
       is: 'hypervideo-node',
-      //tag properties
       properties: {
+        // when connecting hypervideos, this property
+        // catches the ids for creating connections
         connectId: {
           type: String,
           notify: true,
           observer: "handleConnectId"
         },
+        // if any hypervideo is being dragged, this
+        // property handles the redraw of connections
+        dragging: {
+          type: Boolean,
+          notify: true,
+        },
+        // if any hypervideo is being deleted, this
+        // property handles the confirmation request
         deleting: {
           type: Boolean,
           notify: true,
         },
-        dragging: {
-          type: Boolean,
-          notify: true,
+        // property that holds the model element: a Hypervideo
+        hypervideo: {
+          type: Object,
+          value: null,
         }
       },
-      // Polymer factory implementation
       factoryImpl: function(options) {
         this._bounds = options.bounds;
         this._x = options.x;
         this._y = options.y;
-        this._hypervideo = null;
+        this.hypervideo = null;
         this._subjectId = options.subjectId;
         this.connectId = options.connectId;
       },
-      // fired when element is attached to DOM
-      // used to get element properties like bounds
-      // and position relative to document
       attached: function() {
         Polymer.dom.flush();
         this._w = this.$.icon.clientWidth;
@@ -158,13 +178,11 @@
         this._y -= this._w/2;
         this.$.wrapper.style.left = this._x+"px";
         this.$.wrapper.style.top = this._y+"px";
-        // event fired so that Meteor can handle the creation
-        // and persistence of a new instance of hypervideo
         this.fire('hypervideo-created');
-        this.id = "_"+this._hypervideo._id;
-        this.hypervideoId = this._hypervideo._id;
+        this.id = "_"+this.hypervideo._id;
+        this.hypervideoId = this.hypervideo._id;
       },
-//=============== Public Methods =================//
+//============================= Public Methods ===============================//
       handleConnectId: function() {
         var className = this.$.icon.className;
         if(this.connectId) {
@@ -192,17 +210,14 @@
           y: this._y + this._w/2,
         };
       },
-//=============== Private Methods ================//
-      // handle taping
-      _onIconTap: function(e) {
+      onIconTap: function(e) {
         if(this.connectId) {
-          this._onConnectTap(e);
+          this.onConnectTap(e);
         } else {
           this._showPreview();
         }
       },
-      // handle tracking
-      _onIconTrack: function(e) {
+      onIconTrack: function(e) {
         switch (e.detail.state) {
           case 'start':
             this._iconTrackStart(e);
@@ -215,6 +230,40 @@
             break;
         }
       },
+      onConnectTap: function(e) {
+        if(this.connectId && this.connectId === this.hypervideoId){
+          this.connectId = null;
+        } else {
+          this.connectId = this.hypervideoId;
+        }
+        this.handleConnectId();
+      },
+      onDeleteTap: function(e) {
+        if(!this.deleting) {
+          this.fire('hypervideo-deleted');
+          this.deleting = true;
+        }
+      },
+      onEditTap: function(e) {
+        this._openComposer();
+      },
+      onHover: function(e) {
+        this.$.delete.style.display = "block";
+        this.$.connect.style.display = "block";
+        this.$.edit.style.display = "block";
+        if(e.target.id !== "icon") {
+          e.target.style.color = "#FFF";
+        }
+      },
+      onHout: function(e) {
+        this.$.delete.style.display = "none";
+        this.$.connect.style.display = "none";
+        this.$.edit.style.display = "none";
+        if(e.target.id !== "icon") {
+          e.target.style.color = e.target.style.backgroundColor;
+        }
+      },
+//============================= Private Methods ==============================//
       _iconTrackStart: function(e) {
         this.$.icon.style.cursor = "move";
         this.dragging = true;
@@ -224,69 +273,35 @@
         var ddy = e.detail.ddy || 0;
         this._x+= ddx;
         this._y+= ddy;
-
-        this._x = (this._x > this._bounds.width)?this._bounds.width : this._x;
+        this._x = (this._x > this._bounds.width)
+          ?this._bounds.width : this._x;
         this._x = (this._x < 20)?20 : this._x;
-        this._y = (this._y > this._bounds.height+this._bounds.y)?this._bounds.height+this._bounds.y : this._y;
-        this._y = (this._y < this._bounds.y + 20)?this._bounds.y + 20 : this._y;
+        this._y = (this._y > this._bounds.height+this._bounds.y)
+          ?this._bounds.height+this._bounds.y : this._y;
+        this._y = (this._y < this._bounds.y + 20)
+          ?this._bounds.y + 20 : this._y;
 
         this.$.wrapper.style.left = this._x+"px";
         this.$.wrapper.style.top = this._y+"px";
       },
       _iconTrackEnd: function() {
-        this._hypervideo.x = this._x;
-        this._hypervideo.y = this._y;
+        this.hypervideo.x = this._x;
+        this.hypervideo.y = this._y;
         this.$.icon.style.cursor = "pointer";
         this.dragging = false;
         this.fire('hypervideo-changed');
       },
-      // handle hovering
-      _onHover: function(e) {
-        this.$.delete.style.display = "block";
-        this.$.connect.style.display = "block";
-        this.$.edit.style.display = "block";
-        if(e.target.id !== "icon") {
-          e.target.style.color = "#FFF";
-        }
-      },
-      _onHout: function(e) {
-        this.$.delete.style.display = "none";
-        this.$.connect.style.display = "none";
-        this.$.edit.style.display = "none";
-        if(e.target.id !== "icon") {
-          e.target.style.color = e.target.style.backgroundColor;
-        }
-      },
-      // Toggle connect mode
-      _onConnectTap: function(e) {
-        if(this.connectId && this.connectId === this.hypervideoId){
-          this.connectId = null;
-        } else {
-          this.connectId = this.hypervideoId;
-        }
-        this.handleConnectId();
-      },
-      // Delete Node
-      _onDeleteTap: function(e) {
-        if(!this.deleting) {
-          this.fire('hypervideo-deleted');
-          this.deleting = true;
-        }
-      },
-      _onEditTap: function(e) {
-        this.toggle();
-      },
       _showPreview: function() {
-        if(this.$.subvideos.style.display !== "block") {
-          this.$.subvideos.style.display = "block";
+        if(this.$.preview.style.display !== "block") {
+          this.$.preview.style.display = "block";
         }
         else {
-          this.$.subvideos.style.display = "none";
+          this.$.preview.style.display = "none";
         }
       },
-      toggle: function() {
-        this.$.hypervideocomposer.hypervideoId = this.hypervideoId;
-        this.$.overlay.open();
+      _openComposer: function() {
+        this.$.hypervideocomposer.hypervideo = this.hypervideo;
+        this.$.composerdialog.open();
       },
     });
   </script>

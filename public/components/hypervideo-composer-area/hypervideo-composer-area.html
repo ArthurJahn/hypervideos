@@ -116,8 +116,8 @@
           dialog-confirm autofocus>Fechar</paper-button>
           <paper-input id="hypervideoName"
             name="name"
-            label="Nome do Curso"
-            on-change="_updateSubject">
+            label="Nome do Hypervideo"
+            on-change="_updateHypervideo">
           </paper-input>
           <paper-button id="toggleDrawer"
           on-tap="toggleDrawer">videos</paper-button>
@@ -131,6 +131,7 @@
   </template>
   <script>
     Polymer({
+//============================= Polymer Methods ==============================//
       is: 'hypervideo-composer-area',
       properties: {
         fileObjects: {
@@ -141,8 +142,19 @@
         },
         filesProgress: {
           type: Array,
+        },
+        // property that holds the model element: a Hypervideo
+        hypervideo: {
+          type: Object,
+          value: null,
         }
       },
+      ready: function() {
+        this.firstTouch = true;
+        this.$.drawer.forceNarrow = true;
+        this.$.drawer.openDrawer();
+      },
+//============================= Public Methods ===============================//
       log: function(e) {
         console.log("completou!!");
       },
@@ -150,11 +162,6 @@
       },
       toggleDrawer: function() {
         this.$.drawer.togglePanel();
-      },
-      ready: function() {
-        this.firstTouch = true;
-        this.$.drawer.forceNarrow = true;
-        this.$.drawer.openDrawer();
       },
       loadFiles: function(e) {
         this.files = e.target.files;

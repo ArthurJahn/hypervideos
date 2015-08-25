@@ -34,14 +34,14 @@ Template.newSubjectPanel.events({
       hypervideo.y = e.target._y;
       hypervideo.subjectId = e.target._subjectId;
       hypervideo.save();
-      e.target._hypervideo = hypervideo;
+      e.target.hypervideo = hypervideo;
     },
     'hypervideo-changed hypervideo-node': function(e, template) {
-      var hypervideo = e.target._hypervideo;
+      var hypervideo = e.target.hypervideo;
       hypervideo.save();
     },
     'hypervideo-deleted hypervideo-node': function(e, template) {
-      var hypervideo = e.target._hypervideo;
+      var hypervideo = e.target.hypervideo;
       var subject = Subjects.findOne({_id: hypervideo.subjectId});
       subject.removeHypervideo(hypervideo._id);
       hypervideo.remove();

@@ -1,10 +1,22 @@
+<!--
+  This compoenent handles de creation and edition of the hole Subject content.
+  The subject composer area is responsible for the creation and edition of:
+    - Hypervideos and their subvideo components.
+    - Connections between hypervideos created.
+
+  These needed components were created in order to uncouple the view. They
+  are listed below in costom implemented components.
+-->
+
+<!-- Polymer components used -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../../components/hypervideo-node/hypervideo-node.html">
-<link rel="import" href="../../components/connection-node/connection-node.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
-<link rel="import" href="../../components/hypervideo-composer-area/hypervideo-composer-area.html">
+
+<!-- Custom implemented components -->
+<link rel="import" href="../../components/hypervideo-node/hypervideo-node.html">
+<link rel="import" href="../../components/connection-node/connection-node.html">
 
 <dom-module id="subject-composer-area">
   <style is="custom-style">
@@ -59,49 +71,53 @@
         <div id="hint-text">Clique para adicionar um hypervideo</div>
       </template>
     </div>
-    <!-- this is where hypervideos will be displayed -->
+    <!-- this is where hypervideo-nodes & connection-nodes will be displayed -->
   </template>
   <script>
     Polymer({
+//======================== Polymer Component Methods =========================//
       is: 'subject-composer-area',
-      composerTap: function(e) {
-        this._updateSubject(e);
-        this._createHypervideo(e);
-        this.firstTouch = !(this.subject.hypervideos.length>0);
-      },
       ready: function() {
         this.firstTouch = true;
         this.subject = null;
       },
       properties: {
-        // when connecting hypervideos this
-        // variable catches the ids for connecting
+        // when connecting hypervideos, this property
+        // catches the ids for creating connections
         connectId: {
           type: String,
           value: null,
           notify: true,
           observer: "connectIdChanged"
         },
-        // if any hypervideo is being dragged
-        // this variable handles the redraw of connections
+        // if any hypervideo is being dragged, this
+        // property handles the redraw of connections
         dragging: {
           type: Boolean,
           value: false,
           notify: true,
           observer: "draggingChanged"
         },
-        // if any hypervideo is being deleted
-        // this variable handles the confirmation request
+        // if any hypervideo is being deleted, this
+        // property handles the confirmation request
         deleting: {
           type: Boolean,
           value: false,
           notify: true,
           observer: "deletingChanged"
         },
+        // property that holds the model element: a Subject
         subject: {
           type: Object,
           value: null,
         }
+      },
+
+//========================= Custom Component Methods =========================//
+      composerTap: function(e) {
+        this._updateSubject(e);
+        this._createHypervideo(e);
+        this.firstTouch = !(this.subject.hypervideos.length>0);
       },
       connectIdChanged: function (newConnectId) {
         var list = this.querySelectorAll('hypervideo-node, connection-node');
@@ -128,6 +144,8 @@
           self._drawConnections();
         }
       },
+
+//===================== Custom Component Private Methods =====================//
       _createHypervideo: function(e) {
         var self = this;
         var xOffset = 35; //depends on initial definition in toucharea css
@@ -142,27 +160,16 @@
         }
         var touchX = e.detail.x - bounds.x;
         var touchY = e.detail.y - bounds.y;
-        var subjectId = self.subject._id;
         var options = {
           x : touchX,
           y : touchY,
           bounds: bounds,
-          subjectId: subjectId,
+          subjectId: self.subject._id,
           connectId: self.connectId
         }
         var hypervideoNode = new HypervideoNode(options);
-
-        hypervideoNode.addEventListener('connect-id-changed', function(ev){
-          self._connectListener(this);
-        });
-        hypervideoNode.addEventListener('deleting-changed', function(ev){
-          self._deletingListener(this);
-        });
-        hypervideoNode.addEventListener('dragging-changed', function(ev){
-          self._draggingListener(this);
-        });
+        self._addHypervideoListeners(hypervideoNode);
         self.appendChild(hypervideoNode);
-        //handle
         self.subject.addHypervideo(hypervideoNode.hypervideoId);
       },
       _updateSubject: function(e) {
@@ -270,6 +277,24 @@
         self.connectId = null;
         self._firstId = null;
       },
+      _addHypervideoListeners: function(hypervideoNode) {
+        var self = this;
+        hypervideoNode.addEventListener('connect-id-changed', function(ev){
+          self._connectListener(this);
+        });
+        hypervideoNode.addEventListener('deleting-changed', function(ev){
+          self._deletingListener(this);
+        });
+        hypervideoNode.addEventListener('dragging-changed', function(ev){
+          self._draggingListener(this);
+        });
+      },
+      //connection Listener functions
+      _connectionListener: function(connInstance) {
+        var self = this;
+        self.removeChild(connInstance);
+        self._drawConnections();
+      },
       _showConnection: function(connection, firstPos, secondPos) {
         var self = this;
         var xmid = (firstPos.x + secondPos.x)/2;
@@ -282,11 +307,6 @@
               return;
           }
         }
-      },
-      _connectionListener: function(connInstance) {
-        var self = this;
-        self.removeChild(connInstance);
-        self._drawConnections();
       }
     });
   </script>
