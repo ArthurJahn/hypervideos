@@ -1,12 +1,11 @@
-if (Meteor.isServer) {
-  Meteor.startup(function () {
-    // FIX ME - only for tests
-    // code to run on server at startup
-    if (Subjects.find().count() !== 0) {
-      Subjects.remove({});
-      Hypervideos.remove({});
-      Videos.remove({});
-    }
+Meteor.startup(function () {
+  // FIX ME - only for tests
+  // code to run on server at startup
+  if (Subjects.find().count() !== 0) {
+    Subjects.remove({});
+    Hypervideos.remove({});
+    Videos.remove({});
+  }
   });
   Videos.deny({
     insert: function(){
@@ -37,13 +36,3 @@ if (Meteor.isServer) {
       return true;
     }
   });
-}
-Router.route('/register');
-Router.route('/login');
-Router.route('/', {
-  name: "mainMenu",
-  template: "mainMenu",
-  subjects: function() {
-    return Subjects.find();
-  }
-});
