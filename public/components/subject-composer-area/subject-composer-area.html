@@ -189,7 +189,7 @@
         if(firstId !== secondId) {
           var connection = {first: firstId, second: secondId};
           if(self.subject.addConnection(connection)){
-            var connNode = new ConnectionNode(connection,self.subject._id);
+            var connNode = new ConnectionNode(connection);
             connNode.addEventListener('connection-removed', function(ev){
               self._connectionListener(this);
             });
