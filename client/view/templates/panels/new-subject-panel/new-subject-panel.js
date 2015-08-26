@@ -21,8 +21,8 @@ Template.newSubjectPanel.events({
 
 // ======================= Hypervideo Controll Methods =======================//
   'hypervideo-created hypervideo-node': function(e, template) {
-    var x = e.target._x, y = e.target._y, subjectId = e.target._subjectId;
-    var hypervideo = hypervideoController.createHypervideo(subjectId,x,y);
+    var x = e.target._x, y = e.target._y;
+    var hypervideo = subjectController.addHypervideo(x,y);
     e.target.hypervideo = hypervideo;
   },
   'hypervideo-changed hypervideo-node': function(e, template) {
@@ -31,8 +31,8 @@ Template.newSubjectPanel.events({
   },
   'hypervideo-deleted hypervideo-node': function(e, template) {
     var hypervideo = e.target.hypervideo;
-    hypervideoController.removeHypervideo(hypervideo);
     subjectController.removeHypervideo(hypervideo._id);
+    hypervideoController.removeHypervideo(hypervideo);
   },
   'upload-videos hypervideo-composer-area': function(e, template) {
     var composer = e.target;

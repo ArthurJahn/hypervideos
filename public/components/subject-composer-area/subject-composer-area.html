@@ -169,7 +169,7 @@
         var hypervideoNode = new HypervideoNode(options);
         self._addHypervideoListeners(hypervideoNode);
         self.appendChild(hypervideoNode);
-        self.subject.addHypervideo(hypervideoNode.hypervideoId);
+        self.fire('add-hypervideo');
       },
       _updateSubject: function(e) {
         if(this.subject === null) {

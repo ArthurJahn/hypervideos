@@ -24,7 +24,12 @@ SubjectController.prototype = (function () {
     removeHypervideo: function (hypervideoId) {
       subject.removeHypervideo(hypervideoId);
     },
-
+    addHypervideo: function (x,y) {
+      var hypervideo = hypervideoController.createHypervideo(x,y);
+      subject.addHypervideo(hypervideo._id);
+      hypervideo.subjectId = Subject._id;
+      return hypervideo;
+    },
   };
 })();
 

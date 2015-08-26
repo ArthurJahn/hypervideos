@@ -26,7 +26,6 @@ HypervideoController.prototype = (function () {
     removeConnection: function(conn) {
       hypervideo.removeConnection(conn);
     },
-
   };
 })();
 
