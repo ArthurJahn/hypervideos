@@ -12,6 +12,8 @@ HypervideoController.prototype = (function () {
       hypervideo.x = x;
       hypervideo.y = y;
       hypervideo.subjectId = subjectId;
+      hypervideo.subvideos = [];
+      hypervideo.connections = [];
       hypervideo.save();
       return hypervideo;
     },
@@ -25,6 +27,16 @@ HypervideoController.prototype = (function () {
     },
     removeConnection: function(conn) {
       hypervideo.removeConnection(conn);
+    },
+    addSubvideo: function(x,y,mediaId) {
+      var subvideo = subvideoController.createSubvideo(x,y,mediaId);
+      subvideo.hypervideoId = hypervideo._id;
+      hypervideo.addSubvideo(subvideo._id);
+      return subvideo;
+    },
+    removeSubvideo: function (subvideo) {
+      hypervideo.removeHypervideo(subvideo._id);
+      subvideoController.removeSubvideo(subvideo);
     },
   };
 })();

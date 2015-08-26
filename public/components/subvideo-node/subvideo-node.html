@@ -2,126 +2,248 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 
-<dom-module id="upload-file">
+<dom-module id="subvideo-node">
   <style media="screen">
-    #wrapper {
-      position: relative;
-      height: 35px;
-      color: #D23216;/*--sec-accent-color*/
-      width: 92%;
-      padding: 5px 10px 0 10px;
-    }
-    p {
-      margin: 0px;
-      padding: 10px 5px 0 0;
-      max-width: 80%;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    iron-icon {
-      float: right;
-      margin-top: -22px;
-    }
-    progress {
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      appearance: none;
-      position: absolute;
-      height: 5px;
-      width: 92%;
-      background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
-    }
-    progress::-webkit-progress-bar {
-      background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
-    }
-    progress::-webkit-progress-value {
-      background-color: #CFD8DC;/*var(--light-primary-color)*/
-    }
-    progress::-moz-progress-bar {
-      background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
-    }
-    progress::-moz-progress-value {
-      background-color: #CFD8DC;/*var(--light-primary-color)*/
-    }
-    /* if upload is waiting to begin */
-    .waiting {
-      position: absolute;
-      top: 10px; left: 10px; bottom: 0; right: 10px;
-      background-image: linear-gradient(
-        -45deg,
-        rgba(220, 220, 220, .2) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(220, 220, 220, .2) 50%,
-        rgba(220, 220, 220, .2) 75%,
-        transparent 75%,
-        transparent
-      );
-      z-index: 1;
-      background-size: 50px 50px;
-      animation: move 2s linear infinite;
-      overflow: hidden;
-    }
-    @keyframes move {
-      0% {
-        background-position: 0 0;
-      }
-      100% {
-        background-position: 50px 50px;
-      }
-    }
+  #wrapper {
+    position: absolute;
+  }
+  #icon {
+    position: absolute;
+    padding: 25px 23px;
+    line-height: 10px;
+    border-radius: 50%;
+    background-color:#DCDCDC;/*var(--light-divider-color);*/
+    color: #212121;/*var(--light-divider-color);*/
+    text-align: center;
+    font-size: 19px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1;
+  }
+  #connect {
+    position: absolute;
+    left:3px;
+    top:-1px;
+    width: 16px;
+    height: 16px;
+    line-height: 10px;
+    border-radius: 50%;
+    background-color:#FFC107;/*var(--accent-color);*/
+    color: #FFC107;/*var(--accent-color);*/
+    text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    margin:0;
+    padding: 1px;
+    z-index: 2;
+  }
+  #delete {
+    position: absolute;
+    left:-7px;
+    top:14px;
+    width: 15px;
+    height: 16px;
+    line-height: 10px;
+    border-radius: 50%;
+    background-color:#D23216;/*var(--sec-accent-color);*/
+    color: #D23216;/*var(--sec-accent-color);*/
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    margin:0;
+    padding: 1px;
+    z-index: 2;
+  }
+  #edit {
+    position: absolute;
+    left:21px;
+    top:-6px;
+    width: 12px;
+    height: 12px;
+    line-height: 10px;
+    border-radius: 50%;
+    background-color: #12AE28;/*var(--trd-accent-color);*/
+    color: #12AE28;/*var(--trd-accent-color);*/
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    margin:0;
+    padding: 3px;
+    z-index: 2;
+  }
   </style>
   <template>
-    <div id="wrapper">
-      <p>{{file.data.blob.name}}</p>
-      <progress value="{{progress}}" max="100">
-      </progress>
-      <template is="dom-if" if="{{waiting}}">
-        <div class="waiting"></div>
-      </template>
-      <template is="dom-if" if="{{uploaded}}">
-        <iron-icon icon="done"></iron-icon>
-      </template>
+    <div id="wrapper"
+    class="animated fadeIn"
+    on-mouseover="onHover"
+    on-mouseout="onHout">
+      <div id="icon"
+      on-tap="onIconTap"
+      on-track="onIconTrack">V
+      </div>
+      <iron-icon id="connect"
+      class="animated fadeIn"
+      on-tap="onConnectTap"
+      icon="add"></iron-icon>
+      <iron-icon id="edit"
+      class="animated fadeIn"
+      on-tap="onEditTap"
+      icon="build"></iron-icon>
     </div>
   </template>
   <script>
-    UploadFile = Polymer({
-      is: 'upload-file',
+    SubvideoNode = Polymer({
+//======================== Polymer Component Methods =========================//
+      is: 'subvideo-node',
       properties: {
-        file: Object,
-        progress: Number,
-        waiting: {
-          type: Boolean,
-          value: true
+        // when connecting subvideos, this property
+        // catches the ids for creating connections
+        connectId: {
+          type: String,
+          notify: true,
+          observer: "handleConnectId"
         },
-        uploaded: {
+        // if any subvideo is being dragged, this
+        // property handles the redraw of connections
+        dragging: {
           type: Boolean,
-          value: false
+          notify: true,
+        },
+        // property that holds the model element: a Subvideo
+        subvideo: {
+          type: Object,
+          value: null,
         }
       },
-      ready: function () {
-        var self = this;
-        console.log(self.file);
-        self._setProgress();
+      factoryImpl: function(options) {
+        this._bounds = options.bounds;
+        this._x = options.x;
+        this._y = options.y;
+        this.subvideo = null;
+        this.connectId = options.connectId;
+        this.mediaId = options.mediaId;
       },
-      _setProgress: function() {
-        var self = this;
-        self._progressInterval = setInterval(function() {
-          self.progress = self.file.uploadProgress();
-          if(self.progress !== 0) {
-            self.waiting = false;
+      attached: function() {
+        Polymer.dom.flush();
+        this._w = this.$.icon.clientWidth;
+        this._x -= this._w/2;
+        this._y -= this._w/2;
+        this.$.wrapper.style.left = this._x+"px";
+        this.$.wrapper.style.top = this._y+"px";
+        this.fire('subvideo-created');
+        this.id = "_"+this.subvideo._id;
+        this.subvideoId = this.subvideo._id;
+      },
+      detached: function() {
+        this.fire('subvideo-deleted');
+      },
+//============================= Public Methods ===============================//
+      handleConnectId: function() {
+        var className = this.$.icon.className;
+        if(this.connectId) {
+          this.$.icon.style.background = "#FFC107";
+          if (this.connectId === this.subvideoId) {
+            if(!this._shaking){
+              this._shaking = true;
+              this.$.icon.className = className.concat(" animated infinite shake");
+            }
           }
-          if(self.progress === 100) {
-            clearInterval(self._progressInterval);
-            self.querySelector('progress').style.opacity = 0;
-            self.uploaded = true;
-            self.$.wrapper.style.color = "#12AE28";//--trd-accent-color
-            self.fire('upload-complete');
+          else {
+            this._shaking = false;
+            this.$.icon.className = className.replace(" animated infinite shake","");
           }
-        },100);
-      }
+        }
+        else {
+          this._shaking = false;
+          this.$.icon.className = className.replace(" animated infinite shake","");
+          this.$.icon.style.background = "#DCDCDC";
+        }
+      },
+      getPos(){
+        return {
+          x: this._x + this._w/2,
+          y: this._y + this._w/2,
+        };
+      },
+      onIconTap: function(e) {
+        if(this.connectId) {
+          this.onConnectTap(e);
+        } else {
+          this._toggleEditing();
+        }
+      },
+      onIconTrack: function(e) {
+        switch (e.detail.state) {
+          case 'start':
+            this._iconTrackStart(e);
+            break;
+          case 'track':
+            this._iconTrackXY(e);
+            break;
+          case 'end':
+            this._iconTrackEnd();
+            break;
+        }
+      },
+      onConnectTap: function(e) {
+        if(this.connectId && this.connectId === this.subvideoId){
+          this.connectId = null;
+        } else {
+          this.connectId = this.subvideoId;
+        }
+        this.handleConnectId();
+      },
+      onEditTap: function(e) {
+        this._openComposer();
+      },
+      onHover: function(e) {
+        this.$.connect.style.display = "block";
+        this.$.edit.style.display = "block";
+        if(e.target.id !== "icon" &&
+        e.target.id !== "preview") {
+          e.target.style.color = "#FFF";
+        }
+      },
+      onHout: function(e) {
+        this.$.connect.style.display = "none";
+        this.$.edit.style.display = "none";
+        if(e.target.id !== "icon" &&
+        e.target.id !== "preview") {
+          e.target.style.color = e.target.style.backgroundColor;
+        }
+      },
+//============================= Private Methods ==============================//
+      _iconTrackStart: function(e) {
+        this.$.icon.style.cursor = "move";
+        this.dragging = true;
+      },
+      _iconTrackXY: function(e) {
+        var ddx = e.detail.ddx || 0;
+        var ddy = e.detail.ddy || 0;
+        this._x+= ddx;
+        this._y+= ddy;
+        this._x = (this._x > this._bounds.width)
+          ?this._bounds.width : this._x;
+        this._x = (this._x < 20)?20 : this._x;
+        this._y = (this._y > this._bounds.height+this._bounds.y)
+          ?this._bounds.height+this._bounds.y : this._y;
+        this._y = (this._y < this._bounds.y + 20)
+          ?this._bounds.y + 20 : this._y;
+
+        this.$.wrapper.style.left = this._x+"px";
+        this.$.wrapper.style.top = this._y+"px";
+      },
+      _iconTrackEnd: function() {
+        this.subvideo.x = this._x;
+        this.subvideo.y = this._y;
+        this.$.icon.style.cursor = "pointer";
+        this.dragging = false;
+        this.fire('subvideo-changed');
+      },
+
     });
   </script>
 </dom-module>
