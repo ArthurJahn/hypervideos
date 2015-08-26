@@ -31,8 +31,7 @@ Template.newSubjectPanel.events({
   },
   'hypervideo-deleted hypervideo-node': function(e, template) {
     var hypervideo = e.target.hypervideo;
-    subjectController.removeHypervideo(hypervideo._id);
-    hypervideoController.removeHypervideo(hypervideo);
+    subjectController.removeHypervideo(hypervideo);
   },
   'upload-videos hypervideo-composer-area': function(e, template) {
     var composer = e.target;

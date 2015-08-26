@@ -21,8 +21,9 @@ SubjectController.prototype = (function () {
     removeConnection: function(conn) {
       subject.removeConnection(conn);
     },
-    removeHypervideo: function (hypervideoId) {
-      subject.removeHypervideo(hypervideoId);
+    removeHypervideo: function (hypervideo) {
+      subject.removeHypervideo(hypervideo._id);
+      hypervideoController.removeHypervideo(hypervideo);
     },
     addHypervideo: function (x,y) {
       var hypervideo = hypervideoController.createHypervideo(x,y);

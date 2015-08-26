@@ -199,6 +199,9 @@
         this.id = "_"+this.hypervideo._id;
         this.hypervideoId = this.hypervideo._id;
       },
+      detached: function() {
+        this.fire('hypervideo-deleted');
+      },
 //============================= Public Methods ===============================//
       handleConnectId: function() {
         var className = this.$.icon.className;
@@ -257,10 +260,7 @@
         this.handleConnectId();
       },
       onDeleteTap: function(e) {
-        if(!this.deleting) {
-          this.fire('hypervideo-deleted');
-          this.deleting = true;
-        }
+        this.deleting = !this.deleting;
       },
       onEditTap: function(e) {
         this._openComposer();

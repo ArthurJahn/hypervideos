@@ -55,6 +55,20 @@
     font-size: 22px;
     font-weight: bold;
   }
+  #confirmation {
+    padding: 12px;
+    height: 80px;
+    width: 200px;
+    color: #D23216;/*var(--sec-accent-color);*/
+  }
+  #confirmation paper-button {
+    font-size: 13px;
+    position: absolute;
+    margin: 0;
+    left: 0;
+    bottom:0;
+    width: 100%;
+  }
   </style>
   <template>
     <paper-input id="subjectName"
@@ -71,6 +85,16 @@
         <div id="hint-text">Clique para adicionar um hypervideo</div>
       </template>
     </div>
+    <paper-dialog id="confirmation"
+    entry-animation="scale-up-animation"
+    exit-animation="scale-down-animation"
+    on-iron-overlay-closed="onDismiss"
+    with-backdrop>
+      Deseja excluir o hypervideo?
+      <paper-button id="confirmButton"
+      on-tap="confirmDelete"
+      dialog-confirm>SIM!</paper-button>
+    </paper-dialog>
     <!-- this is where hypervideo-nodes & connection-nodes will be displayed -->
   </template>
   <script>
@@ -140,10 +164,24 @@
       deletingChanged: function (newDeleting) {
         var self = this;
         if(self.deleting) {
+          self.$.confirmation.open();
           self._drawConnections();
         }
       },
-
+      confirmDelete: function() {
+        var self = this;
+        if(self._deletingNode)
+          self.removeChild(self._deletingNode);
+        self._deletingNode = null;
+      },
+      onDismiss: function() {
+        var self = this;
+        if(self._deletingNode){
+          self._deletingNode.deleting = false;
+          self._deletingNode = null;
+        }
+        self.deleting = false;
+      },
 //===================== Custom Component Private Methods =====================//
       _createHypervideo: function(e) {
         var self = this;
@@ -169,7 +207,6 @@
         var hypervideoNode = new HypervideoNode(options);
         self._addHypervideoListeners(hypervideoNode);
         self.appendChild(hypervideoNode);
-        self.fire('add-hypervideo');
       },
       _updateSubject: function(e) {
         if(this.subject === null) {
@@ -256,11 +293,7 @@
       _deletingListener: function(hnInstance) {
         var self = this;
         self.deleting = hnInstance.deleting;
-        self.subject.removeHypervideo(hnInstance.hypervideoId);
-        self.removeChild(hnInstance);
-
-        self._resetConnecting();
-        self._drawConnections();
+        self._deletingNode = hnInstance;
       },
       _draggingListener: function(hnInstance) {
         var self = this;
