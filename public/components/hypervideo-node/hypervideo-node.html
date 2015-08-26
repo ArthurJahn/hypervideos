@@ -91,13 +91,27 @@
     }
     #preview {
       position: absolute;
-      left:25px;
-      top:25px;
-      width: 120px;
-      height: 70px;
-      background: #212121;
-      display: none;
+      width: 0px;
+      height: 10px;
+      left:1px;
+      top:0px;
+      border-radius: 30px;
+      background-color:#DCDCDC;/*var(--light-divider-color);*/
+      color: #212121;/*var(--light-divider-color);*/
+      padding: 25px 30px;
+      text-align: center;
+      font-size: 16px;
+      opacity: 0;
       z-index: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      -webkit-transition:all .2s ease;
+      -moz-transition:all .2s ease;
+      -ms-transition:all .2s ease;
+      -o-transition:all .2s ease;
+      transition:all .2s ease;
     }
     #composerdialog {
       width: 100%;
@@ -116,11 +130,11 @@
     class="animated fadeIn"
     on-mouseover="onHover"
     on-mouseout="onHout">
-      <div id="preview">
-      </div>
       <div id="icon"
       on-tap="onIconTap"
-      on-track="onIconTrack">H</div>
+      on-track="onIconTrack">H
+      <div id="preview">{{hypervideo.name}}</div>
+      </div>
 
       <iron-icon id="connect"
       class="animated fadeIn"
@@ -190,6 +204,7 @@
         var className = this.$.icon.className;
         if(this.connectId) {
           this.$.icon.style.background = "#FFC107";
+          this._togglePreview();
           if (this.connectId === this.hypervideoId) {
             if(!this._shaking){
               this._shaking = true;
@@ -217,7 +232,7 @@
         if(this.connectId) {
           this.onConnectTap(e);
         } else {
-          this._showPreview();
+          this._togglePreview();
         }
       },
       onIconTrack: function(e) {
@@ -254,7 +269,8 @@
         this.$.delete.style.display = "block";
         this.$.connect.style.display = "block";
         this.$.edit.style.display = "block";
-        if(e.target.id !== "icon") {
+        if(e.target.id !== "icon" &&
+        e.target.id !== "preview") {
           e.target.style.color = "#FFF";
         }
       },
@@ -262,7 +278,8 @@
         this.$.delete.style.display = "none";
         this.$.connect.style.display = "none";
         this.$.edit.style.display = "none";
-        if(e.target.id !== "icon") {
+        if(e.target.id !== "icon" &&
+        e.target.id !== "preview") {
           e.target.style.color = e.target.style.backgroundColor;
         }
       },
@@ -294,12 +311,19 @@
         this.dragging = false;
         this.fire('hypervideo-changed');
       },
-      _showPreview: function() {
-        if(this.$.preview.style.display !== "block") {
-          this.$.preview.style.display = "block";
+      _togglePreview: function() {
+        if(this.connectId){
+          this.$.preview.style.opacity = "0";
+          this.$.preview.style.width = "0";
+          return;
+        }
+        if(this.$.preview.style.opacity !== "1") {
+          this.$.preview.style.opacity = "1";
+          this.$.preview.style.width = "150px";
         }
         else {
-          this.$.preview.style.display = "none";
+          this.$.preview.style.opacity = "0";
+          this.$.preview.style.width = "0";
         }
       },
       _openComposer: function() {
