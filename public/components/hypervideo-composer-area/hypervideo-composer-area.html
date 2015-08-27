@@ -4,6 +4,7 @@
 <link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
 <link rel="import" href="../../components/upload-file/upload-file.html">
 <link rel="import" href="../../components/subvideo-node/subvideo-node.html">
+<link rel="import" href="../../components/connection-node/connection-node.html">
 
 <dom-module id="hypervideo-composer-area">
   <style is="custom-style">
@@ -92,7 +93,7 @@
           <div class="row content">
             <!-- Here will be displayed uploaded videos -->
             <template id="files" is="dom-repeat" items="{{fileObjects}}" as="videoFile">
-              <upload-file file="{{videoFile}}" on-upload-complete="log"></upload-file>
+              <upload-file file="{{videoFile}}" on-upload-complete="handleUploadComplete"></upload-file>
             </template>
           </div>
           <div id="fileInputArea"
@@ -151,7 +152,21 @@
         hypervideo: {
           type: Object,
           value: null,
-        }
+        },
+        // if any hypervideo is being dragged, this
+        // property handles the redraw of connections
+        dragging: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          observer: "draggingChanged"
+        },
+        connectId: {
+          type: String,
+          value: null,
+          notify: true,
+          observer: "connectIdChanged"
+        },
       },
       ready: function() {
         this.firstTouch = true;
@@ -159,7 +174,7 @@
         this.$.drawer.openDrawer();
       },
 //============================= Public Methods ===============================//
-      log: function(e) {
+      handleUploadComplete: function(e) {
         var self = this;
         self._createSubvideo(e.target.file._id);
       },
@@ -171,6 +186,24 @@
       loadFiles: function(e) {
         this.files = e.target.files;
         this.fire('upload-videos');
+      },
+      connectIdChanged: function (newConnectId) {
+        var list = this.querySelectorAll('subvideo-node, connection-node');
+        var length = list.length;
+        for(var i=0; i<length; i++) {
+          var element = list[i];
+          element.connectId = newConnectId;
+        }
+      },
+      draggingChanged: function (newDragging) {
+        var self = this;
+        if(self.dragging) {
+          self._drawInterval = setInterval(function() {
+            self._drawConnections();
+          }, 40);
+        } else {
+          clearInterval(self._drawInterval);
+        }
       },
 //============================= Private Methods ==============================//
       _createSubvideo: function(mediaId) {
@@ -185,21 +218,143 @@
           x: rect.left-xOffset,
           y: rect.top-yOffset
         };
-        // FIX-ME: Make this aleatory position
-        var touchX = 400 - bounds.x;
-        var touchY = 300 - bounds.y;
+        
+        var pos = self._nextNodePos();
         var options = {
-          x : touchX,
-          y : touchY,
+          x : pos.x,
+          y : pos.y,
           bounds: bounds,
           mediaId: mediaId,
           connectId: self.connectId
         }
         var subvideoNode = new SubvideoNode(options);
+        self._addSubvideoListeners(subvideoNode);
         self.$.subvideosFrame.appendChild(subvideoNode);
       },
       _updateHypervideo: function() {
         this.fire('hypervideo-changed');
+      },
+      _nodesCount: function() {
+        var self = this;
+        var list = self.querySelectorAll('subvideo-node');
+        return list.length;
+      },
+      _nextNodePos: function() {
+        var self = this;
+        var i = self._nodesCount();
+        var pos = {
+          x: 300 + i * 70,
+          y: 110 + i * 20
+        };
+        return pos;
+      },
+      _connect: function(firstId, secondId) {
+        var self = this;
+        if(firstId !== secondId) {
+          var connection = {first: firstId, second: secondId};
+          if(self.hypervideo.addConnection(connection)){
+            var connNode = new ConnectionNode(connection);
+            connNode.addEventListener('connection-removed', function(ev){
+              self._connectionListener(this);
+            });
+            self.$.subvideosFrame.appendChild(connNode);
+            self._resetConnecting();
+            self.fire('hypervideo-changed');
+          }
+          self._resetConnecting();
+        }
+        self._drawConnections();
+      },
+      _drawConnections: function() {
+        var self = this;
+        var canvasScale = 3;
+        var lineWidth = 4;
+        var connections = self.querySelectorAll('connection-node');
+        var canvas = self.$.canvas;
+        canvas.width  = canvasScale * canvas.offsetWidth;
+        canvas.height = canvasScale * canvas.offsetHeight;
+        var canvasXOffset = 10;
+        var canvasYOffset = 75;
+        var ctx = canvas.getContext("2d");
+
+        ctx.beginPath();
+        for(var i=0; i< connections.length; i++) {
+          var conn = connections[i].connection;
+          //FIX ME find a better way to do it...
+          var first = self._findSubvideoNode(conn.first);
+          var second = self._findSubvideoNode(conn.second);
+          if(first && second) {
+            var firstPos = first.getPos();
+            var secondPos = second.getPos();
+            var x1 = canvasScale * (firstPos.x - canvasXOffset);
+            var y1 = canvasScale * (firstPos.y - canvasYOffset);
+            var x2 = canvasScale * (secondPos.x - canvasXOffset);
+            var y2 = canvasScale * (secondPos.y - canvasYOffset);
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            self._showConnection(conn, firstPos, secondPos);
+          }
+          else {
+            self.removeChild(connections[i]);
+          }
+        }
+        ctx.lineWidth = lineWidth;
+        ctx.stroke();
+      },
+      _findSubvideoNode: function(id) {
+        var self = this;
+        return self.querySelector('#_'+id);
+      },
+      _resetConnecting: function(){
+        var self = this;
+        self.connectId = null;
+        self._firstId = null;
+      },
+      //subvideo listener functions
+      _connectListener: function(snInstance) {
+        var self = this;
+        self.connectId = snInstance.connectId;
+        if(self.connectId) {
+          if(!self._firstId) {
+            self._firstId = self.connectId;
+          } else {
+            self._connect(self._firstId, self.connectId);
+          }
+        } else {
+          self._firstId = self.connectId;
+        }
+      },
+      _draggingListener: function(snInstance) {
+        var self = this;
+        self.dragging = snInstance.dragging;
+      },
+      _addSubvideoListeners: function(subvideoNode) {
+        var self = this;
+        subvideoNode.addEventListener('connect-id-changed', function(ev){
+          self._connectListener(this);
+        });
+        subvideoNode.addEventListener('dragging-changed', function(ev){
+          self._draggingListener(this);
+        });
+      },
+      //connection Listener functions
+      _connectionListener: function(connInstance) {
+        var self = this;
+        self.$.subvideosFrame.removeChild(connInstance);
+        self._drawConnections();
+      },
+      _showConnection: function(connection, firstPos, secondPos) {
+        var self = this;
+        var xmid = (firstPos.x + secondPos.x)/2;
+        var ymid = (firstPos.y + secondPos.y)/2;
+        var list = self.querySelectorAll('connection-node');
+        for(var i=0; i<list.length; i++) {
+          var connNode = list[i];
+          if(connNode.connection === connection) {
+              connNode.setPos(xmid, ymid);
+              return;
+          }
+        }
       }
     });
   </script>

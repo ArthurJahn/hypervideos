@@ -34,24 +34,7 @@
     font-size: 13px;
     font-weight: bold;
     cursor: pointer;
-    margin:0;
-    padding: 1px;
-    z-index: 2;
-  }
-  #delete {
-    position: absolute;
-    left:-7px;
-    top:14px;
-    width: 15px;
-    height: 16px;
-    line-height: 10px;
-    border-radius: 50%;
-    background-color:#D23216;/*var(--sec-accent-color);*/
-    color: #D23216;/*var(--sec-accent-color);*/
-    text-align: center;
-    font-size: 12px;
-    font-weight: bold;
-    cursor: pointer;
+    display: none;
     margin:0;
     padding: 1px;
     z-index: 2;
@@ -70,6 +53,7 @@
     font-size: 12px;
     font-weight: bold;
     cursor: pointer;
+    display: none;
     margin:0;
     padding: 3px;
     z-index: 2;
@@ -225,13 +209,13 @@
         var ddy = e.detail.ddy || 0;
         this._x+= ddx;
         this._y+= ddy;
-        this._x = (this._x > this._bounds.width)
-          ?this._bounds.width : this._x;
+        this._x = (this._x > this._bounds.width - this._w)
+          ?this._bounds.width - this._w : this._x;
         this._x = (this._x < 20)?20 : this._x;
-        this._y = (this._y > this._bounds.height+this._bounds.y)
-          ?this._bounds.height+this._bounds.y : this._y;
-        this._y = (this._y < this._bounds.y + 20)
-          ?this._bounds.y + 20 : this._y;
+        this._y = (this._y > this._bounds.height+this._bounds.y-this._w)
+          ?this._bounds.height+this._bounds.y - this._w : this._y;
+        this._y = (this._y < this._bounds.y +20)
+          ?this._bounds.y +20 : this._y;
 
         this.$.wrapper.style.left = this._x+"px";
         this.$.wrapper.style.top = this._y+"px";
@@ -243,7 +227,6 @@
         this.dragging = false;
         this.fire('subvideo-changed');
       },
-
     });
   </script>
 </dom-module>
