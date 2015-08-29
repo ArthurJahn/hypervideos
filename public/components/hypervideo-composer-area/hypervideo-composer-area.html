@@ -2,7 +2,7 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
-<link rel="import" href="../../components/upload-file/upload-file.html">
+<link rel="import" href="../../components/subvideo-composer/subvideo-composer.html">
 <link rel="import" href="../../components/subvideo-node/subvideo-node.html">
 <link rel="import" href="../../components/connection-node/connection-node.html">
 
@@ -93,7 +93,7 @@
           <div class="row content">
             <!-- Here will be displayed uploaded videos -->
             <template id="files" is="dom-repeat" items="{{fileObjects}}" as="videoFile">
-              <upload-file file="{{videoFile}}" on-upload-complete="handleUploadComplete"></upload-file>
+              <subvideo-composer file="{{videoFile}}" on-upload-complete="handleUploadComplete"></subvideo-composer>
             </template>
           </div>
           <div id="fileInputArea"
@@ -176,7 +176,7 @@
 //============================= Public Methods ===============================//
       handleUploadComplete: function(e) {
         var self = this;
-        self._createSubvideo(e.target.file._id);
+        self._createSubvideo(e.target);
       },
       composerTap: function(e) {
       },
@@ -206,7 +206,7 @@
         }
       },
 //============================= Private Methods ==============================//
-      _createSubvideo: function(mediaId) {
+      _createSubvideo: function(subvideoComposer) {
         var self = this;
         var xOffset = 35; // depends on initial definition in toucharea css
         var yOffset = 100;// depends on initial definition in toucharea css
@@ -218,18 +218,20 @@
           x: rect.left-xOffset,
           y: rect.top-yOffset
         };
-        
+
         var pos = self._nextNodePos();
         var options = {
           x : pos.x,
           y : pos.y,
           bounds: bounds,
-          mediaId: mediaId,
+          mediaId: subvideoComposer.file._id,
+          name: subvideoComposer.file.data.blob.name,
           connectId: self.connectId
         }
         var subvideoNode = new SubvideoNode(options);
         self._addSubvideoListeners(subvideoNode);
         self.$.subvideosFrame.appendChild(subvideoNode);
+        subvideoComposer.subvideo = subvideoNode.subvideo;
       },
       _updateHypervideo: function() {
         this.fire('hypervideo-changed');

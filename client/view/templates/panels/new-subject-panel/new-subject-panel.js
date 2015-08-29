@@ -51,9 +51,10 @@ Template.newSubjectPanel.events({
 
  // ======================== Subvideo Controll Methods =======================//
  'subvideo-created subvideo-node': function(e, template) {
-   var x = e.target._x, y = e.target._y, mediaId = e.target.mediaId;
-   var subvideo = hypervideoController.addSubvideo(x,y,mediaId);
-   e.target.subvideo = subvideo;
+   var node = e.target;
+   var x = node._x, y = node._y, mediaId = node.mediaId, name = node._name;
+   var subvideo = hypervideoController.addSubvideo(x,y,mediaId, name);
+   node.subvideo = subvideo;
  },
  'subvideo-changed subvideo-node': function(e, template) {
    var subvideo = e.target.subvideo;

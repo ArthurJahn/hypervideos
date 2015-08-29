@@ -2,12 +2,12 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 
-<dom-module id="upload-file">
+<dom-module id="subvideo-composer">
   <style media="screen">
     #wrapper {
       position: relative;
       height: 35px;
-      color: #D23216;/*--sec-accent-color*/
+      color: #CFD8DC;/*var(--light-primary-color)*/
       width: 92%;
       padding: 5px 10px 0 10px;
     }
@@ -26,7 +26,6 @@
     progress {
       -webkit-appearance: none;
       -moz-appearance: none;
-      appearance: none;
       appearance: none;
       position: absolute;
       height: 5px;
@@ -60,7 +59,7 @@
         transparent
       );
       z-index: 1;
-      background-size: 90px 90px;
+      background-size: 50px 50px;
       animation: move 2s linear infinite;
       overflow: hidden;
     }
@@ -84,11 +83,19 @@
       <template is="dom-if" if="{{uploaded}}">
         <iron-icon icon="done"></iron-icon>
       </template>
+      <template is="dom-if" if="{{opened}}">
+        <paper-input id="subvideoName"
+          name="name"
+          label="Nome do Subvideo"
+          value="{{subvideo.name}}"
+          on-change="_updateSubvideo">
+        </paper-input>
+      </template>
     </div>
   </template>
   <script>
     UploadFile = Polymer({
-      is: 'upload-file',
+      is: 'subvideo-composer',
       properties: {
         file: Object,
         progress: Number,
@@ -99,7 +106,14 @@
         uploaded: {
           type: Boolean,
           value: false
+        },
+        subvideo: {
+          type: Object,
+          observer: "subvideoChanged"
         }
+      },
+      subvideoChanged: function(newValue) {
+        console.log(newValue);
       },
       ready: function () {
         var self = this;
@@ -121,7 +135,7 @@
             //create subvideo-node && subvideo-form-area
           }
         },100);
-      }
+      },
     });
   </script>
 </dom-module>

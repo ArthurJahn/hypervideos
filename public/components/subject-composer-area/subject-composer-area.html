@@ -38,7 +38,7 @@
     bottom: 35px;
     left: 35px;
     right: 35px;
-    background-color:rgba(220,220,220,0.1);/*var(--light-divider-color);*/
+    background-color:rgba(220,220,220,0.0);/*var(--light-divider-color);*/
     overflow: hidden;
   }
   #hint-text {
@@ -95,7 +95,14 @@
       on-tap="confirmDelete"
       dialog-confirm>SIM!</paper-button>
     </paper-dialog>
-    <!-- this is where hypervideo-nodes & connection-nodes will be displayed -->
+    <div id="nodes">
+      <div id="hypers">
+        <!-- this is where hypervideo-nodes will be displayed -->
+      </div>
+      <div id="conns">
+        <!-- this is where connection-nodes will be displayed -->
+      </div>
+    </div>
   </template>
   <script>
     Polymer({
@@ -144,7 +151,8 @@
         this.firstTouch = !(this.subject.hypervideos.length>0);
       },
       connectIdChanged: function (newConnectId) {
-        var list = this.querySelectorAll('hypervideo-node, connection-node');
+        var list = this.$.nodes.querySelectorAll(
+          'hypervideo-node, connection-node');
         var length = list.length;
         for(var i=0; i<length; i++) {
           var element = list[i];
@@ -206,7 +214,7 @@
         }
         var hypervideoNode = new HypervideoNode(options);
         self._addHypervideoListeners(hypervideoNode);
-        self.appendChild(hypervideoNode);
+        self.$.hypers.appendChild(hypervideoNode);
       },
       _updateSubject: function(e) {
         if(this.subject === null) {
@@ -230,7 +238,7 @@
             connNode.addEventListener('connection-removed', function(ev){
               self._connectionListener(this);
             });
-            self.appendChild(connNode);
+            self.$.conns.appendChild(connNode);
             self._resetConnecting();
             self.fire('subject-changed');
           }
@@ -242,7 +250,7 @@
         var self = this;
         var canvasScale = 3;
         var lineWidth = 4;
-        var connections = self.querySelectorAll('connection-node');
+        var connections = self.$.conns.querySelectorAll('connection-node');
         var canvas = self.$.canvas;
         canvas.width  = canvasScale * canvas.offsetWidth;
         canvas.height = canvasScale * canvas.offsetHeight;
@@ -329,7 +337,7 @@
         var self = this;
         var xmid = (firstPos.x + secondPos.x)/2;
         var ymid = (firstPos.y + secondPos.y)/2;
-        var list = self.querySelectorAll('connection-node');
+        var list = self.$.conns.querySelectorAll('connection-node');
         for(var i=0; i<list.length; i++) {
           var connNode = list[i];
           if(connNode.connection === connection) {

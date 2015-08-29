@@ -28,8 +28,8 @@ HypervideoController.prototype = (function () {
     removeConnection: function(conn) {
       hypervideo.removeConnection(conn);
     },
-    addSubvideo: function(x,y,mediaId) {
-      var subvideo = subvideoController.createSubvideo(x,y,mediaId);
+    addSubvideo: function(x,y,mediaId,name) {
+      var subvideo = subvideoController.createSubvideo(x, y, mediaId, name);
       subvideo.hypervideoId = hypervideo._id;
       hypervideo.addSubvideo(subvideo._id);
       return subvideo;

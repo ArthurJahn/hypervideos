@@ -6,9 +6,9 @@ SubvideoController.prototype = (function () {
   return {
     constructor:SubvideoController,
 
-    createSubvideo: function( x, y, mediaId) {
+    createSubvideo: function( x, y, mediaId, name) {
       subvideo = new Subvideo();
-      subvideo.name = Subvideos.defaultName;
+      subvideo.name = name || Subvideos.defaultName;
       subvideo.x = x;
       subvideo.y = y;
       subvideo.videoId = mediaId;
