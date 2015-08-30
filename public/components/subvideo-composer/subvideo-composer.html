@@ -73,8 +73,8 @@
     }
   </style>
   <template>
-    <div id="wrapper">
-      <p>{{file.data.blob.name}}</p>
+    <div id="wrapper" on-tap="changeName">
+      <p>{{name}}</p>
       <progress value="{{progress}}" max="100">
       </progress>
       <template is="dom-if" if="{{waiting}}">
@@ -110,13 +110,18 @@
         subvideo: {
           type: Object,
           observer: "subvideoChanged"
-        }
+        },
+        name: String
+      },
+      changeName: function() {
+        console.log("changeName");
       },
       subvideoChanged: function(newValue) {
-        console.log(newValue);
+        console.log("subvideoChanged: " + newValue);
       },
       ready: function () {
         var self = this;
+        self.name = self.file.data.blob.name;
         self._setProgress();
       },
       _setProgress: function() {

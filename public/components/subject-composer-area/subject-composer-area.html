@@ -179,7 +179,7 @@
       confirmDelete: function() {
         var self = this;
         if(self._deletingNode)
-          self.removeChild(self._deletingNode);
+          self.$.hypers.removeChild(self._deletingNode);
         self._deletingNode = null;
       },
       onDismiss: function() {
@@ -276,7 +276,7 @@
             self._showConnection(conn, firstPos, secondPos);
           }
           else {
-            self.removeChild(connections[i]);
+            self.$.conns.removeChild(connections[i]);
           }
         }
         ctx.lineWidth = lineWidth;
@@ -330,7 +330,7 @@
       //connection Listener functions
       _connectionListener: function(connInstance) {
         var self = this;
-        self.removeChild(connInstance);
+        self.$.conns.removeChild(connInstance);
         self._drawConnections();
       },
       _showConnection: function(connection, firstPos, secondPos) {
