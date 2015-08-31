@@ -1,12 +1,14 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
 
 <dom-module id="subvideo-composer">
   <style media="screen">
     #wrapper {
       position: relative;
-      height: 35px;
+      height: auto;
       color: #CFD8DC;/*var(--light-primary-color)*/
       width: 92%;
       padding: 5px 10px 0 10px;
@@ -71,6 +73,16 @@
         background-position: 50px 50px;
       }
     }
+    #toggle {
+      height: 0;
+      overflow: hidden;
+
+      -webkit-transition:all .2s ease;
+      -moz-transition:all .2s ease;
+      -ms-transition:all .2s ease;
+      -o-transition:all .2s ease;
+      transition:all .2s ease;
+    }
   </style>
   <template>
     <div id="wrapper" on-tap="changeName">
@@ -81,20 +93,35 @@
         <div class="waiting"></div>
       </template>
       <template is="dom-if" if="{{uploaded}}">
-        <iron-icon icon="done"></iron-icon>
+        <template is="dom-if" if="{{!opened}}">
+          <iron-icon icon="expand-more"
+          class="animated fadeIn"
+          on-tap="toggleDetails"></iron-icon>
+        </template>
+        <template is="dom-if" if="{{opened}}">
+          <iron-icon icon="expand-less"
+          class="animated fadeIn"
+          on-tap="toggleDetails"></iron-icon>
+        </template>
       </template>
-      <template is="dom-if" if="{{opened}}">
+      <div id="toggle">
         <paper-input id="subvideoName"
           name="name"
           label="Nome do Subvideo"
           value="{{subvideo.name}}"
-          on-change="_updateSubvideo">
+          on-change="_updateSubvideoName">
         </paper-input>
-      </template>
+        <paper-textarea id="subvideoDescription"
+          name="description"
+          label="Descrição do Subvideo"
+          on-change="_updateSubvideoDescription">
+        </paper-textarea>
+      </div>
     </div>
   </template>
   <script>
-    UploadFile = Polymer({
+    subvideoComposer = Polymer({
+
       is: 'subvideo-composer',
       properties: {
         file: Object,
@@ -111,18 +138,35 @@
           type: Object,
           observer: "subvideoChanged"
         },
-        name: String
+        name: {
+          type: String,
+          notify: true
+        },
+        opened: {
+          type: Boolean,
+          value: false
+        }
+      },
+      ready: function () {
+        var self = this;
+        self.name = self.file.data.blob.name;
+        self._setProgress();
+      },
+      toggleDetails: function() {
+        var height = this.$.toggle.scrollHeight;
+        if(this.opened) {
+          this.$.toggle.style.height = "0";
+        }
+        else {
+          this.$.toggle.style.height = height+"px";
+        }
+        this.opened = !this.opened;
       },
       changeName: function() {
         console.log("changeName");
       },
       subvideoChanged: function(newValue) {
         console.log("subvideoChanged: " + newValue);
-      },
-      ready: function () {
-        var self = this;
-        self.name = self.file.data.blob.name;
-        self._setProgress();
       },
       _setProgress: function() {
         var self = this;
@@ -133,14 +177,30 @@
           }
           if(self.progress === 100) {
             clearInterval(self._progressInterval);
-            self.querySelector('progress').style.opacity = 0;
-            self.uploaded = true;
-            self.$.wrapper.style.color = "#12AE28";//--trd-accent-color
-            self.fire('upload-complete');
-            //create subvideo-node && subvideo-form-area
+            self._fireUploaded();
+            self._setupEditPanel();
           }
         },100);
       },
+      _fireUploaded: function() {
+        var self = this;
+        self.querySelector('progress').style.opacity = 0;
+        self.uploaded = true;
+        self.$.wrapper.style.color = "#12AE28";//--trd-accent-color
+        self.fire('upload-complete');
+      },
+      _setupEditPanel: function() {
+        //create subvideo-form-area
+      },
+      _updateSubvideoName: function(e) {
+        var input = e.target;
+        this.name = input.value;
+        this.subvideo.name = this.name;
+      },
+      _updateSubvideoDescription: function(e) {
+        var input = e.target;
+        this.subvideo.description = input.value;
+      }
     });
   </script>
 </dom-module>

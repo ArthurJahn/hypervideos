@@ -173,7 +173,6 @@
         var self = this;
         if(self.deleting) {
           self.$.confirmation.open();
-          self._drawConnections();
         }
       },
       confirmDelete: function() {
@@ -181,6 +180,7 @@
         if(self._deletingNode)
           self.$.hypers.removeChild(self._deletingNode);
         self._deletingNode = null;
+        self._drawConnections();
       },
       onDismiss: function() {
         var self = this;
