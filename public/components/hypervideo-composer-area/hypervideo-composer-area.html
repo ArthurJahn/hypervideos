@@ -29,7 +29,7 @@
     margin: 0 10px;
     float: left;
   }
-  #toggleDrawer,
+  .toggleDrawer,
   #closeButton {
     float: right;
     max-width: 30px;
@@ -87,7 +87,7 @@
   }
   </style>
   <template>
-    <paper-drawer-panel id=drawer>
+    <paper-drawer-panel id=videoDrawer>
       <div drawer>
         <div class="box">
           <div class="row content">
@@ -113,24 +113,49 @@
         </div>
       </div>
       <div main>
-        <div class="options">
-          <paper-button id="closeButton"
-          dialog-confirm autofocus>Fechar</paper-button>
-          <paper-input id="hypervideoName"
-            name="name"
-            label="Nome do Hypervideo"
-            value="{{hypervideo.name}}"
-            on-change="_updateHypervideo">
-          </paper-input>
-          <paper-button id="toggleDrawer"
-          on-tap="toggleDrawer">videos</paper-button>
-        </div>
-        <div id="backcanvas">
-          <canvas id="canvas"></canvas>
-        </div>
-        <div id="subvideosFrame">
-        <!-- this is where subvideos will be displayed -->
-      </div>
+        <paper-drawer-panel id=questionDrawer>
+          <div drawer>
+            <div class="box">
+              <div class="row content">
+                <!-- Here will be displayed uploaded videos -->
+                <template id="files" is="dom-repeat" items="{{fileObjects}}" as="videoFile">
+                  <subvideo-composer file="{{videoFile}}" on-upload-complete="handleUploadComplete"></subvideo-composer>
+                </template>
+              </div>
+              <div id="fileInputArea"
+                class="row footer"
+                on-tap="createQuestion">
+                <div id="hint-text">
+                  <span>
+                    Clique para adicionar questões
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div main>
+            <div class="options">
+              <paper-button id="closeButton"
+              dialog-confirm autofocus>Fechar</paper-button>
+              <paper-input id="hypervideoName"
+                name="name"
+                label="Nome do Hypervideo"
+                value="{{hypervideo.name}}"
+                on-change="_updateHypervideo">
+              </paper-input>
+              <paper-button class="toggleDrawer"
+              on-tap="toggleVideoDrawer">Videos</paper-button>
+              <paper-button class="toggleDrawer"
+              on-tap="toggleQuestionDrawer">Questões</paper-button>
+            </div>
+            <div id="backcanvas">
+              <canvas id="canvas"></canvas>
+            </div>
+            <div id="subvideosFrame">
+              <!-- this is where subvideos will be displayed -->
+            </div>
+          </div>
+        </paper-drawer-panel>
       </div>
     </paper-drawer-panel>
   </template>
@@ -170,8 +195,10 @@
       },
       ready: function() {
         this.firstTouch = true;
-        this.$.drawer.forceNarrow = true;
-        this.$.drawer.openDrawer();
+        this.$.videoDrawer.forceNarrow = true;
+        this.$.videoDrawer.openDrawer();
+        this.$.questionDrawer.forceNarrow = true;
+        this.$.questionDrawer.closeDrawer();
       },
 //============================= Public Methods ===============================//
       handleUploadComplete: function(e) {
@@ -180,12 +207,18 @@
       },
       composerTap: function(e) {
       },
-      toggleDrawer: function() {
-        this.$.drawer.togglePanel();
+      toggleVideoDrawer: function() {
+        this.$.videoDrawer.togglePanel();
+      },
+      toggleQuestionDrawer: function() {
+        this.$.questionDrawer.togglePanel();
       },
       loadFiles: function(e) {
         this.files = e.target.files;
         this.fire('upload-videos');
+      },
+      createQuestion: function() {
+        console.log("where i'll create a Question");
       },
       connectIdChanged: function (newConnectId) {
         var list = this.querySelectorAll('subvideo-node, connection-node');

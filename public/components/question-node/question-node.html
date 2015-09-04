@@ -1,0 +1,206 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+<dom-module id="question-node">
+  <style media="screen">
+  #wrapper {
+    position: absolute;
+  }
+  #icon {
+    position: absolute;
+    padding: 25px 23px;
+    line-height: 10px;
+    border-radius: 50%;
+    background-color:#DCDCDC;/*var(--light-divider-color);*/
+    color: #212121;/*var(--light-divider-color);*/
+    text-align: center;
+    font-size: 19px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1;
+  }
+  #connect {
+    position: absolute;
+    left:3px;
+    top:-1px;
+    width: 16px;
+    height: 16px;
+    line-height: 10px;
+    border-radius: 50%;
+    background-color:#FFC107;/*var(--accent-color);*/
+    color: #FFC107;/*var(--accent-color);*/
+    text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    display: none;
+    margin:0;
+    padding: 1px;
+    z-index: 2;
+  }
+  </style>
+  <template>
+    <div id="wrapper"
+    class="animated fadeIn"
+    on-mouseover="onHover"
+    on-mouseout="onHout">
+      <div id="icon"
+      on-tap="onIconTap"
+      on-track="onIconTrack">Q
+      </div>
+      <iron-icon id="connect"
+      class="animated fadeIn"
+      on-tap="onConnectTap"
+      icon="add"></iron-icon>
+    </div>
+  </template>
+  <script>
+    QuestionNode = Polymer({
+//======================== Polymer Component Methods =========================//
+      is: 'question-node',
+      properties: {
+        // when connecting questions, this property
+        // catches the ids for creating connections
+        connectId: {
+          type: String,
+          notify: true,
+          observer: "handleConnectId"
+        },
+        // if any question is being dragged, this
+        // property handles the redraw of connections
+        dragging: {
+          type: Boolean,
+          notify: true,
+        },
+        // property that holds the model element: a Question
+        question: {
+          type: Object,
+          value: null,
+        }
+      },
+      factoryImpl: function(options) {
+        this._bounds = options.bounds;
+        this._x = options.x;
+        this._y = options.y;
+        this._name = options.name;
+        this.question = null;
+        this.connectId = options.connectId;
+        this.mediaId = options.mediaId;
+      },
+      attached: function() {
+        Polymer.dom.flush();
+        this._w = this.$.icon.clientWidth;
+        this._x -= this._w/2;
+        this._y -= this._w/2;
+        this.$.wrapper.style.left = this._x+"px";
+        this.$.wrapper.style.top = this._y+"px";
+        this.fire('question-created');
+        this.id = "_"+this.question._id;
+        this.questionId = this.question._id;
+      },
+      detached: function() {
+        this.fire('question-deleted');
+      },
+//============================= Public Methods ===============================//
+      handleConnectId: function() {
+        var className = this.$.icon.className;
+        if(this.connectId) {
+          this.$.icon.style.background = "#FFC107";
+          if (this.connectId === this.questionId) {
+            if(!this._shaking){
+              this._shaking = true;
+              this.$.icon.className = className.concat(" animated infinite shake");
+            }
+          }
+          else {
+            this._shaking = false;
+            this.$.icon.className = className.replace(" animated infinite shake","");
+          }
+        }
+        else {
+          this._shaking = false;
+          this.$.icon.className = className.replace(" animated infinite shake","");
+          this.$.icon.style.background = "#DCDCDC";
+        }
+      },
+      getPos(){
+        return {
+          x: this._x + this._w/2,
+          y: this._y + this._w/2,
+        };
+      },
+      onIconTap: function(e) {
+        if(this.connectId) {
+          this.onConnectTap(e);
+        } else {
+          this._toggleEditing();
+        }
+      },
+      onIconTrack: function(e) {
+        switch (e.detail.state) {
+          case 'start':
+            this._iconTrackStart(e);
+            break;
+          case 'track':
+            this._iconTrackXY(e);
+            break;
+          case 'end':
+            this._iconTrackEnd();
+            break;
+        }
+      },
+      onConnectTap: function(e) {
+        if(this.connectId && this.connectId === this.questionId){
+          this.connectId = null;
+        } else {
+          this.connectId = this.questionId;
+        }
+        this.handleConnectId();
+      },
+      onHover: function(e) {
+        this.$.connect.style.display = "block";
+        if(e.target.id !== "icon") {
+          e.target.style.color = "#FFF";
+        }
+      },
+      onHout: function(e) {
+        this.$.connect.style.display = "none";
+        if(e.target.id !== "icon") {
+          e.target.style.color = e.target.style.backgroundColor;
+        }
+      },
+//============================= Private Methods ==============================//
+      _iconTrackStart: function(e) {
+        this.$.icon.style.cursor = "move";
+        this.dragging = true;
+      },
+      _iconTrackXY: function(e) {
+        var ddx = e.detail.ddx || 0;
+        var ddy = e.detail.ddy || 0;
+        this._x+= ddx;
+        this._y+= ddy;
+        this._x = (this._x > this._bounds.width - this._w)
+          ?this._bounds.width - this._w : this._x;
+        this._x = (this._x < 20)?20 : this._x;
+        this._y = (this._y > this._bounds.height+this._bounds.y-this._w)
+          ?this._bounds.height+this._bounds.y - this._w : this._y;
+        this._y = (this._y < this._bounds.y +20)
+          ?this._bounds.y +20 : this._y;
+
+        this.$.wrapper.style.left = this._x+"px";
+        this.$.wrapper.style.top = this._y+"px";
+      },
+      _iconTrackEnd: function() {
+        this.question.x = this._x;
+        this.question.y = this._y;
+        this.$.icon.style.cursor = "pointer";
+        this.dragging = false;
+        this.fire('question-changed');
+      },
+      _toggleEditing: function() {
+
+      }
+    });
+  </script>
+</dom-module>

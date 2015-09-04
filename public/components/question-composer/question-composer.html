@@ -1,0 +1,199 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+
+<dom-module id="question-composer">
+  <style media="screen">
+    #wrapper {
+      position: relative;
+      height: auto;
+      color: #CFD8DC;/*var(--light-primary-color)*/
+      width: 92%;
+      padding: 5px 10px 0 10px;
+    }
+    p {
+      margin: 0px;
+      padding: 10px 5px 0 0;
+      max-width: 80%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    iron-icon {
+      float: right;
+      margin-top: -22px;
+    }
+    progress {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      position: absolute;
+      height: 5px;
+      width: 92%;
+      background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
+    }
+    progress::-webkit-progress-bar {
+      background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
+    }
+    progress::-webkit-progress-value {
+      background-color: #CFD8DC;/*var(--light-primary-color)*/
+    }
+    progress::-moz-progress-bar {
+      background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
+    }
+    progress::-moz-progress-value {
+      background-color: #CFD8DC;/*var(--light-primary-color)*/
+    }
+    /* if upload is waiting to begin */
+    .waiting {
+      position: absolute;
+      top: 10px; left: 10px; bottom: 0; right: 10px;
+      background-image: linear-gradient(
+        -45deg,
+        rgba(220, 220, 220, .2) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(220, 220, 220, .2) 50%,
+        rgba(220, 220, 220, .2) 75%,
+        transparent 75%,
+        transparent
+      );
+      z-index: 1;
+      background-size: 50px 50px;
+      animation: move 2s linear infinite;
+      overflow: hidden;
+    }
+    @keyframes move {
+      0% {
+        background-position: 0 0;
+      }
+      100% {
+        background-position: 50px 50px;
+      }
+    }
+    #toggle {
+      height: 0;
+      overflow: hidden;
+
+      -webkit-transition:all .2s ease;
+      -moz-transition:all .2s ease;
+      -ms-transition:all .2s ease;
+      -o-transition:all .2s ease;
+      transition:all .2s ease;
+    }
+  </style>
+  <template>
+    <div id="wrapper" on-tap="changeName">
+      <p>{{name}}</p>
+      <template is="dom-if" if="{{!opened}}">
+        <iron-icon icon="expand-more"
+        class="animated fadeIn"
+        on-tap="toggleDetails"></iron-icon>
+      </template>
+      <template is="dom-if" if="{{opened}}">
+        <iron-icon icon="expand-less"
+        class="animated fadeIn"
+        on-tap="toggleDetails"></iron-icon>
+      </template>
+      <div id="toggle">
+        <paper-input id="questionName"
+          name="name"
+          label="Nome do Subvideo"
+          value="{{question.name}}"
+          on-change="_updateSubvideoName">
+        </paper-input>
+        <paper-textarea id="questionDescription"
+          name="description"
+          label="Descrição do Subvideo"
+          on-change="_updateSubvideoDescription">
+        </paper-textarea>
+      </div>
+    </div>
+  </template>
+  <script>
+    QuestionComposer = Polymer({
+
+      is: 'question-composer',
+      properties: {
+        file: Object,
+        progress: Number,
+        waiting: {
+          type: Boolean,
+          value: true
+        },
+        uploaded: {
+          type: Boolean,
+          value: false
+        },
+        question: {
+          type: Object,
+          observer: "questionChanged"
+        },
+        name: {
+          type: String,
+          notify: true
+        },
+        opened: {
+          type: Boolean,
+          value: false
+        }
+      },
+      ready: function () {
+        var self = this;
+        self.name = self.file.data.blob.name;
+        self._setProgress();
+      },
+      toggleDetails: function() {
+        var height = this.$.toggle.scrollHeight;
+        if(this.opened) {
+          this.$.toggle.style.height = "0";
+        }
+        else {
+          this.$.toggle.style.height = height+"px";
+        }
+        this.opened = !this.opened;
+      },
+      changeName: function() {
+        console.log("changeName");
+      },
+      questionChanged: function(newValue) {
+        console.log("questionChanged: " + newValue);
+      },
+      _setProgress: function() {
+        var self = this;
+        self._progressInterval = setInterval(function() {
+          self.progress = self.file.uploadProgress();
+          if(self.progress !== 0) {
+            self.waiting = false;
+          }
+          if(self.progress === 100) {
+            clearInterval(self._progressInterval);
+            self._fireUploaded();
+            self._setupEditPanel();
+          }
+        },100);
+      },
+      _fireUploaded: function() {
+        var self = this;
+        self.querySelector('progress').style.opacity = 0;
+        self.uploaded = true;
+        self.$.wrapper.style.color = "#12AE28";//--trd-accent-color
+        self.fire('upload-complete');
+      },
+      _setupEditPanel: function() {
+        //create question-form-area
+      },
+      _updateSubvideoName: function(e) {
+        var input = e.target;
+        this.name = input.value;
+        this.question.name = this.name;
+      },
+      _updateSubvideoDescription: function(e) {
+        var input = e.target;
+        this.question.description = input.value;
+      }
+    });
+  </script>
+</dom-module>
