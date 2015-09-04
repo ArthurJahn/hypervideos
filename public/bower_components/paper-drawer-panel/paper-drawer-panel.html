@@ -499,7 +499,7 @@ To change the drawer container when it's in the right side:
       _onTap: function(event) {
         var targetElement = Polymer.dom(event).localTarget;
         var isTargetToggleElement = targetElement &&
-          this.drawerToggleAttribute &&
+          this.drawerToggleAttribute && targetElement.hasAttribute &&
           targetElement.hasAttribute(this.drawerToggleAttribute);
 
         if (isTargetToggleElement) {
