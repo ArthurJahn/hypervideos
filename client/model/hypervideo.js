@@ -6,6 +6,7 @@ Hypervideo = Astro.Class({
     name: 'string', // Define "title" field of String type.
     subjectId: 'string', //Define subject that contains this hypervideo
     subvideos: 'array', // Define "subvideos" of Array type.
+    questions: 'array', // Define "questions" of Array type.
     connections: 'array',
     x: 'number',
     y: 'number'
@@ -24,6 +25,18 @@ Hypervideo = Astro.Class({
       var i = this.subvideos.indexOf(subvideoId);
       if(i) {
         this.subvideos.splice(i,1);
+        this.save();
+      }
+    },
+    addQuestion: function(questionId) {
+      this.questions.push(questionId);
+      this.save();
+    },
+    removeQuestion: function(questionId) {
+      this.removeConnections(questionId);
+      var i = this.questions.indexOf(questionId);
+      if(i) {
+        this.questions.splice(i,1);
         this.save();
       }
     },

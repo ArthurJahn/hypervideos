@@ -59,6 +59,17 @@ Template.newSubjectPanel.events({
  'subvideo-changed subvideo-node': function(e, template) {
    var subvideo = e.target.subvideo;
    console.log(subvideo);
- }
+ },
 
+ // ======================== Question Controll Methods =======================//
+ 'question-created question-node': function(e, template) {
+   var node = e.target;
+   var x = node._x, y = node._y, name = node._name;
+   var question = hypervideoController.addQuestion(x,y,name);
+   node.question = question;
+ },
+ 'question-changed question-node': function(e, template) {
+   var question = e.target.question;
+   console.log(question);
+ },
 });

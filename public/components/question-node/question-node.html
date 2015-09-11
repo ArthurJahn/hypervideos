@@ -98,6 +98,7 @@
         this.fire('question-created');
         this.id = "_"+this.question._id;
         this.questionId = this.question._id;
+        console.log(this.question);
       },
       detached: function() {
         this.fire('question-deleted');

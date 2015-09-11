@@ -13,6 +13,7 @@ HypervideoController.prototype = (function () {
       hypervideo.y = y;
       hypervideo.subjectId = subjectId;
       hypervideo.subvideos = [];
+      hypervideo.questions = [];
       hypervideo.connections = [];
       hypervideo.save();
       return hypervideo;
@@ -37,6 +38,16 @@ HypervideoController.prototype = (function () {
     removeSubvideo: function (subvideo) {
       hypervideo.removeHypervideo(subvideo._id);
       subvideoController.removeSubvideo(subvideo);
+    },
+    addQuestion: function(x,y,name) {
+      var question = questionController.createQuestion(x, y, name);
+      question.hypervideoId = hypervideo._id;
+      hypervideo.addQuestion(question._id);
+      return question;
+    },
+    removeQuestion: function (question) {
+      hypervideo.removeHypervideo(question._id);
+      questionController.removeQuestion(question);
     },
   };
 })();

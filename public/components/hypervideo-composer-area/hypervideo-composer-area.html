@@ -2,89 +2,92 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
+
 <link rel="import" href="../../components/subvideo-composer/subvideo-composer.html">
+<link rel="import" href="../../components/question-composer/question-composer.html">
 <link rel="import" href="../../components/subvideo-node/subvideo-node.html">
+<link rel="import" href="../../components/question-node/question-node.html">
 <link rel="import" href="../../components/connection-node/connection-node.html">
 
 <dom-module id="hypervideo-composer-area">
   <style is="custom-style">
-  #backcanvas {
-    position: absolute;
-    top: 75px;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
-  }
-  #backcanvas canvas{
-    width: 100%;
-    height: 100%;
-    background-color:rgba(246,246,246,1);/*var(--light-divider-color);*/
-  }
-  .options {
-    position: relative;
-    width: 100%;
-  }
-  #hypervideoName {
-    width: 70%;
-    margin: 0 10px;
-    float: left;
-  }
-  .toggleDrawer,
-  #closeButton {
-    float: right;
-    max-width: 30px;
-    width: 20%;
-    font-size: 12px;
-  }
-  .box {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  .box .row.content {
-    flex: 1 .01 auto;
-    overflow: scroll;
-  }
-  .box .row.footer {
-    flex: 0 1 auto;
-    min-height: 80px;
-    overflow: hidden;
-  }
-  #fileInputArea {
-    color: transparent;
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background-color:rgba(220,220,220,0);/*var(--light-divider-color);*/
-    overflow: hidden;
-  }
-  #inputfile{
-    opacity: 0;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-  }
-  #hint-text {
-    position: absolute;
-    left: 10px;
-    top: 10px;
-    right: 10px;
-    bottom: 10px;
-    background-color:rgba(220,220,220,0.2);/*var(--light-divider-color);*/
-    color: rgba(200,200,200,1);/*var(--light-divider-color);*/
-    text-align: center;
-    font-size: 20px;
-    font-weight: bold;
-    z-index: 0;
-  }
-  #hint-text span {
-    position: absolute;
-    width: 200px;
-    left: 50%;
-    top: 50%;
-    margin:-20px 0 0 -100px;
-  }
+    #backcanvas {
+      position: absolute;
+      top: 75px;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+    }
+    #backcanvas canvas{
+      width: 100%;
+      height: 100%;
+      background-color:rgba(246,246,246,1);/*var(--light-divider-color);*/
+    }
+    .options {
+      position: relative;
+      width: 100%;
+    }
+    #hypervideoName {
+      width: 70%;
+      margin: 0 10px;
+      float: left;
+    }
+    .toggleDrawer,
+    #closeButton {
+      float: right;
+      max-width: 30px;
+      width: 20%;
+      font-size: 12px;
+    }
+    .box {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .box .row.content {
+      flex: 1 .01 auto;
+      overflow: scroll;
+    }
+    .box .row.footer {
+      flex: 0 1 auto;
+      min-height: 80px;
+      overflow: hidden;
+    }
+    #fileInputArea {
+      color: transparent;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background-color:rgba(220,220,220,0);/*var(--light-divider-color);*/
+      overflow: hidden;
+    }
+    #inputfile{
+      opacity: 0;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+    }
+    #hint-text {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      right: 10px;
+      bottom: 10px;
+      background-color:rgba(220,220,220,0.2);/*var(--light-divider-color);*/
+      color: rgba(200,200,200,1);/*var(--light-divider-color);*/
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      z-index: 0;
+    }
+    #hint-text span {
+      position: absolute;
+      width: 200px;
+      left: 50%;
+      top: 50%;
+      margin:-20px 0 0 -100px;
+    }
   </style>
   <template>
     <paper-drawer-panel id=videoDrawer>
@@ -119,7 +122,7 @@
               <div class="row content">
                 <!-- Here will be displayed uploaded videos -->
                 <template id="files" is="dom-repeat" items="{{fileObjects}}" as="videoFile">
-                  <subvideo-composer file="{{videoFile}}" on-upload-complete="handleUploadComplete"></subvideo-composer>
+                  <question-composer file="{{videoFile}}" on-upload-complete="handleUploadComplete"></question-composer>
                 </template>
               </div>
               <div id="fileInputArea"
@@ -204,8 +207,10 @@
       handleUploadComplete: function(e) {
         var self = this;
         self._createSubvideo(e.target);
+        self._createQuestion(e.target);
       },
       composerTap: function(e) {
+        var x;
       },
       toggleVideoDrawer: function() {
         this.$.videoDrawer.togglePanel();
@@ -221,7 +226,8 @@
         console.log("where i'll create a Question");
       },
       connectIdChanged: function (newConnectId) {
-        var list = this.querySelectorAll('subvideo-node, connection-node');
+        var nodes = 'subvideo-node, connection-node, question-node';
+        var list = this.querySelectorAll(nodes);
         var length = list.length;
         for(var i=0; i<length; i++) {
           var element = list[i];
@@ -258,7 +264,7 @@
           y : pos.y,
           bounds: bounds,
           mediaId: subvideoComposer.file._id,
-          name: subvideoComposer.file.data.blob.name,
+          name: subvideoComposer.name,
           connectId: self.connectId
         }
         var subvideoNode = new SubvideoNode(options);
@@ -266,12 +272,39 @@
         self.$.subvideosFrame.appendChild(subvideoNode);
         subvideoComposer.subvideo = subvideoNode.subvideo;
       },
+      _createQuestion: function(subvideoComposer) {
+        var self = this;
+        var xOffset = 35; // depends on initial definition in toucharea css
+        var yOffset = 100;// depends on initial definition in toucharea css
+        // defines bounds and offset of dragging limits for a hypervideoNode
+        var rect = self.$.backcanvas.getBoundingClientRect();
+        var bounds = {
+          width: rect.right - rect.left,
+          height: rect.bottom - rect.top,
+          x: rect.left-xOffset,
+          y: rect.top-yOffset
+        };
+
+        var pos = self._nextNodePos();
+        var options = {
+          x : pos.x,
+          y : pos.y,
+          bounds: bounds,
+          mediaId: subvideoComposer.file._id,
+          name: subvideoComposer.name,
+          connectId: self.connectId
+        }
+        var questionNode = new QuestionNode(options);
+        self._addSubvideoListeners(questionNode);
+        self.$.subvideosFrame.appendChild(questionNode);
+        //subvideoComposer.subvideo = subvideoNode.subvideo;
+      },
       _updateHypervideo: function() {
         this.fire('hypervideo-changed');
       },
       _nodesCount: function() {
         var self = this;
-        var list = self.querySelectorAll('subvideo-node');
+        var list = self.querySelectorAll('subvideo-node, question-node');
         return list.length;
       },
       _nextNodePos: function() {

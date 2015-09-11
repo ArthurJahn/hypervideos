@@ -142,8 +142,6 @@
       },
       ready: function () {
         var self = this;
-        self.name = self.file.data.blob.name;
-        self._setProgress();
       },
       toggleDetails: function() {
         var height = this.$.toggle.scrollHeight;
@@ -174,13 +172,6 @@
             self._setupEditPanel();
           }
         },100);
-      },
-      _fireUploaded: function() {
-        var self = this;
-        self.querySelector('progress').style.opacity = 0;
-        self.uploaded = true;
-        self.$.wrapper.style.color = "#12AE28";//--trd-accent-color
-        self.fire('upload-complete');
       },
       _setupEditPanel: function() {
         //create question-form-area
