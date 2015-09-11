@@ -46,33 +46,6 @@
     progress::-moz-progress-value {
       background-color: #CFD8DC;/*var(--light-primary-color)*/
     }
-    /* if upload is waiting to begin */
-    .waiting {
-      position: absolute;
-      top: 10px; left: 10px; bottom: 0; right: 10px;
-      background-image: linear-gradient(
-        -45deg,
-        rgba(220, 220, 220, .2) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(220, 220, 220, .2) 50%,
-        rgba(220, 220, 220, .2) 75%,
-        transparent 75%,
-        transparent
-      );
-      z-index: 1;
-      background-size: 50px 50px;
-      animation: move 2s linear infinite;
-      overflow: hidden;
-    }
-    @keyframes move {
-      0% {
-        background-position: 0 0;
-      }
-      100% {
-        background-position: 50px 50px;
-      }
-    }
     #toggle {
       height: 0;
       overflow: hidden;
@@ -100,14 +73,14 @@
       <div id="toggle">
         <paper-input id="questionName"
           name="name"
-          label="Nome do Subvideo"
+          label="Nome da Questão"
           value="{{question.name}}"
-          on-change="_updateSubvideoName">
+          on-change="_updateQuestionName">
         </paper-input>
         <paper-textarea id="questionDescription"
           name="description"
-          label="Descrição do Subvideo"
-          on-change="_updateSubvideoDescription">
+          label="Descrição do Question"
+          on-change="_updateQuestionDescription">
         </paper-textarea>
       </div>
     </div>
@@ -142,6 +115,7 @@
       },
       ready: function () {
         var self = this;
+        self.name = self.question.name;
       },
       toggleDetails: function() {
         var height = this.$.toggle.scrollHeight;
@@ -159,29 +133,15 @@
       questionChanged: function(newValue) {
         console.log("questionChanged: " + newValue);
       },
-      _setProgress: function() {
-        var self = this;
-        self._progressInterval = setInterval(function() {
-          self.progress = self.file.uploadProgress();
-          if(self.progress !== 0) {
-            self.waiting = false;
-          }
-          if(self.progress === 100) {
-            clearInterval(self._progressInterval);
-            self._fireUploaded();
-            self._setupEditPanel();
-          }
-        },100);
-      },
       _setupEditPanel: function() {
         //create question-form-area
       },
-      _updateSubvideoName: function(e) {
+      _updateQuestionName: function(e) {
         var input = e.target;
         this.name = input.value;
         this.question.name = this.name;
       },
-      _updateSubvideoDescription: function(e) {
+      _updateQuestionDescription: function(e) {
         var input = e.target;
         this.question.description = input.value;
       }

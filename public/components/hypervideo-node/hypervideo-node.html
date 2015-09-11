@@ -22,6 +22,16 @@
     #wrapper {
       position: absolute;
     }
+    paper-dialog {
+      margin: 0px;
+    }
+    #closeButton {
+      float: right;
+      z-index: 999;
+      width: 25px;
+      height: 25px;
+      margin: 0;
+    }
     #icon {
       position: absolute;
       padding: 25px 23px;
@@ -123,8 +133,10 @@
       entry-animation="scale-up-animation"
       exit-animation="scale-down-animation"
       with-backdrop modal>
-      <hypervideo-composer-area id="hypervideocomposer">
+      <hypervideo-composer-area id="hypervideocomposer" on-name-changed="_updateName">
       </hypervideo-composer-area>
+      <paper-icon-button id="closeButton"
+      dialog-confirm autofocus icon="close"></paper-icon-button>
     </paper-dialog>
     <div id="wrapper"
     class="animated fadeIn"
@@ -133,7 +145,7 @@
       <div id="icon"
       on-tap="onIconTap"
       on-track="onIconTrack">H
-      <div id="preview">{{hypervideo.name}}</div>
+      <div id="preview">{{name}}</div>
       </div>
 
       <iron-icon id="connect"
@@ -179,6 +191,9 @@
         hypervideo: {
           type: Object,
           value: null,
+        },
+        name: {
+          type: String,
         }
       },
       factoryImpl: function(options) {
@@ -198,6 +213,7 @@
         this.fire('hypervideo-created');
         this.id = "_"+this.hypervideo._id;
         this.hypervideoId = this.hypervideo._id;
+        this.name = this.hypervideo.name;
       },
       detached: function() {
         this.fire('hypervideo-deleted');
@@ -329,6 +345,9 @@
       _openComposer: function() {
         this.$.hypervideocomposer.hypervideo = this.hypervideo;
         this.$.composerdialog.open();
+      },
+      _updateName: function() {
+        this.name = this.hypervideo.name;
       },
     });
   </script>

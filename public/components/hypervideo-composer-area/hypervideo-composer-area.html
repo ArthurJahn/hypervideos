@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
 
 <link rel="import" href="../../components/subvideo-composer/subvideo-composer.html">
@@ -28,16 +29,9 @@
       width: 100%;
     }
     #hypervideoName {
-      width: 70%;
-      margin: 0 10px;
+      width: 50%;
+      margin-left: 15%;
       float: left;
-    }
-    .toggleDrawer,
-    #closeButton {
-      float: right;
-      max-width: 30px;
-      width: 20%;
-      font-size: 12px;
     }
     .box {
       display: flex;
@@ -88,6 +82,14 @@
       top: 50%;
       margin:-20px 0 0 -100px;
     }
+    .left {
+      float: left;
+    }
+    .toggleDrawer {
+      margin-left: 10px;
+      width: 75px;
+      font-size: 11px;
+    }
   </style>
   <template>
     <paper-drawer-panel id=videoDrawer>
@@ -121,8 +123,8 @@
             <div class="box">
               <div class="row content">
                 <!-- Here will be displayed uploaded videos -->
-                <template id="files" is="dom-repeat" items="{{fileObjects}}" as="videoFile">
-                  <question-composer file="{{videoFile}}" on-upload-complete="handleUploadComplete"></question-composer>
+                <template id="files" is="dom-repeat" items="{{questionNodes}}" as="questionNode">
+                  <question-composer question="{{questionNode.question}}"></question-composer>
                 </template>
               </div>
               <div id="fileInputArea"
@@ -138,23 +140,27 @@
           </div>
           <div main>
             <div class="options">
-              <paper-button id="closeButton"
-              dialog-confirm autofocus>Fechar</paper-button>
+              <ul class="list-inline left">
+                <li>
+                  <paper-button class="toggleDrawer"
+                  on-tap="toggleVideoDrawer">Videos</paper-button>
+                </li>
+                <li>
+                  <paper-button class="toggleDrawer"
+                  on-tap="toggleQuestionDrawer">Questões</paper-button>
+                </li>
+              </ul>
               <paper-input id="hypervideoName"
                 name="name"
                 label="Nome do Hypervideo"
                 value="{{hypervideo.name}}"
                 on-change="_updateHypervideo">
               </paper-input>
-              <paper-button class="toggleDrawer"
-              on-tap="toggleVideoDrawer">Videos</paper-button>
-              <paper-button class="toggleDrawer"
-              on-tap="toggleQuestionDrawer">Questões</paper-button>
             </div>
             <div id="backcanvas">
               <canvas id="canvas"></canvas>
             </div>
-            <div id="subvideosFrame">
+            <div id="nodesFrame">
               <!-- this is where subvideos will be displayed -->
             </div>
           </div>
@@ -175,6 +181,15 @@
         },
         filesProgress: {
           type: Array,
+          value: function() {
+              return [];
+          }
+        },
+        questionNodes: {
+          type: Array,
+          value: function() {
+              return [];
+          }
         },
         // property that holds the model element: a Hypervideo
         hypervideo: {
@@ -207,7 +222,6 @@
       handleUploadComplete: function(e) {
         var self = this;
         self._createSubvideo(e.target);
-        self._createQuestion(e.target);
       },
       composerTap: function(e) {
         var x;
@@ -269,38 +283,22 @@
         }
         var subvideoNode = new SubvideoNode(options);
         self._addSubvideoListeners(subvideoNode);
-        self.$.subvideosFrame.appendChild(subvideoNode);
+        self.$.nodesFrame.appendChild(subvideoNode);
         subvideoComposer.subvideo = subvideoNode.subvideo;
-      },
-      _createQuestion: function(subvideoComposer) {
-        var self = this;
-        var xOffset = 35; // depends on initial definition in toucharea css
-        var yOffset = 100;// depends on initial definition in toucharea css
-        // defines bounds and offset of dragging limits for a hypervideoNode
-        var rect = self.$.backcanvas.getBoundingClientRect();
-        var bounds = {
-          width: rect.right - rect.left,
-          height: rect.bottom - rect.top,
-          x: rect.left-xOffset,
-          y: rect.top-yOffset
-        };
 
-        var pos = self._nextNodePos();
-        var options = {
-          x : pos.x,
-          y : pos.y,
-          bounds: bounds,
-          mediaId: subvideoComposer.file._id,
-          name: subvideoComposer.name,
-          connectId: self.connectId
-        }
+        pos = self._nextNodePos();
+        options.x = pos.x;
+        options.y = pos.y;
         var questionNode = new QuestionNode(options);
         self._addSubvideoListeners(questionNode);
-        self.$.subvideosFrame.appendChild(questionNode);
-        //subvideoComposer.subvideo = subvideoNode.subvideo;
+        self.$.nodesFrame.appendChild(questionNode);
+        var list = self.querySelectorAll('question-node');
+        self.questionNodes = Array.prototype.slice.call(list);
       },
-      _updateHypervideo: function() {
-        this.fire('hypervideo-changed');
+      _updateHypervideo: function(e) {
+        this.hypervideo.name = e.target.value;
+        this.fire('name-changed');
+        console.log(this.hypervideo);
       },
       _nodesCount: function() {
         var self = this;
@@ -325,7 +323,7 @@
             connNode.addEventListener('connection-removed', function(ev){
               self._connectionListener(this);
             });
-            self.$.subvideosFrame.appendChild(connNode);
+            self.$.nodesFrame.appendChild(connNode);
             self._resetConnecting();
             self.fire('hypervideo-changed');
           }
@@ -408,7 +406,7 @@
       //connection Listener functions
       _connectionListener: function(connInstance) {
         var self = this;
-        self.$.subvideosFrame.removeChild(connInstance);
+        self.$.nodesFrame.removeChild(connInstance);
         self._drawConnections();
       },
       _showConnection: function(connection, firstPos, secondPos) {
