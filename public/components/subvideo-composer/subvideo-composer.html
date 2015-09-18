@@ -85,7 +85,7 @@
     }
   </style>
   <template>
-    <div id="wrapper" on-tap="changeName">
+    <div id="wrapper">
       <p>{{name}}</p>
       <progress value="{{progress}}" max="100">
       </progress>
@@ -161,9 +161,6 @@
           this.$.toggle.style.height = height+"px";
         }
         this.opened = !this.opened;
-      },
-      changeName: function() {
-        console.log("changeName");
       },
       subvideoChanged: function(newValue) {
         console.log("subvideoChanged: " + newValue);

@@ -9,7 +9,7 @@
     #wrapper {
       position: relative;
       height: auto;
-      color: #CFD8DC;/*var(--light-primary-color)*/
+      color: #727272;/*var(--secondary-text-color)*/
       width: 92%;
       padding: 5px 10px 0 10px;
     }
@@ -25,27 +25,6 @@
       float: right;
       margin-top: -22px;
     }
-    progress {
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      position: absolute;
-      height: 5px;
-      width: 92%;
-      background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
-    }
-    progress::-webkit-progress-bar {
-      background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
-    }
-    progress::-webkit-progress-value {
-      background-color: #CFD8DC;/*var(--light-primary-color)*/
-    }
-    progress::-moz-progress-bar {
-      background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
-    }
-    progress::-moz-progress-value {
-      background-color: #CFD8DC;/*var(--light-primary-color)*/
-    }
     #toggle {
       height: 0;
       overflow: hidden;
@@ -58,7 +37,7 @@
     }
   </style>
   <template>
-    <div id="wrapper" on-tap="changeName">
+    <div id="wrapper">
       <p>{{name}}</p>
       <template is="dom-if" if="{{!opened}}">
         <iron-icon icon="expand-more"
@@ -74,14 +53,25 @@
         <paper-input id="questionName"
           name="name"
           label="Nome da Questão"
-          value="{{question.name}}"
+          value="{{name}}"
           on-change="_updateQuestionName">
         </paper-input>
         <paper-textarea id="questionDescription"
           name="description"
-          label="Descrição do Question"
+          label="Descrição da Questão"
           on-change="_updateQuestionDescription">
         </paper-textarea>
+        <template is="dom-repeat" items="{{answers}}" as="answer">
+          <paper-input name="name"
+            label="{{_answerLabel(index)}}"
+            on-focus="_handleAnswerFocus"
+            value="{{answer}}"
+            on-change="_updateQuestionAnswer">
+          </paper-input>
+        </template>
+        <template is="dom-if" if="{{!maxAnswers}}">
+          <paper-icon-button icon="add" on-tap="_addAnswer"></paper-icon-button>
+        </template>
       </div>
     </div>
   </template>
@@ -90,13 +80,7 @@
 
       is: 'question-composer',
       properties: {
-        file: Object,
-        progress: Number,
-        waiting: {
-          type: Boolean,
-          value: true
-        },
-        uploaded: {
+        maxAnswers: {
           type: Boolean,
           value: false
         },
@@ -108,6 +92,10 @@
           type: String,
           notify: true
         },
+        answers: {
+          type: Array,
+          notify: true
+        },
         opened: {
           type: Boolean,
           value: false
@@ -116,25 +104,19 @@
       ready: function () {
         var self = this;
         self.name = self.question.name;
+        self.answers = self.question.answers;
       },
       toggleDetails: function() {
-        var height = this.$.toggle.scrollHeight;
         if(this.opened) {
           this.$.toggle.style.height = "0";
         }
         else {
-          this.$.toggle.style.height = height+"px";
+          this._setCurrentHeight();
         }
         this.opened = !this.opened;
       },
-      changeName: function() {
-        console.log("changeName");
-      },
       questionChanged: function(newValue) {
         console.log("questionChanged: " + newValue);
-      },
-      _setupEditPanel: function() {
-        //create question-form-area
       },
       _updateQuestionName: function(e) {
         var input = e.target;
@@ -142,9 +124,40 @@
         this.question.name = this.name;
       },
       _updateQuestionDescription: function(e) {
+        var self = this;
         var input = e.target;
-        this.question.description = input.value;
-      }
+        self.question.description = input.value;
+        self._setCurrentHeight();
+      },
+      _updateQuestionAnswer: function(e) {
+        var input = e.target;
+        this.answers[this._answerIndex] = input.value;
+      },
+      _handleAnswerFocus: function(e){
+        var value = e.target.value;
+        this._answerIndex = this.question.answers.indexOf(value);
+      },
+      _answerLabel: function(index) {
+        return "Resposta "+ (index+1);
+      },
+      _addAnswer: function() {
+        var self = this;
+        var questionAns = self.question.answers;
+        if(questionAns.length < 5) {
+          var answers = questionAns.splice(0,questionAns.length);
+          answers.push("Resposta "+ (answers.length+1));
+          self.answers = answers;
+          self.question.answers = answers;
+          self._setCurrentHeight();
+          console.log(answers);
+        } else {
+          self.maxAnswers = true;
+        }
+      },
+      _setCurrentHeight: function() {
+        var height = this.$.toggle.scrollHeight;
+        this.$.toggle.style.height = height+"px";
+      },
     });
   </script>
 </dom-module>

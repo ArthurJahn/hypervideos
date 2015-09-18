@@ -2,6 +2,7 @@ function QuestionController() {}
 
 QuestionController.prototype = (function () {
   var question = null;
+  var defaultAns = ["resposta 1", "resposta 2"];
 
   return {
     constructor:QuestionController,
@@ -11,6 +12,7 @@ QuestionController.prototype = (function () {
       question.name = name || Question.defaultName;
       question.x = x;
       question.y = y;
+      question.answers = defaultAns;
       question.save();
       return question;
     },

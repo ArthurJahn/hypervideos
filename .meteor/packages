@@ -15,3 +15,5 @@ jagi:astronomy
 meteorhacks:kadira-profiler
 cfs:standard-packages
 cfs:gridfs
+xolvio:cucumber
+velocity:console-reporter
