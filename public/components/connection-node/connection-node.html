@@ -33,8 +33,10 @@
         if(this.connectId === this.connection.first ||
           this.connectId === this.connection.second) {
           this.style.display = "block";
+          return true;
         } else {
           this.style.display = "none";
+          return false;
         }
       },
       remove: function() {
