@@ -58,15 +58,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           assert.equal(hNode.hypervideo._id, '1');
           assert.equal(hNode.hypervideoId, '1');
         });
-        test('verify event "hypervideo-changed" fired', function() {
-          setUp();
-          var eventFired = false;
-          hNode.addEventListener('hypervideo-changed', function(event) {
-            eventFired = true;
-          });
-          hNode._iconTrackEnd();
-          assert.isTrue(eventFired);
-        });
         test('verify event "hypervideo-created" fired', function(){
           var eventFired = false;
           var hNewNode = document.createElement('hypervideo-node');
@@ -76,6 +67,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           });
           document.querySelector("#newNode").appendChild(hNewNode);
           assert.equal("newNode",hNewNode.parentNode.id);
+          assert.isTrue(eventFired);
+        });
+        test('verify event "hypervideo-changed" fired', function() {
+          setUp();
+          var eventFired = false;
+          hNode.addEventListener('hypervideo-changed', function(event) {
+            eventFired = true;
+          });
+          hNode._iconTrackEnd();
           assert.isTrue(eventFired);
         });
         test('verify event "hypervideo-deleted" fired', function(){
@@ -112,6 +112,64 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var pos = hNode.getPos();
           assert.equal(xPos,pos.x);
           assert.equal(yPos,pos.y);
+        });
+        test('verify connect tap to enable connecting mode', function(){
+          setUp();
+          hNode.connectId = null;
+          hNode.onConnectTap();
+          assert.equal(hNode.hypervideoId, hNode.connectId);
+        });
+        test('verify connect tap to disable connecting mode', function(){
+          setUp();
+          hNode.connectId = hNode.hypervideoId;
+          hNode.onConnectTap();
+          assert.isNull(hNode.connectId);
+        });
+        test('verify delete tap to enable deleting mode', function(){
+          setUp();
+          hNode.deleting = false;
+          hNode.onDeleteTap();
+          assert.isTrue(hNode.deleting);
+        });
+        test('verify delete tap to disable deleting mode', function(){
+          setUp();
+          hNode.deleting = true;
+          hNode.onDeleteTap();
+          assert.isFalse(hNode.deleting);
+        });
+        test('verify edit tap to open editing dialog', function(){
+          setUp();
+          hNode.onEditTap();
+          assert.isTrue(hNode.$.composerdialog.opened);
+        });
+        test('verify icon hover actions', function(){
+          setUp();
+          var e = {
+            target: hNode.$.icon
+          };
+          hNode.onHover(e);
+          assert.equal("block", hNode.$.edit.style.display);
+          assert.equal("block", hNode.$.delete.style.display);
+          assert.equal("block", hNode.$.connect.style.display);
+
+          hNode.onHout(e);
+          assert.equal("none", hNode.$.edit.style.display);
+          assert.equal("none", hNode.$.delete.style.display);
+          assert.equal("none", hNode.$.connect.style.display);
+        });
+        test('verify icon track event actions', function(){
+          setUp();
+          var e = {
+            detail: {
+              state: "start",
+            }
+          };
+          hNode.onIconTrack(e);
+          assert.isTrue(hNode.dragging);
+
+          e.detail.state="end";
+          hNode.onIconTrack(e);
+          assert.isFalse(hNode.dragging);
         });
       });
     </script>

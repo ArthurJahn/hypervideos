@@ -13,6 +13,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 
 <!-- Custom implemented components -->
 <link rel="import" href="../../components/hypervideo-composer-area/hypervideo-composer-area.html">
@@ -145,7 +146,7 @@
       <div id="icon"
       on-tap="onIconTap"
       on-track="onIconTrack">H
-      <div id="preview">{{name}}</div>
+        <div id="preview">{{name}}</div>
       </div>
 
       <iron-icon id="connect"
@@ -262,13 +263,12 @@
             break;
         }
       },
-      onConnectTap: function(e) {
+      onConnectTap: function() {
         if(this.connectId && this.connectId === this.hypervideoId){
           this.connectId = null;
         } else {
           this.connectId = this.hypervideoId;
         }
-        this.handleConnectId();
       },
       onDeleteTap: function(e) {
         this.deleting = !this.deleting;
