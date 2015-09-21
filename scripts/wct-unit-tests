@@ -14,7 +14,7 @@ ln -s ../bower_components/web-component-tester web-component-tester
 ln -s ../bower_components/webcomponentsjs webcomponentsjs
 
 # run web components tester
-wct
+wct public/components/tests
 
 rm webcomponentsjs
 rm web-component-tester
