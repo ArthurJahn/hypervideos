@@ -35,7 +35,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         width: 200,
         height: 200,
       };
-      var xPos = 10, yPos = 10;
+      var xPos = 10, yPos = 20;
 
       function setUp() {
         hNode.bounds = bounds;
@@ -49,7 +49,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           x: 10,
           y: 20,
         };
-        this.connectId = '1';
+        hNode._x = xPos;
+        hNode._y = yPos;
       }
       suite('<hypervideo-node>', function() {
         test('defines the "hypervideo" property', function() {
@@ -65,6 +66,52 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           });
           hNode._iconTrackEnd();
           assert.isTrue(eventFired);
+        });
+        test('verify event "hypervideo-created" fired', function(){
+          var eventFired = false;
+          var hNewNode = document.createElement('hypervideo-node');
+
+          hNewNode.addEventListener('hypervideo-created',function(){
+            eventFired = true;
+          });
+          document.querySelector("#newNode").appendChild(hNewNode);
+          assert.equal("newNode",hNewNode.parentNode.id);
+          assert.isTrue(eventFired);
+        });
+        test('verify event "hypervideo-deleted" fired', function(){
+          var eventFired = false;
+          hNode.addEventListener('hypervideo-deleted', function(event) {
+            eventFired = true;
+          });
+          hNode.remove();
+          assert.isTrue(eventFired);
+        });
+        test('verify connectId set as same as elements id', function(){
+          setUp();
+          hNode.connectId = '1';
+          assert.isTrue(hNode._shaking);
+          assert.isTrue(hNode.$.icon.className.indexOf("animated") > -1);
+          assert.equal(hNode.$.icon.style.background, "rgb(255, 193, 7)");
+        });
+        test('verify connectId set as different from elements id', function(){
+          setUp();
+          hNode.connectId = '2';
+          assert.isFalse(hNode._shaking);
+          assert.equal(hNode.$.icon.className.indexOf("animated"), -1);
+          assert.equal(hNode.$.icon.style.background, "rgb(255, 193, 7)");
+        });
+        test('verify connectId set as null', function(){
+          setUp();
+          hNode.connectId = null;
+          assert.isFalse(hNode._shaking);
+          assert.equal(hNode.$.icon.className.indexOf("animated"), -1);
+          assert.equal(hNode.$.icon.style.background, "rgb(220, 220, 220)");
+        });
+        test('verify method getPos', function(){
+          setUp();
+          var pos = hNode.getPos();
+          assert.equal(xPos,pos.x);
+          assert.equal(yPos,pos.y);
         });
       });
     </script>

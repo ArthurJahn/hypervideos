@@ -307,9 +307,8 @@
       remove: function() {
         this.fire('hypervideo-deleted');
       },
-
       hypervideoChanged: function() {
-        if (this.hypervideo) {           
+        if (this.hypervideo) {
           this.id = "_"+this.hypervideo._id;
           this.hypervideoId = this.hypervideo._id;
           this.name = this.hypervideo.name;
