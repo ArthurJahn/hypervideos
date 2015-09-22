@@ -77,6 +77,7 @@
         subvideo: {
           type: Object,
           value: null,
+          observer: "subvideoChanged"
         }
       },
       factoryImpl: function(options) {
@@ -96,8 +97,7 @@
         this.$.wrapper.style.left = this._x+"px";
         this.$.wrapper.style.top = this._y+"px";
         this.fire('subvideo-created');
-        this.id = "_"+this.subvideo._id;
-        this.subvideoId = this.subvideo._id;
+
       },
       detached: function() {
         this.fire('subvideo-deleted');
@@ -168,6 +168,12 @@
         this.$.connect.style.display = "none";
         if(e.target.id !== "icon") {
           e.target.style.color = e.target.style.backgroundColor;
+        }
+      },
+      subvideoChanged: function() {
+        if(this.subvideo){
+          this.id = "_"+this.subvideo._id;
+          this.subvideoId = this.subvideo._id;
         }
       },
 //============================= Private Methods ==============================//

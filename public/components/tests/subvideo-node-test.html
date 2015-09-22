@@ -1,0 +1,152 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../web-component-tester/browser.js"></script>
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="../subvideo-node/subvideo-node.html">
+  </head>
+  <body>
+
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <subvideo-node></subvideo-node>
+    <div id="newNode"></div>
+    <script>
+      var sNode = document.querySelector('subvideo-node');
+      var bounds = {
+        x: 0,
+        y:0,
+        width: 200,
+        height: 200,
+      };
+      var xPos = 10, yPos = 20;
+
+      function setUp() {
+        sNode._bounds = bounds;
+        sNode.subvideo = {
+          _id: '1',
+          name: 'subvideo',
+          subvideoId: '1',
+          description: "Description",
+          answers: ["answer 1", "answer 2"],
+          x: 10,
+          y: 20,
+        };
+        sNode._x = xPos;
+        sNode._y = yPos;
+      }
+      suite('<subvideo-node>', function() {
+        test('defines the "subvideo" property', function() {
+          setUp();
+          assert.equal(sNode.subvideo._id, '1');
+          assert.equal(sNode.subvideoId, '1');
+        });
+        test('verify event "subvideo-created" fired', function(){
+          var eventFired = false;
+          var qNewNode = document.createElement('subvideo-node');
+
+          qNewNode.addEventListener('subvideo-created',function(){
+            eventFired = true;
+          });
+          document.querySelector("#newNode").appendChild(qNewNode);
+          assert.equal("newNode",qNewNode.parentNode.id);
+          assert.isTrue(eventFired);
+        });
+        test('verify event "subvideo-changed" fired', function() {
+          setUp();
+          var eventFired = false;
+          sNode.addEventListener('subvideo-changed', function(event) {
+            eventFired = true;
+          });
+          sNode._iconTrackEnd();
+          assert.isTrue(eventFired);
+        });
+        test('verify event "subvideo-deleted" fired', function(){
+          var eventFired = false;
+          sNode.addEventListener('subvideo-deleted', function(event) {
+            eventFired = true;
+          });
+          sNode.remove();
+          assert.isTrue(eventFired);
+        });
+        test('verify connectId set as same as elements id', function(){
+          setUp();
+          sNode.connectId = '1';
+          assert.isTrue(sNode._shaking);
+          assert.isTrue(sNode.$.icon.className.indexOf("animated") > -1);
+          assert.equal(sNode.$.icon.style.background, "rgb(255, 193, 7)");
+        });
+        test('verify connectId set as different from elements id', function(){
+          setUp();
+          sNode.connectId = '2';
+          assert.isFalse(sNode._shaking);
+          assert.equal(sNode.$.icon.className.indexOf("animated"), -1);
+          assert.equal(sNode.$.icon.style.background, "rgb(255, 193, 7)");
+        });
+        test('verify connectId set as null', function(){
+          setUp();
+          sNode.connectId = null;
+          assert.isFalse(sNode._shaking);
+          assert.equal(sNode.$.icon.className.indexOf("animated"), -1);
+          assert.equal(sNode.$.icon.style.background, "rgb(220, 220, 220)");
+        });
+        test('verify method getPos', function(){
+          setUp();
+          var pos = sNode.getPos();
+          assert.equal(xPos,pos.x);
+          assert.equal(yPos,pos.y);
+        });
+        test('verify connect tap to enable connecting mode', function(){
+          setUp();
+          sNode.connectId = null;
+          sNode.onConnectTap();
+          assert.equal(sNode.subvideoId, sNode.connectId);
+        });
+        test('verify connect tap to disable connecting mode', function(){
+          setUp();
+          sNode.connectId = sNode.subvideoId;
+          sNode.onConnectTap();
+          assert.isNull(sNode.connectId);
+        });
+        test('verify icon hover actions', function(){
+          setUp();
+          var e = {
+            target: sNode.$.icon
+          };
+          sNode.onHover(e);
+          assert.equal("block", sNode.$.connect.style.display);
+
+          sNode.onHout(e);
+          assert.equal("none", sNode.$.connect.style.display);
+        });
+        test('verify icon track event actions', function(){
+          setUp();
+          var e = {
+            detail: {
+              state: "start",
+            }
+          };
+          sNode.onIconTrack(e);
+          assert.isTrue(sNode.dragging);
+
+          e.detail.state="end";
+          sNode.onIconTrack(e);
+          assert.isFalse(sNode.dragging);
+        });
+      });
+    </script>
+  </body>
+</html>

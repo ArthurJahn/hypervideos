@@ -1,0 +1,152 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../web-component-tester/browser.js"></script>
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="../question-node/question-node.html">
+  </head>
+  <body>
+
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <question-node></question-node>
+    <div id="newNode"></div>
+    <script>
+      var qNode = document.querySelector('question-node');
+      var bounds = {
+        x: 0,
+        y:0,
+        width: 200,
+        height: 200,
+      };
+      var xPos = 10, yPos = 20;
+
+      function setUp() {
+        qNode._bounds = bounds;
+        qNode.question = {
+          _id: '1',
+          name: 'question',
+          questionId: '1',
+          description: "Description",
+          answers: ["answer 1", "answer 2"],
+          x: 10,
+          y: 20,
+        };
+        qNode._x = xPos;
+        qNode._y = yPos;
+      }
+      suite('<question-node>', function() {
+        test('defines the "question" property', function() {
+          setUp();
+          assert.equal(qNode.question._id, '1');
+          assert.equal(qNode.questionId, '1');
+        });
+        test('verify event "question-created" fired', function(){
+          var eventFired = false;
+          var qNewNode = document.createElement('question-node');
+
+          qNewNode.addEventListener('question-created',function(){
+            eventFired = true;
+          });
+          document.querySelector("#newNode").appendChild(qNewNode);
+          assert.equal("newNode",qNewNode.parentNode.id);
+          assert.isTrue(eventFired);
+        });
+        test('verify event "question-changed" fired', function() {
+          setUp();
+          var eventFired = false;
+          qNode.addEventListener('question-changed', function(event) {
+            eventFired = true;
+          });
+          qNode._iconTrackEnd();
+          assert.isTrue(eventFired);
+        });
+        test('verify event "question-deleted" fired', function(){
+          var eventFired = false;
+          qNode.addEventListener('question-deleted', function(event) {
+            eventFired = true;
+          });
+          qNode.remove();
+          assert.isTrue(eventFired);
+        });
+        test('verify connectId set as same as elements id', function(){
+          setUp();
+          qNode.connectId = '1';
+          assert.isTrue(qNode._shaking);
+          assert.isTrue(qNode.$.icon.className.indexOf("animated") > -1);
+          assert.equal(qNode.$.icon.style.background, "rgb(255, 193, 7)");
+        });
+        test('verify connectId set as different from elements id', function(){
+          setUp();
+          qNode.connectId = '2';
+          assert.isFalse(qNode._shaking);
+          assert.equal(qNode.$.icon.className.indexOf("animated"), -1);
+          assert.equal(qNode.$.icon.style.background, "rgb(255, 193, 7)");
+        });
+        test('verify connectId set as null', function(){
+          setUp();
+          qNode.connectId = null;
+          assert.isFalse(qNode._shaking);
+          assert.equal(qNode.$.icon.className.indexOf("animated"), -1);
+          assert.equal(qNode.$.icon.style.background, "rgb(220, 220, 220)");
+        });
+        test('verify method getPos', function(){
+          setUp();
+          var pos = qNode.getPos();
+          assert.equal(xPos,pos.x);
+          assert.equal(yPos,pos.y);
+        });
+        test('verify connect tap to enable connecting mode', function(){
+          setUp();
+          qNode.connectId = null;
+          qNode.onConnectTap();
+          assert.equal(qNode.questionId, qNode.connectId);
+        });
+        test('verify connect tap to disable connecting mode', function(){
+          setUp();
+          qNode.connectId = qNode.questionId;
+          qNode.onConnectTap();
+          assert.isNull(qNode.connectId);
+        });
+        test('verify icon hover actions', function(){
+          setUp();
+          var e = {
+            target: qNode.$.icon
+          };
+          qNode.onHover(e);
+          assert.equal("block", qNode.$.connect.style.display);
+
+          qNode.onHout(e);
+          assert.equal("none", qNode.$.connect.style.display);
+        });
+        test('verify icon track event actions', function(){
+          setUp();
+          var e = {
+            detail: {
+              state: "start",
+            }
+          };
+          qNode.onIconTrack(e);
+          assert.isTrue(qNode.dragging);
+
+          e.detail.state="end";
+          qNode.onIconTrack(e);
+          assert.isFalse(qNode.dragging);
+        });
+      });
+    </script>
+  </body>
+</html>

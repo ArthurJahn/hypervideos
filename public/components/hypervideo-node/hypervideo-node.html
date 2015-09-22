@@ -295,13 +295,11 @@
         }
       },
       setPos: function(x,y) {
-        this._x = (x > this._bounds.width)
-          ? this._bounds.width : x;
-        this._x = (x < 20) ? 20 : x;
-        this._y = (y > this._bounds.height+this._bounds.y)
-          ? this._bounds.height+this._bounds.y : y;
-        this._y = (y < this._bounds.y + 20)
-          ? this._bounds.y + 20 : y;
+        var m = 50;
+        this._x = (x > this._bounds.width - m)? this._bounds.width - m : x;
+        this._x = (x < m) ? m : x;
+        this._y = (y > this._bounds.height - m)? this._bounds.height - m : y;
+        this._y = (y < this._bounds.y + m)? this._bounds.y + m : y;
         this._moveToPos();
       },
       remove: function() {
