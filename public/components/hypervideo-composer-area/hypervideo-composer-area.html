@@ -154,7 +154,7 @@
                 name="name"
                 label="Nome do Hypervideo"
                 value="{{hypervideo.name}}"
-                on-change="_updateHypervideo">
+                on-change="updateHypervideo">
               </paper-input>
             </div>
             <div id="backcanvas">
@@ -223,9 +223,6 @@
         var self = this;
         self._createSubvideo(e.target);
       },
-      composerTap: function(e) {
-        var x;
-      },
       toggleVideoDrawer: function() {
         this.$.videoDrawer.togglePanel();
       },
@@ -258,6 +255,10 @@
           clearInterval(self._drawInterval);
         }
       },
+      updateHypervideo: function(e) {
+        this.hypervideo.name = e.target.value;
+        this.fire('name-changed');
+      },
 //============================= Private Methods ==============================//
       _createSubvideo: function(subvideoComposer) {
         var self = this;
@@ -282,7 +283,7 @@
           connectId: self.connectId
         }
         var subvideoNode = new SubvideoNode(options);
-        self._addSubvideoListeners(subvideoNode);
+        self._addNodeoListeners(subvideoNode);
         self.$.nodesFrame.appendChild(subvideoNode);
         subvideoComposer.subvideo = subvideoNode.subvideo;
 
@@ -290,15 +291,10 @@
         options.x = pos.x;
         options.y = pos.y;
         var questionNode = new QuestionNode(options);
-        self._addSubvideoListeners(questionNode);
+        self._addNodeoListeners(questionNode);
         self.$.nodesFrame.appendChild(questionNode);
         var list = self.querySelectorAll('question-node');
         self.questionNodes = Array.prototype.slice.call(list);
-      },
-      _updateHypervideo: function(e) {
-        this.hypervideo.name = e.target.value;
-        this.fire('name-changed');
-        console.log(this.hypervideo);
       },
       _nodesCount: function() {
         var self = this;
@@ -394,12 +390,12 @@
         var self = this;
         self.dragging = snInstance.dragging;
       },
-      _addSubvideoListeners: function(subvideoNode) {
+      _addNodeoListeners: function(node) {
         var self = this;
-        subvideoNode.addEventListener('connect-id-changed', function(ev){
+        node.addEventListener('connect-id-changed', function(ev){
           self._connectListener(this);
         });
-        subvideoNode.addEventListener('dragging-changed', function(ev){
+        node.addEventListener('dragging-changed', function(ev){
           self._draggingListener(this);
         });
       },

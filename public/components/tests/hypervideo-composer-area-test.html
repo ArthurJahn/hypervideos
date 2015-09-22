@@ -22,17 +22,64 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </head>
   <body>
     <hypervideo-composer-area></hypervideo-composer-area>
+    <div id="newVid"></div>
     <!-- You can use the document as a place to set up your fixtures. -->
     <script>
-      var hNode = document.querySelector('hypervideo-composer-area');
+      var hComposer = document.querySelector('hypervideo-composer-area');
 
       function setUp() {
 
       }
       suite('<hypervideo-composer-area>', function() {
-        test('defines the "hypervideo" property', function() {
-          
+        test('verify uploaded files completed', function() {
+          var e = {
+            target: {
+              subvideo: null,
+              file: {id:'1'}
+          }};
+          var num_nodes = hComposer.querySelectorAll('subvideo-node').length;
+          assert.isTrue(num_nodes===0);
+          hComposer.handleUploadComplete(e);
+          num_nodes = hComposer.querySelectorAll('subvideo-node').length;
+          assert.isTrue(num_nodes===1);
         });
+        test('verify "upload-videos" event fired',function(){
+          var e = {target:{files:['blob','blob2']}};
+          var eventFired = false;
+          hComposer.addEventListener('upload-videos', function(){
+            eventFired = true;
+          });
+          hComposer.loadFiles(e);
+          assert.isTrue(eventFired);
+        });
+        test('verify "connect-id-changed" event fired',function(){
+          var eventFired = false;
+          hComposer.addEventListener('connect-id-changed', function(){
+            eventFired = true;
+          });
+          hComposer.connectId = '2';
+          assert.isTrue(eventFired);
+        });
+        test('verify "dragging-changed" event fired',function(){
+          var eventFired = false;
+          hComposer.addEventListener('dragging-changed', function(){
+            eventFired = true;
+          });
+          hComposer.dragging = true;
+          assert.isTrue(eventFired);
+        });
+        test('verify "name-changed" event fired',function(){
+          var eventFired = false;
+          var e = {target: {value: 'new name'}};
+          hComposer.hypervideo = {name: "old name"};
+          hComposer.addEventListener('name-changed', function(){
+            eventFired = true;
+          });
+          hComposer.updateHypervideo(e);
+          assert.isTrue(eventFired);
+          assert.equal(hComposer.hypervideo.name, "new name");
+        });
+
       });
     </script>
   </body>
