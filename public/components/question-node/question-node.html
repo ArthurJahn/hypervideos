@@ -92,10 +92,8 @@
       attached: function() {
         Polymer.dom.flush();
         this._w = this.$.icon.clientWidth;
-        this._x -= this._w/2;
-        this._y -= this._w/2;
-        this.$.wrapper.style.left = this._x+"px";
-        this.$.wrapper.style.top = this._y+"px";
+
+        this._moveToPos();
         this.fire('question-created');
         this.questionChanged();
       },

@@ -92,15 +92,12 @@
       attached: function() {
         Polymer.dom.flush();
         this._w = this.$.icon.clientWidth;
-        this._x -= this._w/2;
-        this._y -= this._w/2;
-        this.$.wrapper.style.left = this._x+"px";
-        this.$.wrapper.style.top = this._y+"px";
+        this._moveToPos();
         this.fire('subvideo-created');
 
       },
       detached: function() {
-        this.fire('subvideo-deleted');
+        this.remove();
       },
 //============================= Public Methods ===============================//
       handleConnectId: function() {
@@ -126,8 +123,8 @@
       },
       getPos(){
         return {
-          x: this._x + this._w/2,
-          y: this._y + this._w/2,
+          x: this._x,
+          y: this._y,
         };
       },
       onIconTap: function(e) {
@@ -170,6 +167,19 @@
           e.target.style.color = e.target.style.backgroundColor;
         }
       },
+      setPos: function(x,y) {
+        this._x = (x > this._bounds.width)
+          ? this._bounds.width : x;
+        this._x = (x < 20) ? 20 : x;
+        this._y = (y > this._bounds.height+this._bounds.y)
+          ? this._bounds.height+this._bounds.y : y;
+        this._y = (y < this._bounds.y + 20)
+          ? this._bounds.y + 20 : y;
+        this._moveToPos();
+      },
+      remove: function() {
+        this.fire('subvideo-deleted');
+      },
       subvideoChanged: function() {
         if(this.subvideo){
           this.id = "_"+this.subvideo._id;
@@ -184,18 +194,9 @@
       _iconTrackXY: function(e) {
         var ddx = e.detail.ddx || 0;
         var ddy = e.detail.ddy || 0;
-        this._x+= ddx;
-        this._y+= ddy;
-        this._x = (this._x > this._bounds.width - this._w)
-          ?this._bounds.width - this._w : this._x;
-        this._x = (this._x < 20)?20 : this._x;
-        this._y = (this._y > this._bounds.height+this._bounds.y-this._w)
-          ?this._bounds.height+this._bounds.y - this._w : this._y;
-        this._y = (this._y < this._bounds.y +20)
-          ?this._bounds.y +20 : this._y;
-
-        this.$.wrapper.style.left = this._x+"px";
-        this.$.wrapper.style.top = this._y+"px";
+        var newX = this._x + ddx;
+        var newY = this._y + ddy;
+        this.setPos(newX,newY);
       },
       _iconTrackEnd: function() {
         this.subvideo.x = this._x;
@@ -206,7 +207,11 @@
       },
       _toggleEditing: function() {
 
-      }
+      },
+      _moveToPos: function() {
+        this.$.wrapper.style.left = this._x - this._w/2+"px";
+        this.$.wrapper.style.top = this._y - this._w/2+"px";
+      },
     });
   </script>
 </dom-module>
