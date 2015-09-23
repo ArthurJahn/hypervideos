@@ -1,0 +1,79 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../web-component-tester/browser.js"></script>
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="../question-composer/question-composer.html">
+  </head>
+  <body>
+    <question-composer></question-composer>
+    <div id="newVid"></div>
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <script>
+      var qComposer = document.querySelector('question-composer');
+
+      function setUp() {
+        qComposer.question = {name:"new name", answers : ['ans 1','ans 2']};
+      }
+      suite('<question-composer>', function() {
+        test('verify toggle details', function() {
+          qComposer.opened = false;
+          qComposer.toggleDetails();
+          assert.isTrue(qComposer.opened);
+        });
+        test('verify observer of question property', function(){
+          setUp();
+          qComposer.questionChanged();
+          assert.equal("new name",qComposer.name);
+          assert.equal('ans 1',qComposer.answers[0]);
+        });
+        test('verify updateQuestionName', function(){
+          setUp();
+          var e = {target:{value:"new value"}};
+          qComposer.updateQuestionName(e);
+          assert.equal(qComposer.name, "new value");
+          assert.equal(qComposer.question.name, "new value");
+        });
+        test('verify updateQuestionDescription', function(){
+          setUp();
+          var e = {target:{value:"new description"}};
+          qComposer.updateQuestionDescription(e);
+          assert.equal(qComposer.question.description, "new description");
+        });
+        test('verify updateQuestionAnswer', function(){
+          setUp();
+          var e = {target:{value:"new answer"}};
+          qComposer._answerIndex = 0;
+          qComposer.updateQuestionAnswer(e);
+          assert.equal(qComposer.question.answers[0], "new answer");
+        });
+        test('verify handleAnswerFocus', function(){
+          setUp();
+          var e = {target:{value:"ans 2"}};
+          qComposer.handleAnswerFocus(e);
+          assert.equal(qComposer._answerIndex, 1);
+        });
+        test('verify addAnswer', function(){
+          setUp();
+          qComposer.addAnswer();
+          assert.equal(qComposer.answers.length, 3);
+        });
+      });
+    </script>
+  </body>
+</html>

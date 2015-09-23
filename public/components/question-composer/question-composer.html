@@ -54,23 +54,23 @@
           name="name"
           label="Nome da Questão"
           value="{{name}}"
-          on-change="_updateQuestionName">
+          on-change="updateQuestionName">
         </paper-input>
         <paper-textarea id="questionDescription"
           name="description"
           label="Descrição da Questão"
-          on-change="_updateQuestionDescription">
+          on-change="updateQuestionDescription">
         </paper-textarea>
         <template is="dom-repeat" items="{{answers}}" as="answer">
           <paper-input name="name"
-            label="{{_answerLabel(index)}}"
-            on-focus="_handleAnswerFocus"
+            label="{{answerLabel(index)}}"
+            on-focus="handleAnswerFocus"
             value="{{answer}}"
-            on-change="_updateQuestionAnswer">
+            on-change="updateQuestionAnswer">
           </paper-input>
         </template>
         <template is="dom-if" if="{{!maxAnswers}}">
-          <paper-icon-button icon="add" on-tap="_addAnswer"></paper-icon-button>
+          <paper-icon-button icon="add" on-tap="addAnswer"></paper-icon-button>
         </template>
       </div>
     </div>
@@ -103,44 +103,48 @@
       },
       ready: function () {
         var self = this;
-        self.name = self.question.name;
-        self.answers = self.question.answers;
+        self.questionChanged();
       },
       toggleDetails: function() {
-        if(this.opened) {
-          this.$.toggle.style.height = "0";
+        var self = this;
+        if(self.opened) {
+          self.$.toggle.style.height = "0";
         }
         else {
-          this._setCurrentHeight();
+          self._setCurrentHeight();
         }
-        this.opened = !this.opened;
+        self.opened = !self.opened;
       },
       questionChanged: function(newValue) {
-        console.log("questionChanged: " + newValue);
+        var self = this;
+        if(self.question) {
+          self.name = self.question.name;
+          self.answers = self.question.answers;
+        }
       },
-      _updateQuestionName: function(e) {
+      updateQuestionName: function(e) {
         var input = e.target;
         this.name = input.value;
         this.question.name = this.name;
       },
-      _updateQuestionDescription: function(e) {
+      updateQuestionDescription: function(e) {
         var self = this;
         var input = e.target;
         self.question.description = input.value;
         self._setCurrentHeight();
       },
-      _updateQuestionAnswer: function(e) {
+      updateQuestionAnswer: function(e) {
         var input = e.target;
         this.answers[this._answerIndex] = input.value;
       },
-      _handleAnswerFocus: function(e){
+      handleAnswerFocus: function(e){
         var value = e.target.value;
         this._answerIndex = this.question.answers.indexOf(value);
       },
-      _answerLabel: function(index) {
+      answerLabel: function(index) {
         return "Resposta "+ (index+1);
       },
-      _addAnswer: function() {
+      addAnswer: function() {
         var self = this;
         var questionAns = self.question.answers;
         if(questionAns.length < 5) {
@@ -150,7 +154,7 @@
           self.question.answers = answers;
           self._setCurrentHeight();
           console.log(answers);
-        } else {
+        } if(self.maxAnswers === 5){
           self.maxAnswers = true;
         }
       },
