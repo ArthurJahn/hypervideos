@@ -109,12 +109,12 @@
           name="name"
           label="Nome do Subvideo"
           value="{{subvideo.name}}"
-          on-change="_updateSubvideoName">
+          on-change="updateSubvideoName">
         </paper-input>
         <paper-textarea id="subvideoDescription"
           name="description"
           label="Descrição do Subvideo"
-          on-change="_updateSubvideoDescription">
+          on-change="updateSubvideoDescription">
         </paper-textarea>
       </div>
     </div>
@@ -149,8 +149,7 @@
       },
       ready: function () {
         var self = this;
-        self.name = self.file.data.blob.name;
-        self._setProgress();
+        self._setFileInfo();
       },
       toggleDetails: function() {
         var height = this.$.toggle.scrollHeight;
@@ -162,22 +161,14 @@
         }
         this.opened = !this.opened;
       },
-      subvideoChanged: function(newValue) {
-        console.log("subvideoChanged: " + newValue);
+      updateSubvideoName: function(e) {
+        var input = e.target;
+        this.name = input.value;
+        this.subvideo.name = this.name;
       },
-      _setProgress: function() {
-        var self = this;
-        self._progressInterval = setInterval(function() {
-          self.progress = self.file.uploadProgress();
-          if(self.progress !== 0) {
-            self.waiting = false;
-          }
-          if(self.progress === 100) {
-            clearInterval(self._progressInterval);
-            self._fireUploaded();
-            self._setupEditPanel();
-          }
-        },100);
+      updateSubvideoDescription: function(e) {
+        var input = e.target;
+        this.subvideo.description = input.value;
       },
       _fireUploaded: function() {
         var self = this;
@@ -186,18 +177,26 @@
         self.$.wrapper.style.color = "#12AE28";//--trd-accent-color
         self.fire('upload-complete');
       },
-      _setupEditPanel: function() {
-        //create subvideo-form-area
+      _setFileInfo: function() {
+        var self = this;
+        if(self.file) {
+          self.name = self.file.data.blob.name;
+          self._progressInterval = setInterval(function() {
+            self._setProgress();
+          },100);
+        }
       },
-      _updateSubvideoName: function(e) {
-        var input = e.target;
-        this.name = input.value;
-        this.subvideo.name = this.name;
+      _setProgress: function() {
+        var self = this;
+        self.progress = self.file.uploadProgress();
+        if(self.progress !== 0) {
+          self.waiting = false;
+        }
+        if(self.progress === 100) {
+          clearInterval(self._progressInterval);
+          self._fireUploaded();
+        }
       },
-      _updateSubvideoDescription: function(e) {
-        var input = e.target;
-        this.subvideo.description = input.value;
-      }
     });
   </script>
 </dom-module>
