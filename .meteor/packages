@@ -6,7 +6,6 @@
 
 accounts-password
 velocity:console-reporter
-velocity:html-reporter
 iron:router
 sanjo:jasmine
 jagi:astronomy
