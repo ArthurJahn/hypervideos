@@ -25,49 +25,49 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div id="newVid"></div>
     <!-- You can use the document as a place to set up your fixtures. -->
     <script>
-      var qComposer = document.querySelector('subvideo-composer');
+      var sComposer = document.querySelector('subvideo-composer');
 
       function setUp() {
-        qComposer.file = {
+        sComposer.file = {
           data:{blob:{name:"file name"}},
           uploadProgress: function() {
             return 100;
           }
         };
-        qComposer.subvideo = {
+        sComposer.subvideo = {
           name: "subvideo"
         };
       }
       suite('<subvideo-composer>', function() {
         test('verify toggle details', function() {
-          qComposer.opened = false;
-          qComposer.toggleDetails();
-          assert.isTrue(qComposer.opened);
+          sComposer.opened = false;
+          sComposer.toggleDetails();
+          assert.isTrue(sComposer.opened);
         });
         test('verify file property setup', function(){
           setUp();
-          qComposer._setFileInfo();
-          assert.equal(qComposer.name,"file name");
+          sComposer._setFileInfo();
+          assert.equal(sComposer.name,"file name");
         });
         test('verify updateSubvideoName', function(){
           setUp();
           var e = {target:{value:"new value"}};
-          qComposer.updateSubvideoName(e);
-          assert.equal(qComposer.name, "new value");
-          assert.equal(qComposer.subvideo.name, "new value");
+          sComposer.updateSubvideoName(e);
+          assert.equal(sComposer.name, "new value");
+          assert.equal(sComposer.subvideo.name, "new value");
         });
         test('verify updateSubvideoDescription', function(){
           setUp();
           var e = {target:{value:"new description"}};
-          qComposer.updateSubvideoDescription(e);
-          assert.equal(qComposer.subvideo.description, "new description");
+          sComposer.updateSubvideoDescription(e);
+          assert.equal(sComposer.subvideo.description, "new description");
         });
         test('verify set progress', function(){
           setUp();
-          qComposer._setProgress();
-          assert.isFalse(qComposer.waiting);
-          assert.equal(qComposer.progress,100);
-          assert.isTrue(qComposer.uploaded);
+          sComposer._setProgress();
+          assert.isFalse(sComposer.waiting);
+          assert.equal(sComposer.progress,100);
+          assert.isTrue(sComposer.uploaded);
         });
       });
     </script>

@@ -216,7 +216,7 @@
         self._addHypervideoListeners(hypervideoNode);
         self.$.hypers.appendChild(hypervideoNode);
       },
-      _updateSubject: function(e) {
+      _updateSubject: function() {
         if(this.subject === null) {
           this.fire('subject-created');
         }

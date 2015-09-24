@@ -18,39 +18,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <script src="../web-component-tester/browser.js"></script>
 
     <!-- Step 1: import the element to test -->
-    <link rel="import" href="../hypervideo-composer-area/hypervideo-composer-area.html">
+    <link rel="import" href="../subject-composer-area/subject-composer-area.html">
   </head>
   <body>
-    <hypervideo-composer-area></hypervideo-composer-area>
+    <subject-composer-area></subject-composer-area>
     <!-- You can use the document as a place to set up your fixtures. -->
     <script>
-      var hComposer = document.querySelector('hypervideo-composer-area');
+      var hComposer = document.querySelector('subject-composer-area');
 
       function setUp() {
 
       }
-      suite('<hypervideo-composer-area>', function() {
-        test('verify uploaded files completed', function() {
-          var e = {
-            target: {
-              subvideo: null,
-              file: {id:'1'}
-          }};
-          var num_nodes = hComposer.querySelectorAll('subvideo-node').length;
-          assert.isTrue(num_nodes===0);
-          hComposer.handleUploadComplete(e);
-          num_nodes = hComposer.querySelectorAll('subvideo-node').length;
-          assert.isTrue(num_nodes===1);
-        });
-        test('verify "upload-videos" event fired',function(){
-          var e = {target:{files:['blob','blob2']}};
-          var eventFired = false;
-          hComposer.addEventListener('upload-videos', function(){
-            eventFired = true;
-          });
-          hComposer.loadFiles(e);
-          assert.isTrue(eventFired);
-        });
+      suite('<subject-composer-area>', function() {
         test('verify "connect-id-changed" event fired',function(){
           var eventFired = false;
           hComposer.addEventListener('connect-id-changed', function(){
@@ -67,16 +46,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           hComposer.dragging = true;
           assert.isTrue(eventFired);
         });
-        test('verify "name-changed" event fired',function(){
+        test('verify "subject-changed" event fired',function(){
           var eventFired = false;
-          var e = {target: {value: 'new name'}};
-          hComposer.hypervideo = {name: "old name"};
-          hComposer.addEventListener('name-changed', function(){
+          hComposer.$.subjectName.value = 'new name';
+          hComposer.subject = {name: "old name",
+            setName: function(newName) {
+              this.name = newName;
+            }};
+          hComposer.addEventListener('subject-changed', function(){
             eventFired = true;
           });
-          hComposer.updateHypervideo(e);
+          hComposer._updateSubject();
           assert.isTrue(eventFired);
-          assert.equal(hComposer.hypervideo.name, "new name");
+          assert.equal(hComposer.subject.name, "new name");
         });
       });
     </script>
