@@ -111,10 +111,40 @@ ul.list-inline {
   margin: 13px 5px 13px 13px;
 }
 
+.topbar-menu {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.topbar-menu li {
+  display: inline-block;
+}
+
+.topbar-menu li:last-child {
+  line-height: 60px;
+  font-size: 16px;
+  float: right;
+  text-align: right;
+}
+
+.topbar-menu li:last-child a {
+  margin-right: 20px;
+  text-decoration: none !important;
+}
+
+.topbar-menu li:last-child #login-dropdown-list {
+  margin-left: -200px;
+}
+
+.topbar-menu li:last-child .login-close-text {
+  float: right !important;
+}
+
 /*--------------------------------- drawer -----------------------------------*/
 .label-is-highlighted.paper-input-container label{
   color: #FFC107  !important;/*var(--accent-color);*/
 }
 .focused-line.paper-input-container {
-     background-color: #FFC107  !important;/*var(--accent-color);*/
+  background-color: #FFC107  !important;/*var(--accent-color);*/
 }

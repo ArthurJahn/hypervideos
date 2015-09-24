@@ -1,5 +1,7 @@
 function SubjectController() {}
 
+Meteor.subscribe("subjects");
+
 SubjectController.prototype = (function () {
   var subject = null;
 

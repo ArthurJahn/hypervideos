@@ -1,5 +1,7 @@
 function SubvideoController() {}
 
+Meteor.subscribe("subvideos");
+
 SubvideoController.prototype = (function () {
   var subvideo = null;
 

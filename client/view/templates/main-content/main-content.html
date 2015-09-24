@@ -2,7 +2,15 @@
 <paper-header-panel id="mainHeaderPanel">
   <!-- TOPBAR MENU -->
   <paper-toolbar>
-    {{>title}}
+    <ul class="topbar-menu">
+      <li>
+        {{>title}}
+      </li>
+      <li>
+        {{> loginButtons}}
+      </li>
+    </ul>
+
   </paper-toolbar>
   <!-- MAIN CONTENT -->
   <div main-content>

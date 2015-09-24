@@ -5,20 +5,17 @@ Meteor.startup(function () {
     Subjects.remove({});
     Hypervideos.remove({});
     Videos.remove({});
+    Subvideos.remove({});
+    Questions.remove({});
   }
-  });
+});
+
   Videos.deny({
-    insert: function(){
-      return false;
-    },
     update: function(){
-      return false;
-    },
-    remove: function(){
-      return false;
+      return true;
     },
     download: function(){
-      return false;
+      return true;
     }
   });
 
@@ -26,13 +23,27 @@ Meteor.startup(function () {
     insert: function(){
       return true;
     },
-    update: function(){
-      return true;
-    },
     remove: function(){
       return true;
     },
-    download: function(){
-      return true;
-    }
+  });
+
+  Meteor.publish('subjects', function () {
+      return Subjects.find();
+  });
+
+  Meteor.publish('hypervideos', function () {
+      return Subjects.find();
+  });
+
+  Meteor.publish('subvideos', function () {
+      return Subjects.find();
+  });
+
+  Meteor.publish('questions', function () {
+      return Subjects.find();
+  });
+
+  Meteor.publish('videos', function () {
+      return Subjects.find();
   });

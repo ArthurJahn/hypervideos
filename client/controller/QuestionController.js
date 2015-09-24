@@ -1,5 +1,7 @@
 function QuestionController() {}
 
+Meteor.subscribe("questions");
+
 QuestionController.prototype = (function () {
   var question = null;
   var defaultAns = ["resposta 1", "resposta 2"];
