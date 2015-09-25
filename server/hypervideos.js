@@ -10,13 +10,73 @@ Meteor.startup(function () {
   }
 });
 
-  Videos.deny({
+  Meteor.publish('subjects', function () {
+      return Subjects.find();
+  });
+
+  Subjects.allow({
+    insert: function(){
+      return true;
+    },
+    remove: function(){
+      return true;
+    },
     update: function(){
       return true;
     },
-    download: function(){
+  });
+
+  Meteor.publish('hypervideos', function () {
+      return Hypervideos.find();
+  });
+
+  Hypervideos.allow({
+    insert: function(){
       return true;
-    }
+    },
+    remove: function(){
+      return true;
+    },
+    update: function(){
+      return true;
+    },
+  });
+
+  Meteor.publish('subvideos', function () {
+      return Subvideos.find();
+  });
+
+  Subvideos.allow({
+    insert: function(){
+      return true;
+    },
+    remove: function(){
+      return true;
+    },
+    update: function(){
+      return true;
+    },
+  });
+
+  Meteor.publish('questions', function () {
+      return Questions.find();
+  });
+
+  Questions.allow({
+    insert: function(){
+      return true;
+    },
+    remove: function(){
+      return true;
+    },
+    update: function(){
+      return true;
+    },
+  });
+
+
+  Meteor.publish('videos', function () {
+      return Videos.find();
   });
 
   Videos.allow({
@@ -26,24 +86,7 @@ Meteor.startup(function () {
     remove: function(){
       return true;
     },
-  });
-
-  Meteor.publish('subjects', function () {
-      return Subjects.find();
-  });
-
-  Meteor.publish('hypervideos', function () {
-      return Subjects.find();
-  });
-
-  Meteor.publish('subvideos', function () {
-      return Subjects.find();
-  });
-
-  Meteor.publish('questions', function () {
-      return Subjects.find();
-  });
-
-  Meteor.publish('videos', function () {
-      return Subjects.find();
+    update: function(){
+      return true;
+    },
   });

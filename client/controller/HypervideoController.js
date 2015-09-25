@@ -1,7 +1,5 @@
 function HypervideoController() {}
 
-Meteor.subscribe("hypervideos");
-
 HypervideoController.prototype = (function () {
   var hypervideo = null;
 
