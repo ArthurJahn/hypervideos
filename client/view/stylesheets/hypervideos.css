@@ -91,6 +91,7 @@ ul.list-inline {
   background-color: #ffffff;/*var(--drawer-menu-color);*/
 }
 #drawerHeaderPanel [menu-content] paper-item {
+  color: #616161;
   border-bottom: 1px solid #DCDCDC;/*var(--light-divider-color);*/
 }
 #drawerHeaderPanel [menu-content] paper-item:active {
@@ -139,6 +140,10 @@ ul.list-inline {
 
 .topbar-menu li:last-child .login-close-text {
   float: right !important;
+}
+
+.sidebar-menu iron-icon {
+  margin: 0 15px;
 }
 
 /*--------------------------------- drawer -----------------------------------*/
