@@ -29,6 +29,7 @@
       height: 360px;
     }
     #backcanvas {
+      padding-top: 15px;
       position: absolute;
       width: 100%;
       height: 280px;
@@ -90,7 +91,7 @@
     },
     attached: function() {
       var self = this;
-      self.$.hypers.bounds = self._getTouchableBounds();
+      self.$.hypers.bounds = self._getGridBounds();
       if (self.subject) {
         self.fire('get-hypervideos');
       }
@@ -98,15 +99,16 @@
     presentHypervideos: function() {
       var self = this;
       if(self.hypervideos) {
-        self.$.hypers.bounds = self._getTouchableBounds();
+        self.$.hypers.bounds = self._getGridBounds();
         for(var i=0; i< self.hypervideos.length; i++) {
           var hypervideo = self.hypervideos[i];
           var preview = new hypervideoPreview(hypervideo);
           self.$.hypers.appendGridChild(preview);
         }
+        this._drawConnections();
       }
     },
-    _getTouchableBounds: function() {
+    _getGridBounds: function() {
       var self = this;
       var rect = self.$.gridarea.getBoundingClientRect();
       var bounds = {
@@ -118,7 +120,42 @@
       return bounds;
     },
     _onIronResize: function() {
-      this.$.hypers.bounds = this._getTouchableBounds();
+      this.$.hypers.bounds = this._getGridBounds();
+      this._drawConnections();
+    },
+    _drawConnections: function() {
+      var self = this;
+      var canvasScale = 3;
+      var lineWidth = 4;
+      var connections = self.subject.connections;
+      var canvas = self.$.canvas;
+      canvas.width  = canvasScale * canvas.offsetWidth;
+      canvas.height = canvasScale * canvas.offsetHeight;
+      var ctx = canvas.getContext("2d");
+
+      ctx.beginPath();
+      for(var i=0; i< connections.length; i++) {
+        var conn = connections[i];
+        //FIX ME find a better way to do it...
+        var first = self._findHypervideoNode(conn.first);
+        var second = self._findHypervideoNode(conn.second);
+        if(first && second) {
+          var firstPos = first.getPos();
+          var secondPos = second.getPos();
+          var x1 = canvasScale * (firstPos.x);
+          var y1 = canvasScale * (firstPos.y);
+          var x2 = canvasScale * (secondPos.x);
+          var y2 = canvasScale * (secondPos.y);
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+        }
+      }
+      ctx.lineWidth = lineWidth;
+      ctx.stroke();
+    },
+    _findHypervideoNode: function(id) {
+      var self = this;
+      return self.querySelector('#_'+id);
     },
   });
   </script>

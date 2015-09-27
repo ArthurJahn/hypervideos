@@ -50,6 +50,12 @@
       this.$.wrapper.style.left = this._x - this._w/2+"px";
       this.$.wrapper.style.top = this._y - this._w/2+"px";
     },
+    getPos(){
+      return {
+        x: this._x,
+        y: this._y,
+      };
+    },
   });
   </script>
 </dom-module>
