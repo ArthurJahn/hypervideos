@@ -8,13 +8,13 @@ Hypervideo = Astro.Class({
     subvideos: 'array', // Define "subvideos" of Array type.
     questions: 'array', // Define "questions" of Array type.
     connections: 'array',
-    x: 'number',
-    y: 'number'
+    col: 'number',
+    row: 'number'
   },
   methods: { // Define few methods.
-    move: function(x,y) {
-      this.x = x;
-      this.y = y;
+    move: function(col,row) {
+      this.col = col;
+      this.row = row;
     },
     addSubvideo: function(subvideoId) {
       this.subvideos.push(subvideoId);

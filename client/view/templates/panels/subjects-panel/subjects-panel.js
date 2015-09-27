@@ -9,13 +9,13 @@ Template.subjectsPanel.helpers({
     return Session.get('activePanel') === "0";
   },
   subjects: function () {
-    return Subjects.find();
+    return subjectController.subjects();
   }
 });
 
 Template.subjectsPanel.events({
-  'click button': function () {
-    // increment the counter when button is clicked
-    Session.set('counter', Session.get('counter') + 1);
+  'get-hypervideos subject-box': function (e, template) {
+    var list = hypervideoController.getByIds(e.target.subject.hypervideos);
+    e.target.hypervideos = list;
   }
 });

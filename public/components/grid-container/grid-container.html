@@ -43,6 +43,7 @@
         gridNode.className += self.gridClass;
         gridNode._bounds = self.bounds;
         self.$.container.appendChild(gridNode);
+        this.setNodePos(gridNode);
       },
       removeGridChild: function(gridNode) {
         var self = this;
@@ -53,7 +54,6 @@
         var y = gridNode._y;
         var col = Math.floor((x/this.bounds.width)*this.cols);
         var row = Math.floor((y/this.bounds.height)*this.rows);
-        console.log(col+" : "+row);
         gridNode._col = col;
         gridNode._row = row;
         this.setNodePos(gridNode);
@@ -84,6 +84,7 @@
         }
       },
       setNodePos: function(node) {
+        node._bounds = this.bounds;
         node._x = node._col * this._cSize + 3*this._cSize/4;
         node._y = node._row * this._rSize + this._rSize/2;
         node.moveToPos();

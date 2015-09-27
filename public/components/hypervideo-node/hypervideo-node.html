@@ -250,6 +250,8 @@
         } else {
           this._togglePreview();
         }
+        console.log(this._col + " : " + this._row);
+        console.log(this._bounds);
       },
       onIconTrack: function(e) {
         switch (e.detail.state) {
@@ -329,8 +331,8 @@
       },
       _iconTrackEnd: function() {
         this.fire('position-changed');
-        this.hypervideo.x = this._x;
-        this.hypervideo.y = this._y;
+        this.hypervideo.col = this._col;
+        this.hypervideo.row = this._row;
         this.$.icon.style.cursor = "pointer";
         this.fire('hypervideo-changed');
         this.dragging = false;

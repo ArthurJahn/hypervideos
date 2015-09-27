@@ -1,11 +1,5 @@
 <template name="subjectsPanel">
   {{#if show}}
-    {{#each subjects}}
-      {{>subject}}
-    {{/each}}
+    <subjects-list subjects={{subjects}}></subjects-list>
   {{/if}}
-</template>
-<template name="subject">
-  <subject-box name="{{name}}">
-  </subject-box>
 </template>

@@ -6,11 +6,11 @@ HypervideoController.prototype = (function () {
   return {
     constructor:HypervideoController,
 
-    createHypervideo: function(subjectId, x, y) {
+    createHypervideo: function(subjectId, col, row) {
       hypervideo = new Hypervideo();
       hypervideo.name = Hypervideos.defaultName;
-      hypervideo.x = x;
-      hypervideo.y = y;
+      hypervideo.col = col;
+      hypervideo.row = row;
       hypervideo.subjectId = subjectId;
       hypervideo.subvideos = [];
       hypervideo.questions = [];
@@ -48,6 +48,9 @@ HypervideoController.prototype = (function () {
     removeQuestion: function (question) {
       hypervideo.removeHypervideo(question._id);
       questionController.removeQuestion(question);
+    },
+    getByIds: function(ids) {
+      return Hypervideos.find({_id: { $in : ids }}).fetch();
     },
   };
 })();

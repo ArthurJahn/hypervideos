@@ -21,8 +21,8 @@ Template.newSubjectPanel.events({
 
 // ======================= Hypervideo Controll Methods =======================//
   'hypervideo-created hypervideo-node': function(e, template) {
-    var x = e.target._x, y = e.target._y;
-    var hypervideo = subjectController.addHypervideo(x,y);
+    var col = e.target._col, row = e.target._row;
+    var hypervideo = subjectController.addHypervideo(col,row);
     e.target.hypervideo = hypervideo;
   },
   'hypervideo-changed hypervideo-node': function(e, template) {

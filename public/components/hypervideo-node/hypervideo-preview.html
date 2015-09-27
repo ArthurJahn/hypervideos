@@ -1,0 +1,55 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="hypervideo-preview">
+  <style>
+    #wrapper {
+      position: absolute;
+    }
+    #icon {
+      position: absolute;
+      padding: 18px 17px;
+      line-height: 10px;
+      border-radius: 50%;
+      background-color:#DCDCDC;/*var(--light-divider-color);*/
+      color: #212121;/*var(--light-divider-color);*/
+      text-align: center;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 1;
+    }
+  </style>
+  <template>
+    <div id="wrapper">
+      <div id="icon" on-tap="showPos">
+        H
+      </div>
+    </div>
+  </template>
+  <script>
+  hypervideoPreview = Polymer({
+    is: 'hypervideo-preview',
+    properties: {
+      hypervideo: {
+        type: Object,
+        value: null
+      }
+    },
+    factoryImpl: function(hypervideo) {
+      this.hypervideo = hypervideo;
+    },
+    attached: function() {
+      Polymer.dom.flush();
+      this._w = this.$.icon.clientWidth;
+      this._col = this.hypervideo.col;
+      this._row = this.hypervideo.row;
+      this.moveToPos();
+      this.id = "_"+this.hypervideo._id;
+    },
+    moveToPos: function() {
+      this.$.wrapper.style.left = this._x - this._w/2+"px";
+      this.$.wrapper.style.top = this._y - this._w/2+"px";
+    },
+  });
+  </script>
+</dom-module>

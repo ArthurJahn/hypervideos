@@ -75,7 +75,7 @@ ul.list-inline {
 }
 #mainHeaderPanel [main-content] {
   background-color: #ffffff;/*var(--drawer-menu-color);*/
-  margin: 10px;
+  margin: 7px;
 }
 
 /*--------------------------------- drawer -----------------------------------*/
@@ -91,6 +91,7 @@ ul.list-inline {
   background-color: #ffffff;/*var(--drawer-menu-color);*/
 }
 #drawerHeaderPanel [menu-content] paper-item {
+  cursor: pointer;
   color: #616161;
   border-bottom: 1px solid #DCDCDC;/*var(--light-divider-color);*/
 }
@@ -152,4 +153,13 @@ ul.list-inline {
 }
 .focused-line.paper-input-container {
   background-color: #FFC107  !important;/*var(--accent-color);*/
+}
+
+#login-buttons .login-button, .accounts-dialog .login-button {
+  line-height: 2;
+  background-color: #FFC107;
+  border: 0;
+}
+#login-buttons .login-button:hover, .accounts-dialog .login-button:hover {
+  background-color: #FFC107;
 }
