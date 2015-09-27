@@ -13,10 +13,12 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
 
 <!-- Custom implemented components -->
 <link rel="import" href="../../components/hypervideo-node/hypervideo-node.html">
 <link rel="import" href="../../components/connection-node/connection-node.html">
+<link rel="import" href="../../components/grid-container/grid-container.html">
 
 <dom-module id="subject-composer-area">
   <style is="custom-style">
@@ -26,11 +28,12 @@
       bottom: 10px;
       left: 10px;
       right: 10px;
+      padding-top: 25px;
+      background-color:rgba(246,246,246,1);/*var(--light-divider-color);*/
     }
     #backcanvas canvas{
       width: 100%;
       height: 100%;
-      background-color:rgba(246,246,246,1);/*var(--light-divider-color);*/
     }
     #toucharea {
       position: absolute;
@@ -69,6 +72,11 @@
       bottom:0;
       width: 100%;
     }
+    #hypers, #conns {
+      position: absolute;
+      top: 100px;
+      bottom: 35px;
+    }
   </style>
   <template>
     <paper-input id="subjectName"
@@ -96,9 +104,9 @@
       dialog-confirm>SIM!</paper-button>
     </paper-dialog>
     <div id="nodes">
-      <div id="hypers">
+      <grid-container id="hypers">
         <!-- this is where hypervideo-nodes will be displayed -->
-      </div>
+      </grid-container>
       <div id="conns">
         <!-- this is where connection-nodes will be displayed -->
       </div>
@@ -143,9 +151,15 @@
           value: null,
         }
       },
-
+      listeners: {
+        'iron-resize': '_onIronResize'
+      },
+      behaviors: [
+        Polymer.IronResizableBehavior
+      ],
 //========================= Custom Component Methods =========================//
       composerTap: function(e) {
+        this.$.hypers.bounds = this._getTouchableBounds();
         this._updateSubject(e);
         this._createHypervideo(e);
         this.firstTouch = !(this.subject.hypervideos.length>0);
@@ -161,11 +175,10 @@
       },
       draggingChanged: function (newDragging) {
         var self = this;
-        if(self.dragging) {
-          self._drawInterval = setInterval(function() {
-            self._drawConnections();
-          }, 40);
-        } else {
+        self._drawInterval = setInterval(function() {
+          self._drawConnections();
+        }, 1);
+        if(!self.dragging) {
           clearInterval(self._drawInterval);
         }
       },
@@ -178,9 +191,9 @@
       confirmDelete: function() {
         var self = this;
         if(self._deletingNode)
-          self.$.hypers.removeChild(self._deletingNode);
-        self._deletingNode = null;
-        self._drawConnections();
+          self.$.hypers.removeGridChild(self._deletingNode);
+          self._deletingNode = null;
+          self._drawConnections();
       },
       onDismiss: function() {
         var self = this;
@@ -193,16 +206,9 @@
 //===================== Custom Component Private Methods =====================//
       _createHypervideo: function(e) {
         var self = this;
-        var xOffset = 35; //depends on initial definition in toucharea css
-        var yOffset = 100;//depends on initial definition in toucharea css
         // defines bounds and offset of dragging limits for a hypervideoNode
-        var rect = self.$.toucharea.getBoundingClientRect();
-        var bounds = {
-          width: rect.right - rect.left,
-          height: rect.bottom - rect.top,
-          x: rect.left-xOffset,
-          y: rect.top-yOffset
-        }
+        var bounds = self.$.hypers.bounds;
+
         var touchX = e.detail.x - bounds.x;
         var touchY = e.detail.y - bounds.y;
         var options = {
@@ -214,7 +220,7 @@
         }
         var hypervideoNode = new HypervideoNode(options);
         self._addHypervideoListeners(hypervideoNode);
-        self.$.hypers.appendChild(hypervideoNode);
+        self.$.hypers.appendGridChild(hypervideoNode);
       },
       _updateSubject: function() {
         if(this.subject === null) {
@@ -254,8 +260,6 @@
         var canvas = self.$.canvas;
         canvas.width  = canvasScale * canvas.offsetWidth;
         canvas.height = canvasScale * canvas.offsetHeight;
-        var canvasXOffset = 10;
-        var canvasYOffset = 75;
         var ctx = canvas.getContext("2d");
 
         ctx.beginPath();
@@ -267,10 +271,10 @@
           if(first && second) {
             var firstPos = first.getPos();
             var secondPos = second.getPos();
-            var x1 = canvasScale * (firstPos.x - canvasXOffset);
-            var y1 = canvasScale * (firstPos.y - canvasYOffset);
-            var x2 = canvasScale * (secondPos.x - canvasXOffset);
-            var y2 = canvasScale * (secondPos.y - canvasYOffset);
+            var x1 = canvasScale * (firstPos.x);
+            var y1 = canvasScale * (firstPos.y);
+            var x2 = canvasScale * (secondPos.x);
+            var y2 = canvasScale * (secondPos.y);
             ctx.moveTo(x1, y1);
             ctx.lineTo(x2, y2);
             self._showConnection(conn, firstPos, secondPos);
@@ -345,7 +349,22 @@
               return;
           }
         }
-      }
+      },
+      _getTouchableBounds: function() {
+        var self = this;
+        var rect = self.$.toucharea.getBoundingClientRect();
+        var bounds = {
+          width: rect.right - rect.left,
+          height: rect.bottom - rect.top,
+          x: rect.left,
+          y: rect.top
+        }
+        console.log(bounds);
+        return bounds;
+      },
+      _onIronResize: function() {
+        this.$.hypers.bounds = this._getTouchableBounds();
+      },
     });
   </script>
 </dom-module>

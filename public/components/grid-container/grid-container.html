@@ -1,0 +1,92 @@
+<dom-module id="grid-container">
+  <style media="screen">
+    #container {
+      position: relative;
+      margin: 0;
+    }
+  </style>
+  <template>
+    <div id="container"></div>
+  </template>
+  <script type="text/javascript">
+    Polymer({
+      is:"grid-container",
+      properties: {
+        cols: {
+          type: Number,
+          value: 10
+        },
+        rows: {
+          type: Number,
+          value: 7
+        },
+        bounds: {
+          type: Object,
+          observer: "boundsChanged"
+        },
+        gridClass: {
+          type: String,
+          value: "gridNode"
+        }
+      },
+      attached: function() {
+        var self = this;
+        if(!self.bounds) {
+          self.setBounds();
+        }
+      },
+      appendGridChild: function(gridNode) {
+        var self = this;
+        gridNode.addEventListener('position-changed', function(){
+          self.positionMovedNode(this);
+        });
+        gridNode.className += self.gridClass;
+        gridNode._bounds = self.bounds;
+        self.$.container.appendChild(gridNode);
+      },
+      removeGridChild: function(gridNode) {
+        var self = this;
+        self.$.container.removeChild(gridNode);
+      },
+      positionMovedNode: function(gridNode) {
+        var x = gridNode._x;
+        var y = gridNode._y;
+        var col = Math.floor((x/this.bounds.width)*this.cols);
+        var row = Math.floor((y/this.bounds.height)*this.rows);
+        console.log(col+" : "+row);
+        gridNode._col = col;
+        gridNode._row = row;
+        this.setNodePos(gridNode);
+      },
+      setBounds: function() {
+        var self = this;
+        var rect = self.parentNode.getBoundingClientRect();
+        var width = rect.right - rect.left;
+        var height = rect.bottom - rect.top;
+        self.bounds = {
+          x: rect.left,
+          y: rect.top,
+          width: width,
+          height: height
+        };
+      },
+      boundsChanged: function() {
+        var self = this;
+        if (self.bounds) {
+          self._cSize = (self.bounds.width/(self.cols));
+          self._rSize = (self.bounds.height/(self.rows));
+        }
+        var gridNodes = self.$.container.getElementsByClassName(self.gridClass);
+        for(var i=0; i< gridNodes.length; i++) {
+          var gridNode = gridNodes[i];
+          gridNode._bounds = self.bounds;
+          self.setNodePos(gridNode);
+        }
+      },
+      setNodePos: function(node) {
+        node._x = node._col * this._cSize + 3*this._cSize/4;
+        node._y = node._row * this._rSize + this._rSize/2;
+        node.moveToPos();
+      }
+    });
+  </script>
