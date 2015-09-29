@@ -17,13 +17,22 @@
       font-size: 15px;
       line-height: 10px;
       height: 40px;
-      width: 100%;
-      padding: 0;
+      width: 90%;
+      padding: 0 5%;
       color: #616161;
       background-color: rgba(246,246,246,1);/*var(--light-divider-color);*/
     }
     #mainPanel paper-toolbar p {
-      padding: 0 20px;
+      width: 50%;
+      display: inline-block;
+    }
+    #mainPanel paper-toolbar span {
+      width: 49%;
+      text-align: right;
+      display: inline-block;
+    }
+    #mainPanel paper-toolbar iron-icon:hover {
+      color: #FFC107;
     }
     #mainPanel .wrapper {
       height: 360px;
@@ -48,11 +57,36 @@
       position: absolute;
       top:15px;
     }
+    .wrapper .progress {
+      position: absolute;
+      top: 270px;
+      left: 5px;
+    }
+    progress {
+      position: absolute;
+      top: 290px;
+      left: 0;
+      height: 5px;
+      width: 100%;
+      -webkit-appearance: none;
+      background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
+    }
+    progress::-webkit-progress-bar {
+      background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
+    }
+    progress::-webkit-progress-value {
+      background-color: #FFC107;
+    }
   </style>
   <template>
     <paper-header-panel id="mainPanel" mode="seamed">
       <paper-toolbar>
         <p>{{subject.name}}</p>
+        <span>
+          <iron-icon icon="av:play-circle-filled"></iron-icon>
+          <iron-icon icon="create"></iron-icon>
+          <iron-icon icon="delete"></iron-icon>
+        </span>
       </paper-toolbar>
       <div class="wrapper">
         <div id="backcanvas">
@@ -61,6 +95,10 @@
         </div>
         <grid-container id="hypers">
         </grid-container>
+        <div class="progress">
+          <span>{{progress}}</span> % concluído
+        </div>
+        <progress value="{{progress}}" max="100"></progress>
       </div>
     </paper-header-panel>
   </template>
@@ -70,7 +108,8 @@
     properties: {
       subject: {
         type: Object,
-        value: null
+        value: null,
+        observer: "subjectChanged"
       },
       hypervideos: {
         type: Array,
@@ -78,6 +117,10 @@
           return [];
         },
         observer: "presentHypervideos"
+      },
+      progress: {
+        type: Number,
+        value: 50
       }
     },
     listeners: {
@@ -86,12 +129,13 @@
     behaviors: [
       Polymer.IronResizableBehavior
     ],
-    ready: function() {
-
-    },
     attached: function() {
       var self = this;
       self.$.hypers.bounds = self._getGridBounds();
+      self.subjectChanged();
+    },
+    subjectChanged: function() {
+      var self = this;
       if (self.subject) {
         self.fire('get-hypervideos');
       }
@@ -125,33 +169,34 @@
     },
     _drawConnections: function() {
       var self = this;
-      var canvasScale = 3;
-      var lineWidth = 4;
-      var connections = self.subject.connections;
-      var canvas = self.$.canvas;
-      canvas.width  = canvasScale * canvas.offsetWidth;
-      canvas.height = canvasScale * canvas.offsetHeight;
-      var ctx = canvas.getContext("2d");
+      if(self.subject) {
+        var canvasScale = 3;
+        var lineWidth = 4;
+        var connections = self.subject.connections;
+        var canvas = self.$.canvas;
+        canvas.width  = canvasScale * canvas.offsetWidth;
+        canvas.height = canvasScale * canvas.offsetHeight;
+        var ctx = canvas.getContext("2d");
 
-      ctx.beginPath();
-      for(var i=0; i< connections.length; i++) {
-        var conn = connections[i];
-        //FIX ME find a better way to do it...
-        var first = self._findHypervideoNode(conn.first);
-        var second = self._findHypervideoNode(conn.second);
-        if(first && second) {
-          var firstPos = first.getPos();
-          var secondPos = second.getPos();
-          var x1 = canvasScale * (firstPos.x);
-          var y1 = canvasScale * (firstPos.y);
-          var x2 = canvasScale * (secondPos.x);
-          var y2 = canvasScale * (secondPos.y);
-          ctx.moveTo(x1, y1);
-          ctx.lineTo(x2, y2);
+        ctx.beginPath();
+        for(var i=0; i< connections.length; i++) {
+          var conn = connections[i];
+          var first = self._findHypervideoNode(conn.first);
+          var second = self._findHypervideoNode(conn.second);
+          if(first && second) {
+            var firstPos = first.getPos();
+            var secondPos = second.getPos();
+            var x1 = canvasScale * (firstPos.x);
+            var y1 = canvasScale * (firstPos.y);
+            var x2 = canvasScale * (secondPos.x);
+            var y2 = canvasScale * (secondPos.y);
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+          }
         }
+        ctx.lineWidth = lineWidth;
+        ctx.stroke();
       }
-      ctx.lineWidth = lineWidth;
-      ctx.stroke();
     },
     _findHypervideoNode: function(id) {
       var self = this;

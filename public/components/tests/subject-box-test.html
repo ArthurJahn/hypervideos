@@ -22,14 +22,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <body>
 
     <!-- You can use the document as a place to set up your fixtures. -->
-    <subject-box name="subject name"></subject-box>
+    <subject-box></subject-box>
     <div id="newNode"></div>
     <script>
       var sBox = document.querySelector('subject-box');
+      function setUp() {
+        sBox.subject = {
+          name: 'subject name',
+          connections: [],
+          hypervideos: []
+        };
+      }
 
       suite('<subject-box>', function() {
-        test('defines the "name" property', function() {
-          assert.equal(sBox.name, "subject name");
+        test('verify event "get-hypervideos" fired', function() {
+          var eventFired = false;
+          sBox.addEventListener('get-hypervideos', function(){
+            eventFired = true;
+          });
+          setUp();
+          assert.isTrue(eventFired);
+        });
+        test('defines the "subject" property', function() {
+          setUp();
+          assert.equal(sBox.subject.name, "subject name");
         });
       });
     </script>

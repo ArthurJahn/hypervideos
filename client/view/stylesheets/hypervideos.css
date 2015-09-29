@@ -163,3 +163,7 @@ ul.list-inline {
 #login-buttons .login-button:hover, .accounts-dialog .login-button:hover {
   background-color: #FFC107;
 }
+
+#dropShadow.has-shadow.paper-header-panel {
+  z-index: 9;
+}
