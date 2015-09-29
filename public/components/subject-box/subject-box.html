@@ -83,7 +83,7 @@
       <paper-toolbar>
         <p>{{subject.name}}</p>
         <span>
-          <iron-icon icon="av:play-circle-filled"></iron-icon>
+          <iron-icon icon="av:play-circle-filled" on-tap="watchSubject"></iron-icon>
           <iron-icon icon="create"></iron-icon>
           <iron-icon icon="delete"></iron-icon>
         </span>
@@ -151,6 +151,9 @@
         }
         this._drawConnections();
       }
+    },
+    watchSubject: function() {
+      this.fire("watch-subject");
     },
     _getGridBounds: function() {
       var self = this;

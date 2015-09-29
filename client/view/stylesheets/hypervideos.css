@@ -82,7 +82,7 @@ ul.list-inline {
 #drawerHeaderPanel paper-toolbar {
   background-color: #DCDCDC;/*var(--light-divider-color);*/
   height: 65px;
-  font-size: 30px;
+  font-size: 22px;
   color: #727272;/*var(--secondary-text-color);*/
   border-bottom: 1px solid #B3B3B3;/*var(--divider-color);*/
 }
