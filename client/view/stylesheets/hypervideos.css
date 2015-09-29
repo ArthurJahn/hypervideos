@@ -33,6 +33,7 @@
  --paper-input-container-focus-color: rgba(255, 255, 255, 1);
  --paper-input-container-input-color: #fff;
 }
+
 body {
   font-family: 'Muli', sans-serif;
   margin: 0;
@@ -62,7 +63,6 @@ ul.list-inline {
 #drawerPanel[right-drawer] [drawer] {
   border-left: 1px solid #DCDCDC;/*var(--light-divider-color);*/
 }
-
 /*---------------------------------- main ------------------------------------*/
 #mainHeaderPanel paper-toolbar {
   background-color: #455A64;/*var(--dark-primary-color);*/
@@ -89,6 +89,9 @@ ul.list-inline {
 #drawerHeaderPanel [menu-content] paper-menu {
   padding: 0;
   background-color: #ffffff;/*var(--drawer-menu-color);*/
+}
+#drawerHeaderPanel [menu-content] a {
+  text-decoration: none;
 }
 #drawerHeaderPanel [menu-content] paper-item {
   cursor: pointer;

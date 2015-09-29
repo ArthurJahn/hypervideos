@@ -10,30 +10,54 @@
         </paper-toolbar>
         <!-- MENU OPTIONS -->
         <div menu-content>
-          <paper-menu class="sidebar-menu" selected="{{activePanel}}">
-            <paper-item id="subjects">
-              <iron-icon icon="bookmark"></iron-icon>
-              Meus Cursos
-            </paper-item>
-            <paper-item id="profile">
-              <iron-icon icon="account-box"></iron-icon>
-              Perfil
-            </paper-item>
-            <paper-item id="explore">
-              <iron-icon icon="language"></iron-icon>
-              Explorar
-            </paper-item>
-            <paper-item id="highlighted">
-              <iron-icon icon="create"></iron-icon>
-              Novo Curso
-            </paper-item>
+          <paper-menu class="sidebar-menu">
+            <a href="{{pathFor 'subjects'}}">
+              <paper-item id="subjects" on-tap="">
+                <iron-icon icon="bookmark"></iron-icon>
+                Meus Cursos
+              </paper-item>
+            </a>
+            <a href="{{pathFor 'profile'}}">
+              <paper-item id="profile">
+                <iron-icon icon="account-box"></iron-icon>
+                Perfil
+              </paper-item>
+            </a>
+            <a href="{{pathFor 'home'}}">
+              <paper-item id="explore">
+                <iron-icon icon="language"></iron-icon>
+                Explorar
+              </paper-item>
+            </a>
+            <a href="{{pathFor 'newSubject'}}">
+              <paper-item id="highlighted">
+                <iron-icon icon="create"></iron-icon>
+                Novo Curso
+              </paper-item>
+            </a>
           </paper-menu>
         </div>
       </paper-header-panel>
     </div>
     <!-- MAIN CONTENT & TOPBAR -->
     <div main>
-      {{>mainContent}}
+      <paper-header-panel id="mainHeaderPanel">
+        <!-- TOPBAR MENU -->
+        <paper-toolbar>
+          <ul class="topbar-menu">
+            <li>
+              {{>title}}
+            </li>
+            <li>
+              {{>loginButtons}}
+            </li>
+          </ul>
+        </paper-toolbar>
+        <!-- MAIN CONTENT -->
+        <div main-content>
+          {{> yield}}
+        </div>
+      </paper-header-panel>
     </div>
   </paper-drawer-panel>
 </template>
