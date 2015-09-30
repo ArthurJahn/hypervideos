@@ -1,0 +1,26 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../hyper-player/hyper-player.html">
+
+<dom-module id="subject-player">
+  <style media="screen">
+  </style>
+  <template>
+    <div id="wrapper"
+    on-mouseover="onHover"
+    on-mouseout="onHout">
+      <hyper-player source="http://www.w3schools.com/html/mov_bbb.mp4"></hyper-player>
+    </div>
+  </template>
+  <script>
+    Polymer({
+//======================== Polymer Component Methods =========================//
+      is: 'subject-player',
+      properties: {
+        source: {
+          type: String,
+        }
+      }
+    });
+  </script>
+</dom-module>
