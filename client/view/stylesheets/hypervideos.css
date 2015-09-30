@@ -103,12 +103,13 @@ ul.list-inline {
 }
 #drawerHeaderPanel #highlighted {
   background-color: #FFC107;/*var(--accent-color);*/
-  margin: 6px 12px;
+  margin: 6px;
   min-height: 35px;
   line-height: 30px;
   border: 0;
   border-radius: 5px;
   color: #fff;/*var(--paper-input-container-input-color)*/
+  padding: 0 10px;
 }
 #drawerHeaderPanel #logo {
   height: 35px;
@@ -147,7 +148,7 @@ ul.list-inline {
 }
 
 .sidebar-menu iron-icon {
-  margin: 0 15px;
+  margin: 0 15px 0 0;
 }
 
 /*--------------------------------- drawer -----------------------------------*/
