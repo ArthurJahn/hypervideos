@@ -1,27 +1,64 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 
 <dom-module id="hyper-player">
   <style media="screen">
+    .wrapper {
+      display: block;
+      height: auto;
+    }
+    #video {
+      min-width: 70%;
+      width: auto;
+      height: auto;
+      z-index: -100;
+      background-size: cover;
+      overflow: hidden;
+    }
+    #notes {
+      vertical-align: top;
+      box-sizing: border-box;
+      border: none;
+      width: 29%;
+      height: inherit;
+    }
+    @media screen and (max-width: 1000px) {
+      #video {
+        min-width: 50%;
+      }
+      #notes {
+        width: 49%;
+      }
+    }
+
+    @media screen and (max-width: 780px) {
+      #video {
+        min-width: 100%;
+      }
+      #notes {
+        width: 100%;
+      }
+    }
   </style>
   <template>
-    <div id="wrapper"
-    on-mouseover="onHover"
-    on-mouseout="onHout">
-      <video id="video" width="50%" controls autoplay>
+    <div class="wrapper">
+      <video id="video" controls autoplay poster="{{poster}}">
         <source src="{{source}}" type="video/mp4">
         <source src="{{source}}" type="video/ogg">
       </video>
+      <textarea id="notes"></textarea>
     </div>
   </template>
   <script>
     Polymer({
-//======================== Polymer Component Methods =========================//
       is: 'hyper-player',
       properties: {
+        poster:{
+          type: String,
+          value: ''
+        },
         source: {
           type: String,
+          value: ''
         }
       },
     });
