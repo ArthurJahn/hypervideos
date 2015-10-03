@@ -2,7 +2,13 @@ function HypervideoController() {}
 
 HypervideoController.prototype = (function () {
   var hypervideo = null;
-
+  Meteor.methods({
+    'createHypervideo': function(hypervideo) {
+      if(hypervideo.validate()) {
+        hypervideo.save();
+      }
+    }
+  });
   return {
     constructor:HypervideoController,
 
@@ -49,8 +55,8 @@ HypervideoController.prototype = (function () {
       hypervideo.removeHypervideo(question._id);
       questionController.removeQuestion(question);
     },
-    getByIds: function(ids) {
-      return Hypervideos.find({_id: { $in : ids }}).fetch();
+    getByIds: function(id) {
+      return Hypervideos.find({subjectId : id}).fetch();
     },
   };
 })();

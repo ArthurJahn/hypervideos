@@ -3,7 +3,10 @@ Hypervideo = Astro.Class({
   collection: Hypervideos, // Associate collection with the model.
   transform: true, // Auto transform objects fetched from collection.
   fields: {
-    name: 'string', // Define "title" field of String type.
+    name:{
+      type: 'string',
+      validator: Validators.minLength(3)
+    },
     subjectId: 'string', //Define subject that contains this hypervideo
     subvideos: 'array', // Define "subvideos" of Array type.
     questions: 'array', // Define "questions" of Array type.
@@ -11,7 +14,7 @@ Hypervideo = Astro.Class({
     col: 'number',
     row: 'number'
   },
-  methods: { // Define few methods.
+  methods: {
     move: function(col,row) {
       this.col = col;
       this.row = row;

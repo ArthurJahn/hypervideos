@@ -6,7 +6,9 @@ Template.subjectsPanel.helpers({
 
 Template.subjectsPanel.events({
   'get-hypervideos subject-box': function (e, template) {
-    var list = hypervideoController.getByIds(e.target.subject.hypervideos);
+    var subject = e.target.subject;
+    console.log(subject);
+    var list = hypervideoController.getByIds(subject._id);
     e.target.hypervideos = list;
   },
   'watch-subject subject-box': function (e, template) {
