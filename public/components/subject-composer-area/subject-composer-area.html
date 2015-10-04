@@ -89,7 +89,7 @@
     </div>
     <div id="toucharea"
       on-tap="composerTap">
-      <template is="dom-if" if="{{firstTouch}}">
+      <template is="dom-if" if="emptyComposer">
         <div id="hint-text">Clique para adicionar um hypervideo</div>
       </template>
     </div>
@@ -116,10 +116,6 @@
     Polymer({
 //======================== Polymer Component Methods =========================//
       is: 'subject-composer-area',
-      ready: function() {
-        this.firstTouch = true;
-        this.subject = null;
-      },
       properties: {
         // when connecting hypervideos, this property
         // catches the ids for creating connections
@@ -149,6 +145,10 @@
         subject: {
           type: Object,
           value: null,
+        },
+        hypervideos: {
+          type: Object,
+          value: null,
         }
       },
       listeners: {
@@ -162,7 +162,6 @@
         this.$.hypers.bounds = this._getTouchableBounds();
         this._updateSubject(e);
         this._createHypervideo(e);
-        this.firstTouch = !(this.subject.hypervideos.length>0);
       },
       connectIdChanged: function (newConnectId) {
         var list = this.$.nodes.querySelectorAll(
@@ -225,6 +224,7 @@
       _updateSubject: function() {
         if(this.subject === null) {
           this.fire('subject-created');
+          console.log(this.subject);
         }
         if(this.subject) {
           if(this.$.subjectName.value === "") {
@@ -363,6 +363,10 @@
       },
       _onIronResize: function() {
         this.$.hypers.bounds = this._getTouchableBounds();
+      },
+      emptyComposer: function() {
+        var nodes = this.$.hypers.querySelectorAll('hypervideo-node');
+        return (nodes.length > 0);
       },
     });
   </script>

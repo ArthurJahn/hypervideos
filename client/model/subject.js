@@ -2,28 +2,28 @@
 // and a flag to indicate whether this subject is still under edition or ready
 // to be published.
 
-Subject = Astro.Class({
-  name: 'Subject',        // Name model.
-  collection: Subjects,   // Associate collection with the model.
-  transform: true,        // Auto transform objects fetched from collection.
+Subject = Astro.createClass({
+  name: 'Subject',
+  collection: Subjects,
   fields: {
-    name: 'string',       // Define the subject's "name".
-    hypervideos: 'array', // Define the array of "hypervideos" ids.
-    connections: 'array', // Define the connections between hypervideos.
-    editing: 'boolean',   // To identify if the subject is still under edition.
+    name: {
+      type: 'string',
+      default: 'Novo Curso',
+    },
+    connections: {
+      type: 'array',
+      default: [],
+    },
+    editing: {
+      type: 'boolean',
+      default: true,
+    },
   },
   methods: {
-    addHypervideo: function(hypervideoId) {
-      this.hypervideos.push(hypervideoId);
-      this.save();
-    },
     removeHypervideo: function(hypervideoId) {
       this.removeConnections(hypervideoId);
-      var i = this.hypervideos.indexOf(hypervideoId);
-      if(i) {
-        this.hypervideos.splice(i,1);
-        this.save();
-      }
+      var hypervideo = Hypervideos.findOne({_id: hypervideoId});
+      hypervideo.autoRemove();
     },
     setEditing: function() {
       this.editing = true;
@@ -65,6 +65,9 @@ Subject = Astro.Class({
     setName: function(newName){
       this.name = newName;
       this.save();
+    },
+    hypervideos: function() {
+      return Hypervideos.find({subjectId: this._id}).fetch();
     },
     //private methods
     _hasConnection: function(conn) {

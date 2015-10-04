@@ -1,15 +1,14 @@
 Template.subjectsPanel.helpers({
   subjects: function () {
-    return subjectController.subjects();
+    return JSON.stringify(Subjects.find().fetch());
   }
 });
 
 Template.subjectsPanel.events({
   'get-hypervideos subject-box': function (e, template) {
-    var subject = e.target.subject;
+    var subject = Subject.findOne({_id : e.target.subject._id});
     console.log(subject);
-    var list = hypervideoController.getByIds(subject._id);
-    e.target.hypervideos = list;
+    e.target.hypervideos = subject.hypervideos();
   },
   'watch-subject subject-box': function (e, template) {
     var subject = e.target.subject;

@@ -1,15 +1,11 @@
 Hypervideo = Astro.Class({
-  name: 'Hypervideo', // Name model.
-  collection: Hypervideos, // Associate collection with the model.
-  transform: true, // Auto transform objects fetched from collection.
+  name: 'Hypervideo',
+  collection: Hypervideos,
   fields: {
-    name:{
-      type: 'string',
-      validator: Validators.minLength(3)
-    },
-    subjectId: 'string', //Define subject that contains this hypervideo
-    subvideos: 'array', // Define "subvideos" of Array type.
-    questions: 'array', // Define "questions" of Array type.
+    name: 'string',
+    subjectId: 'string',
+    subvideos: 'array',
+    questions: 'array',
     connections: 'array',
     col: 'number',
     row: 'number'
@@ -90,5 +86,5 @@ Hypervideo = Astro.Class({
       return false;
     },
   },
-  behaviors: ['timestamp'] // Add "timestamp" behavior that adds "createdAt" and "updatedAt" fields.
+  behaviors: ['timestamp'] 
 });

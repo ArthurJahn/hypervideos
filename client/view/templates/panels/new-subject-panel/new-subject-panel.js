@@ -8,21 +8,24 @@ Template.newSubjectPanel.events({
 
 // ======================== Subject Controll Methods =========================//
   'subject-created subject-composer-area': function(e, template) {
-    var subject = subjectController.createSubject();
-    e.target.subject = subject;
+    var subject = new Subject();
+    subject.save();
+    e.target.subject = subject.get();
   },
   'subject-changed subject-composer-area': function(e, template) {
-    subjectController.saveSubject();
+    var id = e.target.subject._id;
+    var subject = Subject.findOne({_id:id});
+    subject.save();
   },
   'connection-removed connection-node': function(e, template) {
     var conn = e.target.connection;
-    subjectController.removeConnection(conn);
   },
 
 // ======================= Hypervideo Controll Methods =======================//
   'hypervideo-created hypervideo-node': function(e, template) {
     var col = e.target._col, row = e.target._row;
-    var hypervideo = subjectController.addHypervideo(col,row);
+    var subjectId = e.target._subjectId;
+    var hypervideo = hypervideoController.createHypervideo(subjectId,col,row);
     e.target.hypervideo = hypervideo;
   },
   'hypervideo-changed hypervideo-node': function(e, template) {
