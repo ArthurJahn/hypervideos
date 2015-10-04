@@ -251,8 +251,6 @@
         } else {
           this._togglePreview();
         }
-        console.log(this._col + " : " + this._row);
-        console.log(this._bounds);
       },
       onIconTrack: function(e) {
         switch (e.detail.state) {
@@ -354,7 +352,7 @@
         }
       },
       _openComposer: function() {
-        this.$.hypervideocomposer.hypervideo = this.hypervideo;
+        this.$.hypervideocomposer.hypervideoId = this.hypervideoId;
         this.$.composerdialog.open();
       },
       _updateName: function() {

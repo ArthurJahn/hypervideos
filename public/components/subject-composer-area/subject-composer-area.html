@@ -89,7 +89,7 @@
     </div>
     <div id="toucharea"
       on-tap="composerTap">
-      <template is="dom-if" if="emptyComposer">
+      <template is="dom-if" if="{{empty}}">
         <div id="hint-text">Clique para adicionar um hypervideo</div>
       </template>
     </div>
@@ -149,6 +149,10 @@
         hypervideos: {
           type: Object,
           value: null,
+        },
+        empty: {
+          type: Boolean,
+          value: true,
         }
       },
       listeners: {
@@ -162,6 +166,7 @@
         this.$.hypers.bounds = this._getTouchableBounds();
         this._updateSubject(e);
         this._createHypervideo(e);
+        this.emptyComposer();
       },
       connectIdChanged: function (newConnectId) {
         var list = this.$.nodes.querySelectorAll(
@@ -189,10 +194,12 @@
       },
       confirmDelete: function() {
         var self = this;
-        if(self._deletingNode)
+        if(self._deletingNode){
           self.$.hypers.removeGridChild(self._deletingNode);
           self._deletingNode = null;
           self._drawConnections();
+        }
+        self.emptyComposer();
       },
       onDismiss: function() {
         var self = this;
@@ -201,6 +208,10 @@
           self._deletingNode = null;
         }
         self.deleting = false;
+      },
+      emptyComposer: function() {
+        var nodes = this.$.hypers.querySelectorAll('hypervideo-node');
+        this.empty = (nodes.length < 1);
       },
 //===================== Custom Component Private Methods =====================//
       _createHypervideo: function(e) {
@@ -224,13 +235,12 @@
       _updateSubject: function() {
         if(this.subject === null) {
           this.fire('subject-created');
-          console.log(this.subject);
         }
         if(this.subject) {
           if(this.$.subjectName.value === "") {
             this.$.subjectName.value = this.subject.name;
           } else if (this.$.subjectName.value !== this.subject.name) {
-            this.subject.setName(this.$.subjectName.value);
+            this.subject.name = this.$.subjectName.value;
             this.fire('subject-changed');
           }
         }
@@ -238,15 +248,17 @@
       _connect: function(firstId, secondId) {
         var self = this;
         if(firstId !== secondId) {
-          var connection = {first: firstId, second: secondId};
-          if(self.subject.addConnection(connection)){
-            var connNode = new ConnectionNode(connection);
-            connNode.addEventListener('connection-removed', function(ev){
+          this._connection = {first: firstId, second: secondId};
+          this.fire('connection-created');
+          console.log(this._connection);
+          if(this._connection){
+            console.log(this._connection);
+            var connNode = new ConnectionNode(this._connection);
+            connNode.addEventListener('detached', function(ev){
               self._connectionListener(this);
             });
             self.$.conns.appendChild(connNode);
             self._resetConnecting();
-            self.fire('subject-changed');
           }
           self._resetConnecting();
         }
@@ -278,9 +290,6 @@
             ctx.moveTo(x1, y1);
             ctx.lineTo(x2, y2);
             self._showConnection(conn, firstPos, secondPos);
-          }
-          else {
-            self.$.conns.removeChild(connections[i]);
           }
         }
         ctx.lineWidth = lineWidth;
@@ -318,6 +327,7 @@
         var self = this;
         self.connectId = null;
         self._firstId = null;
+        self._connection = null;
       },
       _addHypervideoListeners: function(hypervideoNode) {
         var self = this;
@@ -334,7 +344,8 @@
       //connection Listener functions
       _connectionListener: function(connInstance) {
         var self = this;
-        self.$.conns.removeChild(connInstance);
+        this._connection = connInstance.connection;
+        this.fire('connection-removed');
         self._drawConnections();
       },
       _showConnection: function(connection, firstPos, secondPos) {
@@ -363,10 +374,6 @@
       },
       _onIronResize: function() {
         this.$.hypers.bounds = this._getTouchableBounds();
-      },
-      emptyComposer: function() {
-        var nodes = this.$.hypers.querySelectorAll('hypervideo-node');
-        return (nodes.length > 0);
       },
     });
   </script>

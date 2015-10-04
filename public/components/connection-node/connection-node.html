@@ -40,8 +40,8 @@
         }
       },
       remove: function() {
-        this.fire('connection-removed');
-        this.connection.first = null;
+        this.fire('detached');
+        this.parentNode.removeChild(this);
       },
       factoryImpl: function(conn){
         this.connection = conn;

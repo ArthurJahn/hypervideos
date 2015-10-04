@@ -60,6 +60,9 @@
 //======================== Polymer Component Methods =========================//
       is: 'subvideo-node',
       properties: {
+        hypervideoId: {
+          type: String,
+        },
         // when connecting subvideos, this property
         // catches the ids for creating connections
         connectId: {
@@ -86,6 +89,7 @@
         this._y = options.y;
         this._name = options.name;
         this.subvideo = null;
+        this.hypervideoId = options.hypervideoId;
         this.connectId = options.connectId;
         this.mediaId = options.mediaId;
       },

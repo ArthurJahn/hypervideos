@@ -190,12 +190,11 @@
               return [];
           }
         },
-        // property that holds the model element: a Hypervideo
-        hypervideo: {
-          type: Object,
-          value: null,
+        hypervideoId: {
+          type: String,
+          value: '',
         },
-        // if any hypervideo is being dragged, this
+        // if any node is being dragged, this
         // property handles the redraw of connections
         dragging: {
           type: Boolean,
@@ -256,7 +255,7 @@
       },
       updateHypervideo: function(e) {
         this.hypervideo.name = e.target.value;
-        this.fire('name-changed');
+        this.fire('hypervideo-changed');
       },
 //============================= Private Methods ==============================//
       _createSubvideo: function(subvideoComposer) {
@@ -279,7 +278,8 @@
           bounds: bounds,
           mediaId: subvideoComposer.file._id,
           name: subvideoComposer.name,
-          connectId: self.connectId
+          connectId: self.connectId,
+          hypervideoId: self.hypervideoId,
         }
         var subvideoNode = new SubvideoNode(options);
         self._addNodeoListeners(subvideoNode);

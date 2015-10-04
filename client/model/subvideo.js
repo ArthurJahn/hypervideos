@@ -4,8 +4,8 @@ Subvideo = Astro.Class({
   fields: {
     name: 'string',
     hypervideoId: 'string',
+    mediaId: 'string',
     description: 'string',
-    videoId: 'string',
     x: 'number',
     y: 'number'
   },
@@ -15,5 +15,5 @@ Subvideo = Astro.Class({
       this.y = y;
     }
   },
-  behaviors: ['timestamp'] 
+  behaviors: ['timestamp']
 });

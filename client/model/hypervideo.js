@@ -2,11 +2,29 @@ Hypervideo = Astro.Class({
   name: 'Hypervideo',
   collection: Hypervideos,
   fields: {
-    name: 'string',
+    name:{
+      type: 'string',
+      default: 'Novo Hypervideo',
+    },
     subjectId: 'string',
-    subvideos: 'array',
-    questions: 'array',
-    connections: 'array',
+    subvideos: {
+      type: 'array',
+      default: function() {
+        return [];
+      }
+    },
+    questions: {
+      type: 'array',
+      default: function() {
+        return [];
+      }
+    },
+    connections: {
+      type: 'array',
+      default: function() {
+        return [];
+      }
+    },
     col: 'number',
     row: 'number'
   },
@@ -15,29 +33,11 @@ Hypervideo = Astro.Class({
       this.col = col;
       this.row = row;
     },
-    addSubvideo: function(subvideoId) {
-      this.subvideos.push(subvideoId);
-      this.save();
+    subvideos: function() {
+      return Subvideo.find({hypervideoId: this._id}).fetch();
     },
-    removeSubvideo: function(subvideoId) {
-      this.removeConnections(subvideoId);
-      var i = this.subvideos.indexOf(subvideoId);
-      if(i) {
-        this.subvideos.splice(i,1);
-        this.save();
-      }
-    },
-    addQuestion: function(questionId) {
-      this.questions.push(questionId);
-      this.save();
-    },
-    removeQuestion: function(questionId) {
-      this.removeConnections(questionId);
-      var i = this.questions.indexOf(questionId);
-      if(i) {
-        this.questions.splice(i,1);
-        this.save();
-      }
+    questions: function() {
+      return Question.find({hypervideoId: this._id}).fetch();
     },
     addConnection: function(conn) {
       if(this._hasConnection(conn)) {
@@ -86,5 +86,5 @@ Hypervideo = Astro.Class({
       return false;
     },
   },
-  behaviors: ['timestamp'] 
+  behaviors: ['timestamp']
 });

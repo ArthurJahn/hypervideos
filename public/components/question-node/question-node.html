@@ -60,6 +60,9 @@
 //======================== Polymer Component Methods =========================//
       is: 'question-node',
       properties: {
+        hypervideoId: {
+          type: String,
+        },
         // when connecting questions, this property
         // catches the ids for creating connections
         connectId: {
@@ -88,6 +91,7 @@
         this.question = null;
         this.connectId = options.connectId;
         this.mediaId = options.mediaId;
+        this.hypervideoId = options.hypervideoId;
       },
       attached: function() {
         Polymer.dom.flush();

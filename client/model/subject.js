@@ -12,7 +12,9 @@ Subject = Astro.createClass({
     },
     connections: {
       type: 'array',
-      default: [],
+      default: function() {
+        return [];
+      }
     },
     editing: {
       type: 'boolean',
@@ -25,12 +27,8 @@ Subject = Astro.createClass({
       var hypervideo = Hypervideos.findOne({_id: hypervideoId});
       hypervideo.autoRemove();
     },
-    setEditing: function() {
-      this.editing = true;
-      this.save();
-    },
-    endEditing: function() {
-      this.editing = false;
+    setEditing: function(editing) {
+      this.set('editing', editing);
       this.save();
     },
     addConnection: function(conn) {
@@ -38,7 +36,7 @@ Subject = Astro.createClass({
         return false;
       }
       else {
-        this.connections.push(conn);
+        this.push('connections',conn);
         this.save();
         return true;
       }
@@ -52,22 +50,23 @@ Subject = Astro.createClass({
           newConnections.push(compConn);
         }
       }
-      this.connections = newConnections;
+      this.set('connections', newConnections);
       this.save();
     },
     removeConnection: function(connection) {
-      var connId = this.connections.indexOf(connection);
-      if(connId) {
-        this.connections.splice(connId,1);
-        this.save();
+      var compConn = this.pop('connections',1);
+      if(compConn !== connection) {
+        this.push('connections',compConn);
       }
-    },
-    setName: function(newName){
-      this.name = newName;
       this.save();
+      return true;
     },
     hypervideos: function() {
       return Hypervideos.find({subjectId: this._id}).fetch();
+    },
+    setName: function(newName) {
+      this.set('name', newName);
+      this.save();
     },
     //private methods
     _hasConnection: function(conn) {
