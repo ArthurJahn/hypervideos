@@ -2,6 +2,9 @@ Question = Astro.Class({
   name: 'Question',
   collection: Questions,
   fields: {
+    owner: {
+      type: 'string',
+    },
     name: {
       type: 'string',
       default: 'Novo subvideo',

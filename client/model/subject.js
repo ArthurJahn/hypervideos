@@ -6,6 +6,9 @@ Subject = Astro.createClass({
   name: 'Subject',
   collection: Subjects,
   fields: {
+    owner: {
+      type: 'string',
+    },
     name: {
       type: 'string',
       default: 'Novo Curso',

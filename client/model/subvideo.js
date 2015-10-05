@@ -2,6 +2,9 @@ Subvideo = Astro.Class({
   name: 'Subvideo',
   collection: Subvideos,
   fields: {
+    owner: {
+      type: 'string',
+    },
     name: 'string',
     hypervideoId: 'string',
     mediaId: 'string',

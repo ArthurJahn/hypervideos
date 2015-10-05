@@ -2,11 +2,14 @@ Hypervideo = Astro.Class({
   name: 'Hypervideo',
   collection: Hypervideos,
   fields: {
+    owner: {
+      type: 'string',
+    },
+    subjectId: 'string',
     name:{
       type: 'string',
       default: 'Novo Hypervideo',
     },
-    subjectId: 'string',
     subvideos: {
       type: 'array',
       default: function() {
