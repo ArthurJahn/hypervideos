@@ -1,6 +1,3 @@
-Accounts.ui.config({
-  passwordSignupFields: "USERNAME_ONLY"
-});
 //Used in title template
 Session.setDefault('title', 'Explorar');
 

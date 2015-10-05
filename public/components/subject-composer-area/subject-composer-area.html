@@ -250,9 +250,7 @@
         if(firstId !== secondId) {
           this._connection = {first: firstId, second: secondId};
           this.fire('connection-created');
-          console.log(this._connection);
           if(this._connection){
-            console.log(this._connection);
             var connNode = new ConnectionNode(this._connection);
             connNode.addEventListener('detached', function(ev){
               self._connectionListener(this);
@@ -327,7 +325,6 @@
         var self = this;
         self.connectId = null;
         self._firstId = null;
-        self._connection = null;
       },
       _addHypervideoListeners: function(hypervideoNode) {
         var self = this;

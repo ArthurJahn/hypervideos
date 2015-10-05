@@ -2,10 +2,21 @@ Question = Astro.Class({
   name: 'Question',
   collection: Questions,
   fields: {
-    name: 'string',
+    name: {
+      type: 'string',
+      default: 'Novo subvideo',
+    },
     hypervideoId: 'string',
-    description: 'string',
-    answers: 'array',
+    description: {
+      type: 'string',
+      default: 'Enunciado da questão',
+    },
+    answers: {
+      type: 'array',
+      default: function() {
+        return [];
+      },
+    },
     x: 'number',
     y: 'number'
   },

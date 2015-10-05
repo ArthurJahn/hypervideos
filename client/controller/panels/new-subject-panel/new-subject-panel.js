@@ -4,20 +4,20 @@ Template.newSubjectPanel.events({
   'subject-created subject-composer-area': function(e, template) {
     var subject = new Subject();
     subject.save();
+    console.log("create: "+subject._id);
     e.target.subject = subject.get();
   },
   'subject-changed subject-composer-area': function(e, template) {
     var id = e.target.subject._id;
     var subject = Subject.findOne({_id:id});
+    console.log("chage: "+id);
     subject.setName(e.target.subject.name);
   },
   'connection-created subject-composer-area': function(e, template) {
     var id = e.target.subject._id;
     var subject = Subject.findOne({_id:id});
-    var result = subject.addConnection(e.target._connection);
-    if(!result) {
-      e.target._connection = null;
-    }
+    var conn = e.target._connection;
+    var result = subject.addConnection(conn);
   },
   'connection-removed subject-composer-area': function(e, template) {
     var id = e.target.subject._id;
@@ -31,16 +31,14 @@ Template.newSubjectPanel.events({
     var subjectId = e.target._subjectId;
     var hypervideo = new Hypervideo({col: col, row: row, subjectId: subjectId});
     hypervideo.save();
-    console.log(hypervideo);
     e.target.hypervideo = hypervideo.get();
   },
   'hypervideo-changed hypervideo-node': function(e, template) {
     var hypervideo = Hypervideo.findOne(e.target.hypervideo._id);
-    hypervideo.name = e.target.hypervideo.name;
-    hypervideo.col = e.target.hypervideo.col;
-    hypervideo.row = e.target.hypervideo.row;
+    hypervideo.set('name',e.target.hypervideo.name);
+    hypervideo.set('col', e.target.hypervideo.col);
+    hypervideo.set('row', e.target.hypervideo.row);
     hypervideo.save();
-    console.log(hypervideo);
   },
   'hypervideo-deleted hypervideo-node': function(e, template) {
     var hypervideo = Hypervideo.findOne(e.target.hypervideo._id);
