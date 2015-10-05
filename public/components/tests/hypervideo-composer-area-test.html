@@ -67,15 +67,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           hComposer.dragging = true;
           assert.isTrue(eventFired);
         });
-        test('verify "name-changed" event fired',function(){
-          var eventFired = false;
+        test('verify update hypervideo',function(){
           var e = {target: {value: 'new name'}};
           hComposer.hypervideo = {name: "old name"};
-          hComposer.addEventListener('name-changed', function(){
-            eventFired = true;
-          });
           hComposer.updateHypervideo(e);
-          assert.isTrue(eventFired);
+
           assert.equal(hComposer.hypervideo.name, "new name");
         });
       });

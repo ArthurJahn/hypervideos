@@ -44,9 +44,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           assert.equal(myEl.style.left,(x - w/2) + 'px');
           assert.equal(myEl.style.top,(y - w/2) + 'px');
         });
-        test('connection removed', function() {
+        test('connection detached', function() {
           var eventFired = false;
-          myEl.addEventListener('connection-removed', function(event) {
+          myEl.addEventListener('detached', function(event) {
             eventFired = true;
           });
           myEl.remove();
