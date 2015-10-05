@@ -10,18 +10,6 @@ Hypervideo = Astro.Class({
       type: 'string',
       default: 'Novo Hypervideo',
     },
-    subvideos: {
-      type: 'array',
-      default: function() {
-        return [];
-      }
-    },
-    questions: {
-      type: 'array',
-      default: function() {
-        return [];
-      }
-    },
     connections: {
       type: 'array',
       default: function() {
@@ -47,38 +35,40 @@ Hypervideo = Astro.Class({
         return false;
       }
       else {
-        this.connections.push(conn);
+        this.push('connections',conn);
         this.save();
         return true;
       }
     },
-    removeConnections: function(subvideoId) {
+    removeConnections: function(hypervideoId) {
       var newConnections = [];
       for (var i=0;i< this.connections.length; i++) {
         var compConn = this.connections[i];
-        if (subvideoId !== compConn.first &&
-            subvideoId !== compConn.second) {
+        if (hypervideoId !== compConn.first &&
+            hypervideoId !== compConn.second) {
           newConnections.push(compConn);
         }
       }
-      this.connections = newConnections;
+      this.set('connections', newConnections);
       this.save();
     },
     removeConnection: function(connection) {
-      var connId = this.connections.indexOf(connection);
-      if(connId) {
-        this.connections.splice(connId,1);
-        this.save();
+      var compConn = this.pop('connections',1);
+      if(compConn !== connection) {
+        this.push('connections',compConn);
       }
+      this.save();
+      return true;
     },
-    setName: function(newName){
-      this.name = newName;
+    setName: function(newName) {
+      this.set('name', newName);
       this.save();
     },
     //private methods
     _hasConnection: function(conn) {
       for (var i=0;i< this.connections.length; i++) {
         var compConn = this.connections[i];
+        console.log(compConn);
         if ((conn.first === compConn.first &&
             conn.second === compConn.second) ||
            (conn.second === compConn.first &&

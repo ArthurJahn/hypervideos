@@ -162,6 +162,9 @@
             <div id="nodesFrame">
               <!-- this is where subvideos will be displayed -->
             </div>
+            <div id="conns">
+              <!-- this is where connections will be displayed -->
+            </div>
           </div>
         </paper-drawer-panel>
       </div>
@@ -282,7 +285,7 @@
           hypervideoId: self.hypervideoId,
         }
         var subvideoNode = new SubvideoNode(options);
-        self._addNodeoListeners(subvideoNode);
+        self._addNodeListeners(subvideoNode);
         self.$.nodesFrame.appendChild(subvideoNode);
         subvideoComposer.subvideo = subvideoNode.subvideo;
 
@@ -290,7 +293,7 @@
         options.x = pos.x;
         options.y = pos.y;
         var questionNode = new QuestionNode(options);
-        self._addNodeoListeners(questionNode);
+        self._addNodeListeners(questionNode);
         self.$.nodesFrame.appendChild(questionNode);
         var list = self.querySelectorAll('question-node');
         self.questionNodes = Array.prototype.slice.call(list);
@@ -312,59 +315,55 @@
       _connect: function(firstId, secondId) {
         var self = this;
         if(firstId !== secondId) {
-          var connection = {first: firstId, second: secondId};
-          if(self.hypervideo.addConnection(connection)){
-            var connNode = new ConnectionNode(connection);
-            connNode.addEventListener('connection-removed', function(ev){
+          this._connection = {first: firstId, second: secondId};
+          this.fire('connection-created');
+          if(this._connection){
+            var connNode = new ConnectionNode(this._connection);
+            connNode.addEventListener('detached', function(ev){
               self._connectionListener(this);
             });
-            self.$.nodesFrame.appendChild(connNode);
+            self.$.conns.appendChild(connNode);
             self._resetConnecting();
-            self.fire('hypervideo-changed');
           }
           self._resetConnecting();
         }
         self._drawConnections();
       },
       _drawConnections: function() {
+        var xOffset = 10; // depends on initial definition in toucharea css
+        var yOffset = 75;// depends on initial definition in toucharea css
         var self = this;
         var canvasScale = 3;
         var lineWidth = 4;
-        var connections = self.querySelectorAll('connection-node');
+        var connections = self.$.conns.querySelectorAll('connection-node');
         var canvas = self.$.canvas;
         canvas.width  = canvasScale * canvas.offsetWidth;
         canvas.height = canvasScale * canvas.offsetHeight;
-        var canvasXOffset = 10;
-        var canvasYOffset = 75;
         var ctx = canvas.getContext("2d");
-
         ctx.beginPath();
         for(var i=0; i< connections.length; i++) {
           var conn = connections[i].connection;
           //FIX ME find a better way to do it...
-          var first = self._findSubvideoNode(conn.first);
-          var second = self._findSubvideoNode(conn.second);
+          var first = self._findNode(conn.first);
+          var second = self._findNode(conn.second);
           if(first && second) {
             var firstPos = first.getPos();
             var secondPos = second.getPos();
-            var x1 = canvasScale * (firstPos.x - canvasXOffset);
-            var y1 = canvasScale * (firstPos.y - canvasYOffset);
-            var x2 = canvasScale * (secondPos.x - canvasXOffset);
-            var y2 = canvasScale * (secondPos.y - canvasYOffset);
+            var x1 = canvasScale * (firstPos.x - xOffset);
+            var y1 = canvasScale * (firstPos.y - yOffset);
+            var x2 = canvasScale * (secondPos.x - xOffset);
+            var y2 = canvasScale * (secondPos.y - yOffset);
             ctx.moveTo(x1, y1);
             ctx.lineTo(x2, y2);
             self._showConnection(conn, firstPos, secondPos);
-          }
-          else {
-            self.removeChild(connections[i]);
           }
         }
         ctx.lineWidth = lineWidth;
         ctx.stroke();
       },
-      _findSubvideoNode: function(id) {
+      _findNode: function(id) {
         var self = this;
-        return self.querySelector('#_'+id);
+        return self.$.nodesFrame.querySelector('#_'+id);
       },
       _resetConnecting: function(){
         var self = this;
@@ -389,7 +388,7 @@
         var self = this;
         self.dragging = snInstance.dragging;
       },
-      _addNodeoListeners: function(node) {
+      _addNodeListeners: function(node) {
         var self = this;
         node.addEventListener('connect-id-changed', function(ev){
           self._connectListener(this);
@@ -401,7 +400,8 @@
       //connection Listener functions
       _connectionListener: function(connInstance) {
         var self = this;
-        self.$.nodesFrame.removeChild(connInstance);
+        this._connection = connInstance.connection;
+        this.fire('connection-removed');
         self._drawConnections();
       },
       _showConnection: function(connection, firstPos, secondPos) {

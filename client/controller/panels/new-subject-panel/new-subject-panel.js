@@ -18,6 +18,9 @@ Template.newSubjectPanel.events({
     var subject = Subject.findOne({_id:id});
     var conn = e.target._connection;
     var result = subject.addConnection(conn);
+    if (!result) {
+      e.target._connection = null;
+    }
   },
   'connection-removed subject-composer-area': function(e, template) {
     var id = e.target.subject._id;
@@ -59,7 +62,22 @@ Template.newSubjectPanel.events({
       });
    });
  },
-
+ 'connection-created hypervideo-composer-area': function(e, template) {
+   e.stopPropagation();
+   var id = e.target.hypervideoId;
+   var hypervideo = Hypervideo.findOne({_id:id});
+   var conn = e.target._connection;
+   var result = hypervideo.addConnection(conn);
+   if (!result) {
+     e.target._connection = null;
+   }
+ },
+ 'connection-removed hypervideo-composer-area': function(e, template) {
+   var id = e.target.hypervideoId;
+   var hypervideo = Hypervideo.findOne({_id:id});
+   hypervideo.removeConnection(e.target._connection);
+   e.stopPropagation();
+ },
  // ======================== Subvideo Controll Methods =======================//
  'subvideo-created subvideo-node': function(e, template) {
    var node = e.target;
@@ -74,6 +92,7 @@ Template.newSubjectPanel.events({
      x: x,
      y: y
    });
+   subvideo.save();
    node.subvideo = subvideo.get();
  },
  'subvideo-changed subvideo-node': function(e, template) {
@@ -93,6 +112,7 @@ Template.newSubjectPanel.events({
      x: x,
      y: y
    });
+   question.save();
    node.question = question.get();
  },
  'question-changed question-node': function(e, template) {

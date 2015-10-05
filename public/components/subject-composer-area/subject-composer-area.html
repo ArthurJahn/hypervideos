@@ -271,7 +271,6 @@
         canvas.width  = canvasScale * canvas.offsetWidth;
         canvas.height = canvasScale * canvas.offsetHeight;
         var ctx = canvas.getContext("2d");
-
         ctx.beginPath();
         for(var i=0; i< connections.length; i++) {
           var conn = connections[i].connection;
@@ -319,7 +318,7 @@
       },
       _findHypervideoNode: function(id) {
         var self = this;
-        return self.querySelector('#_'+id);
+        return self.$.hypers.querySelector('#_'+id);
       },
       _resetConnecting: function(){
         var self = this;
