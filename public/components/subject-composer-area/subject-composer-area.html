@@ -241,12 +241,13 @@
           this.fire('subject-created');
         }
         if(this.subject) {
-          if(this.name === "") {
+          if(this.name === '') {
             this.name = this.subject.name;
           } else if (this.name !== this.subject.name) {
             this.subject.name = this.name;
             this.fire('subject-changed');
           }
+          this.$.subjectName.value = this.name;
         }
       },
       _connect: function(firstId, secondId) {

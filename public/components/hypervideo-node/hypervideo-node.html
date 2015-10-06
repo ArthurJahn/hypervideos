@@ -352,11 +352,12 @@
         }
       },
       _openComposer: function() {
-        this.$.hypervideocomposer.hypervideoId = this.hypervideoId;
+        this.$.hypervideocomposer.hypervideo = this.hypervideo;
         this.$.composerdialog.open();
       },
       _updateName: function() {
         this.name = this.hypervideo.name;
+        this.fire('hypervideo-changed');
       },
       moveToPos: function() {
         this.$.wrapper.style.left = this._x - this._w/2+"px";

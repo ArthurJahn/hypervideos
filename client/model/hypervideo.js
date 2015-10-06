@@ -4,11 +4,20 @@ Hypervideo = Astro.Class({
   fields: {
     owner: {
       type: 'string',
+      validator: Validators.required(),
     },
-    subjectId: 'string',
+    subjectId: {
+      type: 'string',
+      validator: Validators.required(),
+    },
     name:{
       type: 'string',
       default: 'Novo Hypervideo',
+      validator: Validators.and([
+          Validators.required('O nome não pode ser vazio'),
+          Validators.string(),
+          Validators.minLength(5,'Nome muito curto')
+        ])
     },
     connections: {
       type: 'array',
@@ -16,8 +25,14 @@ Hypervideo = Astro.Class({
         return [];
       }
     },
-    col: 'number',
-    row: 'number'
+    col: {
+      type: 'number',
+      validator: Validators.required(),
+    },
+    row: {
+      type: 'number',
+      validator: Validators.required(),
+    },
   },
   methods: {
     move: function(col,row) {

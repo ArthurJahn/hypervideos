@@ -193,9 +193,9 @@
               return [];
           }
         },
-        hypervideoId: {
-          type: String,
-          value: '',
+        hypervideo: {
+          type: Object,
+          value: null,
         },
         // if any node is being dragged, this
         // property handles the redraw of connections
@@ -211,6 +211,10 @@
           notify: true,
           observer: "connectIdChanged"
         },
+        name: {
+          type: String,
+          notify: true
+        }
       },
       ready: function() {
         this.firstTouch = true;
@@ -258,7 +262,7 @@
       },
       updateHypervideo: function(e) {
         this.hypervideo.name = e.target.value;
-        this.fire('hypervideo-changed');
+        this.fire('name-changed');
       },
 //============================= Private Methods ==============================//
       _createSubvideo: function(subvideoComposer) {
@@ -282,7 +286,7 @@
           mediaId: subvideoComposer.file._id,
           name: subvideoComposer.name,
           connectId: self.connectId,
-          hypervideoId: self.hypervideoId,
+          hypervideoId: self.hypervideo._id,
         }
         var subvideoNode = new SubvideoNode(options);
         self._addNodeListeners(subvideoNode);

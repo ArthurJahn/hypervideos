@@ -3,7 +3,12 @@ Template.newSubjectPanel.events({
 // ======================== Subject Controll Methods =========================//
   'subject-created subject-composer-area': function(e, template) {
     var name = e.target.name;
-    var subject = new Subject({name: name});
+    var subject;
+    if(name)
+      subject = new Subject({name: name});
+    else {
+      subject = new Subject();
+    }
     subject.owner = Meteor.userId();
     if(subject.validate()){
       subject.save();
