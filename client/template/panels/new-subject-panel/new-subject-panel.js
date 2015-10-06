@@ -45,8 +45,12 @@ Template.newSubjectPanel.events({
     var subjectId = e.target._subjectId;
     var hypervideo = new Hypervideo({col: col, row: row, subjectId: subjectId});
     hypervideo.owner = Meteor.userId();
-    hypervideo.save();
-    e.target.hypervideo = hypervideo.get();
+    if(hypervideo.validate()) {
+      hypervideo.save();
+      e.target.hypervideo = hypervideo.get();
+      Meteor.subscribe("questions",hypervideo._id);
+      Meteor.subscribe("subvideos",hypervideo._id);
+    }
   },
   'hypervideo-changed hypervideo-node': function(e, template) {
     var hypervideo = Hypervideo.findOne(e.target.hypervideo._id);
@@ -76,7 +80,7 @@ Template.newSubjectPanel.events({
  },
  'connection-created hypervideo-composer-area': function(e, template) {
    e.stopPropagation();
-   var id = e.target.hypervideoId;
+   var id = e.target.hypervideo._id;
    var hypervideo = Hypervideo.findOne({_id:id});
    var conn = e.target._connection;
    var result = hypervideo.addConnection(conn);
@@ -85,7 +89,7 @@ Template.newSubjectPanel.events({
    }
  },
  'connection-removed hypervideo-composer-area': function(e, template) {
-   var id = e.target.hypervideoId;
+   var id = e.target.hypervideo._id;
    var hypervideo = Hypervideo.findOne({_id:id});
    hypervideo.removeConnection(e.target._connection);
    e.stopPropagation();
@@ -104,7 +108,7 @@ Template.newSubjectPanel.events({
      x: x,
      y: y
    });
-   subvideo.owner = Meteor.user()._id;
+   subvideo.owner = Meteor.userId();
    subvideo.save();
    node.subvideo = subvideo.get();
  },
@@ -125,7 +129,7 @@ Template.newSubjectPanel.events({
      x: x,
      y: y
    });
-   question.owner = Meteor.user()._id;
+   question.owner = Meteor.userId();
    question.save();
    node.question = question.get();
  },
