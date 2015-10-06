@@ -27,14 +27,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       var hComposer = document.querySelector('hypervideo-composer-area');
 
       function setUp() {
-
+        hComposer.hypervideo = {
+          _id: '1'
+        }
       }
       suite('<hypervideo-composer-area>', function() {
         test('verify uploaded files completed', function() {
+          setUp();
           var e = {
             target: {
               subvideo: null,
-              file: {id:'1'}
+              file: {_id:'1'}
           }};
           var num_nodes = hComposer.querySelectorAll('subvideo-node').length;
           assert.isTrue(num_nodes===0);

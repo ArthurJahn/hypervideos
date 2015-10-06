@@ -78,8 +78,8 @@ Meteor.startup(function () {
     },
   });
 
-  Meteor.publish('questions', function () {
-      return Questions.find({hypervideoId: hypervideoId});
+  Meteor.publish('questions', function (hypervideoId) {
+    return Questions.find({hypervideoId: hypervideoId});
   });
 
   Questions.allow({
@@ -95,8 +95,8 @@ Meteor.startup(function () {
   });
 
 
-  Meteor.publish('videos', function () {
-      return Videos.find();
+  Meteor.publish('videos', function () {  
+    return Videos.find();
   });
 
   Videos.allow({
