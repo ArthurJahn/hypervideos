@@ -11,39 +11,59 @@ Meteor.startup(function () {
 });
 
   Meteor.publish('subjects', function () {
-      return Subjects.find();
+    var id = this.userId;
+    return Subjects.find({owner:id});
   });
 
   Subjects.allow({
-    insert: function(){
-      return true;
+    insert: function(doc){
+      if(doc.owner === this.userId)
+        return true;
+      else
+        return false;
     },
-    remove: function(){
-      return true;
+    remove: function(doc){
+      if(doc.owner === this.userId)
+        return true;
+      else
+        return false;
     },
-    update: function(){
-      return true;
+    update: function(doc){
+      if(doc.owner === this.userId)
+        return true;
+      else
+        return false;
     },
   });
 
   Meteor.publish('hypervideos', function () {
-      return Hypervideos.find();
+    var id = this.userId;
+    return Hypervideos.find({owner:id});
   });
 
   Hypervideos.allow({
-    insert: function(){
-      return true;
+    insert: function(doc){
+      if(doc.owner === this.userId)
+        return true;
+      else
+        return false;
     },
-    remove: function(){
-      return true;
+    remove: function(doc){
+      if(doc.owner === this.userId)
+        return true;
+      else
+        return false;
     },
-    update: function(){
-      return true;
+    update: function(doc){
+      if(doc.owner === this.userId)
+        return true;
+      else
+        return false;
     },
   });
 
-  Meteor.publish('subvideos', function () {
-      return Subvideos.find();
+  Meteor.publish('subvideos', function (hypervideoId) {
+      return Subvideos.find({hypervideoId: hypervideoId});
   });
 
   Subvideos.allow({
@@ -59,7 +79,7 @@ Meteor.startup(function () {
   });
 
   Meteor.publish('questions', function () {
-      return Questions.find();
+      return Questions.find({hypervideoId: hypervideoId});
   });
 
   Questions.allow({

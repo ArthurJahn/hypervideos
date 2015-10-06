@@ -3,8 +3,8 @@ Template.newSubjectPanel.events({
 // ======================== Subject Controll Methods =========================//
   'subject-created subject-composer-area': function(e, template) {
     var subject = new Subject();
+    subject.owner = Meteor.userId();
     subject.save();
-    console.log("create: "+subject._id);
     e.target.subject = subject.get();
   },
   'subject-changed subject-composer-area': function(e, template) {
@@ -33,6 +33,8 @@ Template.newSubjectPanel.events({
     var col = e.target._col, row = e.target._row;
     var subjectId = e.target._subjectId;
     var hypervideo = new Hypervideo({col: col, row: row, subjectId: subjectId});
+    hypervideo.owner = Meteor.userId();
+    console.log(hypervideo.owner);
     hypervideo.save();
     e.target.hypervideo = hypervideo.get();
   },
@@ -92,6 +94,7 @@ Template.newSubjectPanel.events({
      x: x,
      y: y
    });
+   subvideo.owner = Meteor.user()._id;
    subvideo.save();
    node.subvideo = subvideo.get();
  },
@@ -112,6 +115,7 @@ Template.newSubjectPanel.events({
      x: x,
      y: y
    });
+   question.owner = Meteor.user()._id;
    question.save();
    node.question = question.get();
  },

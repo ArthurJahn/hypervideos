@@ -141,6 +141,7 @@ ul.list-inline {
 
 .topbar-menu li:last-child #login-dropdown-list {
   margin-left: -200px;
+  color: #616161;
 }
 
 .topbar-menu li:last-child .login-close-text {
@@ -170,4 +171,10 @@ ul.list-inline {
 
 #dropShadow.has-shadow.paper-header-panel {
   z-index: 9;
+}
+
+paper-spinner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
 }
