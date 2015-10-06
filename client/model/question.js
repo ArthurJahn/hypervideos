@@ -12,7 +12,7 @@ Question = Astro.Class({
       validator: Validators.and([
           Validators.required('O nome não pode ser vazio'),
           Validators.string(),
-          Validators.minLength(3,'Enunciado muito curto'),
+          Validators.minLength(3,'Nome muito curto'),
         ])
     },
     hypervideoId: {
