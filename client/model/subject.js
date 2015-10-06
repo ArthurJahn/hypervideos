@@ -8,10 +8,16 @@ Subject = Astro.createClass({
   fields: {
     owner: {
       type: 'string',
+      validator: Validators.required(),
     },
     name: {
       type: 'string',
       default: 'Novo Curso',
+      validator: Validators.and([
+          Validators.required('O nome não pode ser vazio'),
+          Validators.string(),
+          Validators.minLength(5,'Nome muito curto')
+        ])
     },
     connections: {
       type: 'array',
@@ -22,6 +28,10 @@ Subject = Astro.createClass({
     editing: {
       type: 'boolean',
       default: true,
+      validator: Validators.and([
+          Validators.required(),
+          Validators.boolean()
+        ])
     },
   },
   methods: {
@@ -32,16 +42,19 @@ Subject = Astro.createClass({
     },
     setEditing: function(editing) {
       this.set('editing', editing);
-      this.save();
+      if (this.validate()) {
+        this.save();
+      }
     },
     addConnection: function(conn) {
       if(this._hasConnection(conn)) {
-        console.log(false);
         return false;
       }
       else {
         this.push('connections',conn);
-        this.save();
+        if (this.validate()) {
+          this.save();
+        }
         return true;
       }
     },
@@ -55,14 +68,18 @@ Subject = Astro.createClass({
         }
       }
       this.set('connections', newConnections);
-      this.save();
+      if (this.validate()) {
+        this.save();
+      }
     },
     removeConnection: function(connection) {
       var compConn = this.pop('connections',1);
       if(compConn !== connection) {
         this.push('connections',compConn);
       }
-      this.save();
+      if (this.validate()) {
+        this.save();
+      }
       return true;
     },
     hypervideos: function() {
@@ -70,7 +87,9 @@ Subject = Astro.createClass({
     },
     setName: function(newName) {
       this.set('name', newName);
-      this.save();
+      if (this.validate()) {
+        this.save();
+      }
     },
     //private methods
     _hasConnection: function(conn) {

@@ -153,6 +153,9 @@
         empty: {
           type: Boolean,
           value: true,
+        },
+        name: {
+          type: String,
         }
       },
       listeners: {
@@ -233,14 +236,15 @@
         self.$.hypers.appendGridChild(hypervideoNode);
       },
       _updateSubject: function() {
+        this.name =  this.$.subjectName.value;
         if(this.subject === null) {
           this.fire('subject-created');
         }
         if(this.subject) {
-          if(this.$.subjectName.value === "") {
-            this.$.subjectName.value = this.subject.name;
-          } else if (this.$.subjectName.value !== this.subject.name) {
-            this.subject.name = this.$.subjectName.value;
+          if(this.name === "") {
+            this.name = this.subject.name;
+          } else if (this.name !== this.subject.name) {
+            this.subject.name = this.name;
             this.fire('subject-changed');
           }
         }

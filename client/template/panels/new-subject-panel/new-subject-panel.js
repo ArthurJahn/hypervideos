@@ -2,15 +2,21 @@ Template.newSubjectPanel.events({
 
 // ======================== Subject Controll Methods =========================//
   'subject-created subject-composer-area': function(e, template) {
-    var subject = new Subject();
+    var name = e.target.name;
+    var subject = new Subject({name: name});
     subject.owner = Meteor.userId();
-    subject.save();
-    e.target.subject = subject.get();
+    if(subject.validate()){
+      subject.save();
+      e.target.subject = subject.get();
+    }
+    else {
+      var errors = subject.getValidationErrors();
+      console.log(errors);
+    }
   },
   'subject-changed subject-composer-area': function(e, template) {
     var id = e.target.subject._id;
     var subject = Subject.findOne({_id:id});
-    console.log("chage: "+id);
     subject.setName(e.target.subject.name);
   },
   'connection-created subject-composer-area': function(e, template) {
@@ -34,7 +40,6 @@ Template.newSubjectPanel.events({
     var subjectId = e.target._subjectId;
     var hypervideo = new Hypervideo({col: col, row: row, subjectId: subjectId});
     hypervideo.owner = Meteor.userId();
-    console.log(hypervideo.owner);
     hypervideo.save();
     e.target.hypervideo = hypervideo.get();
   },
