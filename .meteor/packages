@@ -22,7 +22,6 @@ accounts-password
 accounts-ui
 velocity:console-reporter
 iron:router
-sanjo:jasmine
 cfs:standard-packages
 cfs:gridfs
 jagi:astronomy
