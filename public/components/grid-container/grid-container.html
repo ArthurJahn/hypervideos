@@ -47,6 +47,7 @@
       },
       removeGridChild: function(gridNode) {
         var self = this;
+        gridNode.remove();
         self.$.container.removeChild(gridNode);
       },
       positionMovedNode: function(gridNode) {
