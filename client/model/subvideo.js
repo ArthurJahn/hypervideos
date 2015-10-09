@@ -25,7 +25,7 @@ Subvideo = Astro.Class({
     },
     description: {
       type: 'string',
-      default: 'Enunciado da questão',
+      default: 'Descrição desse subvideo',
       validator: Validators.and([
           Validators.required('A descrição não pode ser vazia'),
           Validators.string(),
@@ -42,7 +42,15 @@ Subvideo = Astro.Class({
       validator: Validators.required(),
     },
   },
+  events: {
+    beforeremove: function() {
+      this.media.remove();
+    }
+  },
   methods: {
+    media: function() {
+      return Videos.findOne({_id: this.mediaId});
+    },
     move: function(x,y) {
       this.x = x;
       this.y = y;

@@ -34,6 +34,16 @@ Hypervideo = Astro.Class({
       validator: Validators.required(),
     },
   },
+  events: {
+    beforeremove: function() {
+      this.subvideos().forEach(function(subvideo){
+        subvideo.remove();
+      });
+      this.questions().forEach(function(question){
+        question.remove();
+      });
+    }
+  },
   methods: {
     move: function(col,row) {
       this.col = col;

@@ -22,6 +22,22 @@
 
 <dom-module id="subject-composer-area">
   <style is="custom-style">
+    .options {
+      position: absolute;
+      margin: 0 1%;
+      width: 97%;
+    }
+    .options paper-input {
+      float: left;
+      width: 55%;
+    }
+    .options paper-button {
+      float: right;
+      width: 14%;
+      font-size: 12px;
+      margin-top: 7px;
+      color: #616161;
+    }
     #backcanvas {
       position: absolute;
       top: 75px;
@@ -77,13 +93,36 @@
       top: 100px;
       bottom: 35px;
     }
+    @media screen and (max-width: 500px) {
+      .options paper-input {
+        float: left;
+        width: 45%;
+      }
+      .options paper-button {
+        float: right;
+        width: 17%;
+        margin: 0 1%;
+        font-size: 10px;
+        margin-top: 7px;
+      }
+    }
   </style>
   <template>
-    <paper-input id="subjectName"
-      name="name"
-      label="Nome do Curso"
-      on-change="_updateSubject">
-    </paper-input>
+    <div class="options">
+      <paper-input id="subjectName"
+        name="name"
+        label="Nome do Curso"
+        on-change="_updateSubject">
+      </paper-input>
+      <paper-button id="publishButton" disabled>
+        <iron-icon icon="social:public"></iron-icon>
+        Publicar
+      </paper-button>
+      <paper-button id="deleteButton" disabled on-tap="discard">
+        <iron-icon icon="delete"></iron-icon>
+        Deletar
+      </paper-button>
+    </div>
     <div id="backcanvas">
       <canvas id="canvas"></canvas>
     </div>
@@ -215,6 +254,10 @@
       emptyComposer: function() {
         var nodes = this.$.hypers.querySelectorAll('hypervideo-node');
         this.empty = (nodes.length < 1);
+        this._toggleActionButtons();
+      },
+      discard: function() {
+        console.log("delete");
       },
 //===================== Custom Component Private Methods =====================//
       _createHypervideo: function(e) {
@@ -375,6 +418,16 @@
       },
       _onIronResize: function() {
         this.$.hypers.bounds = this._getTouchableBounds();
+      },
+      _toggleActionButtons: function() {
+        var delButton = this.$.deleteButton;
+        var publish = this.$.publishButton;
+        if(this.empty) {
+          publish.setAttribute("disabled","true");
+          delButton.setAttribute("disabled","true");
+        } else {
+          delButton.removeAttribute("disabled");
+        }
       },
     });
   </script>

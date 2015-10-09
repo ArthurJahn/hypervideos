@@ -34,11 +34,19 @@ Subject = Astro.createClass({
         ])
     },
   },
+  events: {
+    beforeremove: function() {
+      this.hypervideos().forEach(function(hypervideo){
+        this.removeConnections(hypervideo._id);
+        hypervideo.remove();
+      });
+    }
+  },
   methods: {
     removeHypervideo: function(hypervideoId) {
       this.removeConnections(hypervideoId);
-      var hypervideo = Hypervideos.findOne({_id: hypervideoId});
-      hypervideo.autoRemove();
+      var hypervideo = Hypervideo.findOne({_id: hypervideoId});
+      hypervideo.remove();
     },
     setEditing: function(editing) {
       this.set('editing', editing);
@@ -91,6 +99,7 @@ Subject = Astro.createClass({
         this.save();
       }
     },
+
     //private methods
     _hasConnection: function(conn) {
       for (var i=0;i< this.connections.length; i++) {

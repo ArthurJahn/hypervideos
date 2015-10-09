@@ -24,6 +24,11 @@ Template.newSubjectPanel.events({
     var subject = Subject.findOne({_id:id});
     subject.setName(e.target.subject.name);
   },
+  'subject-deleted subject-composer-area': function(e, template) {
+    var subject = Subject.findOne(e.target.subject._id);
+    subject.autoRemove();
+    e.target.subject = null;
+  },
   'connection-created subject-composer-area': function(e, template) {
     var id = e.target.subject._id;
     var subject = Subject.findOne({_id:id});

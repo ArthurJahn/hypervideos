@@ -23,7 +23,7 @@
       background-color: rgba(246,246,246,1);/*var(--light-divider-color);*/
     }
     #mainPanel paper-toolbar p {
-      width: 50%;
+      width: 49%;
       display: inline-block;
     }
     #mainPanel paper-toolbar span {
@@ -76,6 +76,15 @@
     }
     progress::-webkit-progress-value {
       background-color: #FFC107;
+    }
+
+    @media screen and (max-width: 800px) {
+      #mainPanel {
+        float: left;
+        width: 99%;
+        margin: 0.5%;
+        height: 400px;
+      }
     }
   </style>
   <template>
