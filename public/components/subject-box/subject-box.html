@@ -94,8 +94,7 @@
         <span>
           <iron-icon icon="av:play-circle-filled" on-tap="watchSubject"></iron-icon>
           <iron-icon icon="create" on-tap="editSubject"></iron-icon>
-          <iron-icon icon="delete"></iron-icon>
-          <iron-icon icon="social:public"></iron-icon>
+          <iron-icon icon="delete" on-tap="discardSubject"></iron-icon>
         </span>
       </paper-toolbar>
       <div class="wrapper">
@@ -167,6 +166,9 @@
     },
     editSubject: function() {
       this.fire("edit-subject");
+    },
+    discardSubject: function() {
+      this.fire('subject-deleted');
     },
     _getGridBounds: function() {
       var self = this;

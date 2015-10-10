@@ -46,10 +46,9 @@ body {
   user-select: none;
 }
 
-ul.list-inline {
+.list-inline {
   display: inline;
   text-decoration: none;
-  margin: 0;
   padding: 0;
 }
 /*------------------------------- drawer panel -------------------------------*/
@@ -161,12 +160,14 @@ ul.list-inline {
 }
 
 #login-buttons .login-button, .accounts-dialog .login-button {
+  font-family: 'Muli', sans-serif;
   line-height: 2;
-  background-color: #FFC107;
+  background-color: #DCDCDC;
+  color: #727272;
   border: 0;
 }
 #login-buttons .login-button:hover, .accounts-dialog .login-button:hover {
-  background-color: #FFC107;
+  background-color: #DCDCDC;
 }
 
 #dropShadow.has-shadow.paper-header-panel {

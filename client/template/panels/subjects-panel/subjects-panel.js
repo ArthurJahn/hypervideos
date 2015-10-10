@@ -19,4 +19,8 @@ Template.subjectsPanel.events({
     Session.set("subjectId", subject._id);
     Router.go('subjectPanel', {_id: subject._id});
   },
+  'subject-deleted subject-box': function(e, template) {
+    var subject = Subject.findOne(e.target.subject._id);
+    subject.remove();
+  },
 });
