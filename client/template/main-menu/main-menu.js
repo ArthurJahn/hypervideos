@@ -4,6 +4,11 @@ Session.setDefault('subjectId', 'new');
 Accounts.ui.config({
   passwordSignupFields: 'USERNAME_AND_EMAIL'
 });
+Template.mainMenu.helpers({
+  connected: function() {
+    return Meteor.status().connected;
+  },
+});
 
 Template.mainMenu.events({
   'click #subjects': function () {

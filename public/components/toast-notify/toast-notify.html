@@ -1,0 +1,47 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+<dom-module id="toast-notify">
+  <style>
+    paper-toast {
+      position: absolute;
+    }
+  </style>
+  <template>
+    <paper-toast id="connection" duration=300000 text="{{connectionMessage}}" >
+       <iron-icon icon="cached"></iron-icon>
+    </paper-toast>
+    <paper-toast id="notification" text="{{message}}" ></paper-toast>
+  </template>
+  <script>
+  Polymer({
+    is: 'toast-notify',
+    properties: {
+      message: {
+        type: String,
+        observer: "showToast"
+      },
+      connectionMessage: {
+        type: String,
+        value: "Erro de conexão. Tentando reconectar."
+      },
+      connected: {
+        type: Boolean,
+        observer: "toggleConnIssue"
+      }
+    },
+    showToast: function() {
+      this.$.notification.show();
+    },
+    toggleConnIssue: function() {
+      if(this.connected){
+        this.$.connection.hide();
+      }
+      else {
+        this.$.connection.show();
+      }
+    },
+  });
+  </script>
+</dom-module>
