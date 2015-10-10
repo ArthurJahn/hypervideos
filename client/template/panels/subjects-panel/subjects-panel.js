@@ -3,7 +3,6 @@ Template.subjectsPanel.helpers({
     return JSON.stringify(Subjects.find().fetch());
   }
 });
-
 Template.subjectsPanel.events({
   'get-hypervideos subject-box': function (e, template) {
     var subject = Subject.findOne({_id : e.target.subject._id});
@@ -13,5 +12,11 @@ Template.subjectsPanel.events({
     var subject = e.target.subject;
     Session.set("title", subject.name);
     Router.go('watchSubject', subject);
-  }
+  },
+  'edit-subject subject-box': function (e, template) {
+    var subject = e.target.subject;
+    Session.set("title", subject.name);
+    Session.set("subjectId", subject._id);
+    Router.go('subjectPanel', {_id: subject._id});
+  },
 });

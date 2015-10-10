@@ -281,13 +281,14 @@
       },
       _updateSubject: function() {
         this.name =  this.$.subjectName.value;
-        if(this.subject === null) {
+        if(!this.subject) {
           this.fire('subject-created');
         }
         if(this.subject) {
           if(this.name === '') {
             this.name = this.subject.name;
-          } else if (this.name !== this.subject.name) {
+          }
+          else if (this.name !== this.subject.name) {
             this.subject.name = this.name;
             this.fire('subject-changed');
           }
@@ -440,8 +441,10 @@
         }
         // if a new subject is set, recreate hypervideo-nodes
         if(self.subject) {
+          self.$.subjectName.value = self.subject.name;
           self.hypervideos = [];
           self.fire('get-hypervideos');
+          console.log(self.hypervideos);
           self.hypervideos.forEach(function(hypervideo){
             var options = {
               hypervideo: hypervideo,

@@ -1,6 +1,6 @@
 //Used in title template
 Session.setDefault('title', 'Explorar');
-
+Session.setDefault('subjectId', 'new');
 Accounts.ui.config({
   passwordSignupFields: 'USERNAME_AND_EMAIL'
 });
@@ -17,5 +17,6 @@ Template.mainMenu.events({
   },
   'click #highlighted': function () {
     Session.set('title', 'Novo Curso');
+    Router.go('subjectPanel', {_id:'new'});
   }
 });

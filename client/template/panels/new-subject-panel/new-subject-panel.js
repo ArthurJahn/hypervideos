@@ -1,3 +1,14 @@
+Template.newSubjectPanel.helpers({
+  subject: function() {
+    var id = Session.get('subjectId');
+    var subject = Subject.findOne({_id: id});
+    if(subject){
+      return JSON.stringify(subject.get());
+    }
+    return null;
+  }
+});
+
 Template.newSubjectPanel.events({
 
 // ======================== Subject Controll Methods =========================//
@@ -31,6 +42,7 @@ Template.newSubjectPanel.events({
   },
   'get-hypervideos subject-composer-area': function (e, template) {
     var subject = Subject.findOne({_id : e.target.subject._id});
+    console.log(subject.hypervideos());
     e.target.hypervideos = subject.hypervideos();
   },
   'connection-created subject-composer-area': function(e, template) {
