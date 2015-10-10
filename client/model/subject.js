@@ -82,14 +82,26 @@ Subject = Astro.createClass({
       }
     },
     removeConnection: function(connection) {
-      var compConn = this.pop('connections',1);
-      if(compConn !== connection) {
-        this.push('connections',compConn);
+      var conns = this.connections;
+      var length = conns.length;
+      console.log(conns);
+      console.log(connection);
+      for (var i=0;i< length; i++) {
+        var compConn = conns[i];
+        if(compConn.first === connection.first &&
+           compConn.second === connection.second) {
+          conns.splice(i,1);
+          break;
+        }
       }
-      if (this.validate()) {
+      if(i < length){
+        this.set('connections', conns);
         this.save();
+        return true;
       }
-      return true;
+      else {
+        return false;
+      }
     },
     hypervideos: function() {
       return Hypervideos.find({subjectId: this._id}).fetch();

@@ -52,11 +52,15 @@ Template.newSubjectPanel.events({
     if (!result) {
       e.target._connection = null;
     }
+    else {
+      e.target.subject.connections = subject.connections;
+    }
   },
   'connection-removed subject-composer-area': function(e, template) {
     var id = e.target.subject._id;
     var subject = Subject.findOne({_id:id});
     subject.removeConnection(e.target._connection);
+    e.target.subject.connections = subject.connections;
   },
 // ======================= Hypervideo Controll Methods =======================//
   'hypervideo-created hypervideo-node': function(e, template) {
@@ -95,65 +99,65 @@ Template.newSubjectPanel.events({
            composer.fileObjects = list;
         }
       });
-   });
- },
- 'connection-created hypervideo-composer-area': function(e, template) {
-   e.stopPropagation();
-   var id = e.target.hypervideo._id;
-   var hypervideo = Hypervideo.findOne({_id:id});
-   var conn = e.target._connection;
-   var result = hypervideo.addConnection(conn);
-   if (!result) {
-     e.target._connection = null;
-   }
- },
- 'connection-removed hypervideo-composer-area': function(e, template) {
-   var id = e.target.hypervideo._id;
-   var hypervideo = Hypervideo.findOne({_id:id});
-   hypervideo.removeConnection(e.target._connection);
-   e.stopPropagation();
- },
- // ======================== Subvideo Controll Methods =======================//
- 'subvideo-created subvideo-node': function(e, template) {
-   var node = e.target;
-   var x = node._x, y = node._y;
-   var mediaId = node.mediaId;
-   var name = node._name;
-   var hypervideoId = node.hypervideoId;
-   var subvideo = new Subvideo({
-     name: name,
-     hypervideoId: hypervideoId,
-     mediaId: mediaId,
-     x: x,
-     y: y
-   });
-   subvideo.owner = Meteor.userId();
-   subvideo.save();
-   node.subvideo = subvideo.get();
- },
- 'subvideo-changed subvideo-node': function(e, template) {
-   var subvideo = Subvideo.findOne(e.target.subvideo._id);
-   subvideo.save();
- },
+    });
+  },
+  'connection-created hypervideo-composer-area': function(e, template) {
+    e.stopPropagation();
+    var id = e.target.hypervideo._id;
+    var hypervideo = Hypervideo.findOne({_id:id});
+    var conn = e.target._connection;
+    var result = hypervideo.addConnection(conn);
+    if (!result) {
+      e.target._connection = null;
+    }
+  },
+  'connection-removed hypervideo-composer-area': function(e, template) {
+    var id = e.target.hypervideo._id;
+    var hypervideo = Hypervideo.findOne({_id:id});
+    hypervideo.removeConnection(e.target._connection);
+    e.stopPropagation();
+  },
+  // ======================== Subvideo Controll Methods =======================//
+  'subvideo-created subvideo-node': function(e, template) {
+    var node = e.target;
+    var x = node._x, y = node._y;
+    var mediaId = node.mediaId;
+    var name = node._name;
+    var hypervideoId = node.hypervideoId;
+    var subvideo = new Subvideo({
+      name: name,
+      hypervideoId: hypervideoId,
+      mediaId: mediaId,
+      x: x,
+      y: y
+    });
+    subvideo.owner = Meteor.userId();
+    subvideo.save();
+    node.subvideo = subvideo.get();
+  },
+  'subvideo-changed subvideo-node': function(e, template) {
+    var subvideo = Subvideo.findOne(e.target.subvideo._id);
+    subvideo.save();
+  },
 
  // ======================== Question Controll Methods =======================//
- 'question-created question-node': function(e, template) {
-   var node = e.target;
-   var x = node._x, y = node._y;
-   var name = node._name;
-   var hypervideoId = node.hypervideoId;
-   var question = new Question({
-     name: name,
-     hypervideoId: hypervideoId,
-     x: x,
-     y: y
-   });
-   question.owner = Meteor.userId();
-   question.save();
-   node.question = question.get();
- },
- 'question-changed question-node': function(e, template) {
-   var question = Question.findOne(e.target.question._id);
-   question.save();
- },
+  'question-created question-node': function(e, template) {
+    var node = e.target;
+    var x = node._x, y = node._y;
+    var name = node._name;
+    var hypervideoId = node.hypervideoId;
+    var question = new Question({
+      name: name,
+      hypervideoId: hypervideoId,
+      x: x,
+      y: y
+    });
+    question.owner = Meteor.userId();
+    question.save();
+    node.question = question.get();
+  },
+  'question-changed question-node': function(e, template) {
+    var question = Question.findOne(e.target.question._id);
+    question.save();
+  },
 });

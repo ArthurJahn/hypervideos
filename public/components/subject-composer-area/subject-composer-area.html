@@ -198,8 +198,11 @@
         }
       },
       listeners: {
-        'iron-resize': '_onIronResize'
+        'iron-resize': '_onIronResize',
       },
+      observers: [
+        '_redrawConnections(subject.connections)'
+      ],
       behaviors: [
         Polymer.IronResizableBehavior
       ],
@@ -308,11 +311,12 @@
           this.fire('connection-created');
           if(this._connection){
             var connNode = new ConnectionNode(this._connection);
-            connNode.addEventListener('detached', function(ev){
+            connNode.addEventListener('detached', function(e){
               self._connectionListener(this);
             });
             self.$.conns.appendChild(connNode);
             self._resetConnecting();
+            this._connection = null;
           }
           self._resetConnecting();
         }
@@ -347,6 +351,9 @@
         }
         ctx.lineWidth = lineWidth;
         ctx.stroke();
+      },
+      _redrawConnections: function(connections) {
+        this._drawConnections();
       },
       //hypervideo listener functions
       _connectListener: function(hnInstance) {
@@ -394,10 +401,10 @@
         });
       },
       //connection Listener functions
-      _connectionListener: function(connInstance) {
+      _connectionListener: function(connNode) {
         var self = this;
-        this._connection = connInstance.connection;
-        this.fire('connection-removed');
+        self._connection = connNode.connection;
+        self.fire('connection-removed');
         self._drawConnections();
       },
       _showConnection: function(connection, firstPos, secondPos) {

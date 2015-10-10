@@ -78,12 +78,19 @@ Hypervideo = Astro.Class({
       this.save();
     },
     removeConnection: function(connection) {
-      var compConn = this.pop('connections',1);
-      if(compConn !== connection) {
-        this.push('connections',compConn);
+      var conns = this.connections;
+      var i = conns.indexOf(connection);
+      if(i > -1){
+        conns.splice(i,1);
+        this.set('connections', conns);
+        if (this.validate()) {
+          this.save();
+        }
+        return true;
       }
-      this.save();
-      return true;
+      else {
+        return false;
+      }
     },
     setName: function(newName) {
       this.set('name', newName);
