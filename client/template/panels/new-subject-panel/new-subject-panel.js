@@ -26,8 +26,12 @@ Template.newSubjectPanel.events({
   },
   'subject-deleted subject-composer-area': function(e, template) {
     var subject = Subject.findOne(e.target.subject._id);
-    subject.autoRemove();
+    subject.remove();
     e.target.subject = null;
+  },
+  'get-hypervideos subject-composer-area': function (e, template) {
+    var subject = Subject.findOne({_id : e.target.subject._id});
+    e.target.hypervideos = subject.hypervideos();
   },
   'connection-created subject-composer-area': function(e, template) {
     var id = e.target.subject._id;
@@ -43,7 +47,6 @@ Template.newSubjectPanel.events({
     var subject = Subject.findOne({_id:id});
     subject.removeConnection(e.target._connection);
   },
-
 // ======================= Hypervideo Controll Methods =======================//
   'hypervideo-created hypervideo-node': function(e, template) {
     var col = e.target._col, row = e.target._row;

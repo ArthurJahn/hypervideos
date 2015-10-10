@@ -199,19 +199,29 @@
         }
       },
       factoryImpl: function(options) {
+        if(options.hypervideo) {
+          this.hypervideo = options.hypervideo;
+        }
+        else {
+          this._x = options.x;
+          this._y = options.y;
+        }
         this._bounds = options.bounds;
-        this._x = options.x;
-        this._y = options.y;
         this._subjectId = options.subjectId;
         this.connectId = options.connectId;
       },
       attached: function() {
         Polymer.dom.flush();
         this._w = this.$.icon.clientWidth;
-        this.fire('position-changed');
+        if(this.hypervideo) {
+          this._col = this.hypervideo.col;
+          this._row = this.hypervideo.row;
+        } else {
+          this.fire('position-changed');
+          this.fire('hypervideo-created');
+          this.hypervideoChanged();
+        }
         this.moveToPos();
-        this.fire('hypervideo-created');
-        this.hypervideoChanged();
       },
 //============================= Public Methods ===============================//
       handleConnectId: function() {

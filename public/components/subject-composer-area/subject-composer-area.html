@@ -1,11 +1,11 @@
 <!--
-  This compoenent handles de creation and edition of the hole Subject content.
+  This component handles the creation and edition of the hole Subject content.
   The subject composer area is responsible for the creation and edition of:
-    - Hypervideos and their subvideo components.
+    - Hypervideos and their subvideos/questions components.
     - Connections between hypervideos created.
 
   These needed components were created in order to uncouple the view. They
-  are listed below in costom implemented components.
+  are listed below in custom implemented components.
 -->
 
 <!-- Polymer components used -->
@@ -184,6 +184,7 @@
         subject: {
           type: Object,
           value: null,
+          observer: "_setSubjectData"
         },
         hypervideos: {
           type: Object,
@@ -257,7 +258,7 @@
         this._toggleActionButtons();
       },
       discard: function() {
-        console.log("delete");
+        this.fire('subject-deleted');
       },
 //===================== Custom Component Private Methods =====================//
       _createHypervideo: function(e) {
@@ -429,6 +430,32 @@
           delButton.removeAttribute("disabled");
         }
       },
+      _setSubjectData: function() {
+        var self = this;
+        // Remove hypervideo-nodes in DOM
+        var nodes = self.$.hypers.querySelectorAll('hypervideo-node');
+        for (var i = 0; i < nodes.length; i++) {
+          var node = nodes[i];
+          self.$.hypers.removeGridChild(node);
+        }
+        // if a new subject is set, recreate hypervideo-nodes
+        if(self.subject) {
+          self.hypervideos = [];
+          self.fire('get-hypervideos');
+          self.hypervideos.forEach(function(hypervideo){
+            var options = {
+              hypervideo: hypervideo,
+              bounds: bounds,
+              subjectId: self.subject._id,
+              connectId: self.connectId
+            }
+            var hypervideoNode = new HypervideoNode(options);
+            self._addHypervideoListeners(hypervideoNode);
+            self.$.hypers.appendGridChild(hypervideoNode);
+          });
+        }
+        self._drawConnections();
+      }
     });
   </script>
 </dom-module>

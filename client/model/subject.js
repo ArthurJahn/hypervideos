@@ -36,9 +36,10 @@ Subject = Astro.createClass({
   },
   events: {
     beforeremove: function() {
-      this.hypervideos().forEach(function(hypervideo){
-        this.removeConnections(hypervideo._id);
-        hypervideo.remove();
+      var self = this;
+      self.hypervideos().forEach(function(hypervideo){
+        self.removeConnections(hypervideo._id);
+        //hypervideo.remove();
       });
     }
   },
