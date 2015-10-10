@@ -31,8 +31,9 @@
       text-align: right;
       display: inline-block;
     }
-    #mainPanel paper-toolbar iron-icon:hover {
-      color: #FFC107;
+    #mainPanel paper-toolbar paper-icon-button {
+      margin: 5px -3px;
+      padding: 5px;
     }
     #mainPanel .wrapper {
       height: 360px;
@@ -92,9 +93,9 @@
       <paper-toolbar>
         <p>{{subject.name}}</p>
         <span>
-          <iron-icon icon="av:play-circle-filled" on-tap="watchSubject"></iron-icon>
-          <iron-icon icon="create" on-tap="editSubject"></iron-icon>
-          <iron-icon icon="delete" on-tap="discardSubject"></iron-icon>
+          <paper-icon-button icon="av:play-circle-filled" on-tap="watchSubject"></paper-icon-button>
+          <paper-icon-button icon="create" on-tap="editSubject"></paper-icon-button>
+          <paper-icon-button icon="delete" on-tap="discardSubject"></paper-icon-button>
         </span>
       </paper-toolbar>
       <div class="wrapper">
