@@ -23,6 +23,13 @@
         },
       }
     },
+    attached: function() {
+      var self = this;
+      console.log('get-subjects');
+      setTimeout(function(){
+         self.fire('get-subjects');
+      },1);
+    }
   });
   </script>
 </dom-module>

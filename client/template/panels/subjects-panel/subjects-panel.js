@@ -4,6 +4,13 @@ Template.subjectsPanel.helpers({
   }
 });
 Template.subjectsPanel.events({
+  'get-subjects subjects-list': function(e,template) {
+    var subjects = [];
+    Subject.find().fetch().forEach(function(subject){
+      subjects.push(subject.get());
+    });
+    e.target.subjects = subjects;
+  },
   'get-hypervideos subject-box': function (e, template) {
     var subject = Subject.findOne({_id : e.target.subject._id});
     e.target.hypervideos = subject.hypervideos();
