@@ -286,22 +286,28 @@
         this._openComposer();
       },
       onHover: function(e) {
-        this.$.delete.style.display = "block";
-        this.$.connect.style.display = "block";
-        this.$.edit.style.display = "block";
+        this.showIcons();
         if(e.target.id !== "icon" &&
         e.target.id !== "preview") {
           e.target.style.color = "#FFF";
         }
       },
       onHout: function(e) {
-        this.$.delete.style.display = "none";
-        this.$.connect.style.display = "none";
-        this.$.edit.style.display = "none";
+        this.hideIcons();
         if(e.target.id !== "icon" &&
         e.target.id !== "preview") {
           e.target.style.color = e.target.style.backgroundColor;
         }
+      },
+      showIcons: function() {
+        this.$.delete.style.display = "block";
+        this.$.connect.style.display = "block";
+        this.$.edit.style.display = "block";
+      },
+      hideIcons: function() {
+        this.$.delete.style.display = "none";
+        this.$.connect.style.display = "none";
+        this.$.edit.style.display = "none";
       },
       setPos: function(x,y) {
         var margin = 5;

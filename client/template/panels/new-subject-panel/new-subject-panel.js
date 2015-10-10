@@ -42,7 +42,6 @@ Template.newSubjectPanel.events({
   },
   'get-hypervideos subject-composer-area': function (e, template) {
     var subject = Subject.findOne({_id : e.target.subject._id});
-    console.log(subject.hypervideos());
     e.target.hypervideos = subject.hypervideos();
   },
   'connection-created subject-composer-area': function(e, template) {

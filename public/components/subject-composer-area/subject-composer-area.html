@@ -184,7 +184,6 @@
         subject: {
           type: Object,
           value: null,
-          observer: "_setSubjectData"
         },
         hypervideos: {
           type: Object,
@@ -204,6 +203,13 @@
       behaviors: [
         Polymer.IronResizableBehavior
       ],
+      attached: function() {
+        var self = this;
+        Polymer.dom.flush();
+        setTimeout(function () {
+          self._setSubjectData();
+        }, 1);
+      },
 //========================= Custom Component Methods =========================//
       composerTap: function(e) {
         this.$.hypers.bounds = this._getTouchableBounds();
@@ -433,18 +439,34 @@
       },
       _setSubjectData: function() {
         var self = this;
+        self._resetComposer();
+        self._getSubjectData();
+      },
+      _resetComposer: function() {
+        var self = this;
+        // Reset input name value
         // Remove hypervideo-nodes in DOM
+        // Remove connection-nodes in DOM
+        self.$.subjectName.value = '';
         var nodes = self.$.hypers.querySelectorAll('hypervideo-node');
+        var conns = self.$.conns.querySelectorAll('connection-node');
         for (var i = 0; i < nodes.length; i++) {
           var node = nodes[i];
           self.$.hypers.removeGridChild(node);
         }
+        for (var i = 0; i < conns.length; i++) {
+          var conn = conns[i];
+          self.$.conns.removeChild(conn);
+        }
+      },
+      _getSubjectData: function() {
+        var self = this;
         // if a new subject is set, recreate hypervideo-nodes
         if(self.subject) {
           self.$.subjectName.value = self.subject.name;
           self.hypervideos = [];
           self.fire('get-hypervideos');
-          console.log(self.hypervideos);
+          var bounds = self.$.hypers.bounds;
           self.hypervideos.forEach(function(hypervideo){
             var options = {
               hypervideo: hypervideo,
@@ -455,8 +477,18 @@
             var hypervideoNode = new HypervideoNode(options);
             self._addHypervideoListeners(hypervideoNode);
             self.$.hypers.appendGridChild(hypervideoNode);
+            hypervideoNode.hideIcons();
+          });
+          self.subject.connections.forEach(function(connection){
+            var connNode = new ConnectionNode(connection);
+            connNode.addEventListener('detached', function(ev){
+              self._connectionListener(this);
+            });
+            self.$.conns.appendChild(connNode);
+            self._resetConnecting();
           });
         }
+        self.emptyComposer();
         self._drawConnections();
       }
     });

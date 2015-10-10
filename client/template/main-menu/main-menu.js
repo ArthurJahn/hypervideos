@@ -17,6 +17,7 @@ Template.mainMenu.events({
   },
   'click #highlighted': function () {
     Session.set('title', 'Novo Curso');
+    Session.set('subjectId', 'new');
     Router.go('subjectPanel', {_id:'new'});
   }
 });

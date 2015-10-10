@@ -109,7 +109,6 @@ Subject = Astro.createClass({
             conn.second === compConn.second) ||
            (conn.second === compConn.first &&
              conn.first === compConn.second)) {
-          console.log(compConn);
           return true;
         }
       }
