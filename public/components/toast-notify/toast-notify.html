@@ -6,13 +6,14 @@
   <style>
     paper-toast {
       position: absolute;
+      z-index: 999;
     }
   </style>
   <template>
     <paper-toast id="connection" duration=300000 text="{{connectionMessage}}" >
        <iron-icon icon="cached"></iron-icon>
     </paper-toast>
-    <paper-toast id="notification" text="{{message}}" ></paper-toast>
+    <paper-toast id="notification" duration=10000 text="{{message}}" ></paper-toast>
   </template>
   <script>
   Polymer({
@@ -32,7 +33,10 @@
       }
     },
     showToast: function() {
-      this.$.notification.show();
+      if(this.message !== '')
+        this.$.notification.show();
+      else
+        this.$.notification.hide();
     },
     toggleConnIssue: function() {
       if(this.connected){
