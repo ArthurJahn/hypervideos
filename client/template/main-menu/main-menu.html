@@ -56,10 +56,10 @@
         <!-- MAIN CONTENT -->
         <div main-content>
           {{> yield}}
-          <toast-notify id="notify" connected={{connected}}>
-          </toast-notify>
         </div>
       </paper-header-panel>
+      <toast-notify id="notify" connected={{connected}}>
+      </toast-notify>
     </div>
   </paper-drawer-panel>
 </template>

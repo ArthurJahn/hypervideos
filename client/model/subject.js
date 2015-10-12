@@ -44,17 +44,27 @@ Subject = Astro.createClass({
     }
   },
   methods: {
+    // returns the list of hypervideos
+    //  that belongs to this subject
+    hypervideos: function() {
+      return Hypervideos.find({subjectId: this._id}).fetch();
+    },
+    // given a hypervideo _id, remove all of its connections
+    // and then, remove the hypervideo
     removeHypervideo: function(hypervideoId) {
       this.removeConnections(hypervideoId);
       var hypervideo = Hypervideo.findOne({_id: hypervideoId});
       hypervideo.remove();
     },
+    // when set as editing, a subject is not publishe yet,
+    // so it cannot be found by general users, only its owner
     setEditing: function(editing) {
       this.set('editing', editing);
       if (this.validate()) {
         this.save();
       }
     },
+    // Add a connection between two hypervideos
     addConnection: function(conn) {
       if(this._hasConnection(conn)) {
         return false;
@@ -67,20 +77,7 @@ Subject = Astro.createClass({
         return true;
       }
     },
-    removeConnections: function(hypervideoId) {
-      var newConnections = [];
-      for (var i=0;i< this.connections.length; i++) {
-        var compConn = this.connections[i];
-        if (hypervideoId !== compConn.first &&
-            hypervideoId !== compConn.second) {
-          newConnections.push(compConn);
-        }
-      }
-      this.set('connections', newConnections);
-      if (this.validate()) {
-        this.save();
-      }
-    },
+    // Remove a connection from subject
     removeConnection: function(connection) {
       var conns = this.connections;
       var length = conns.length;
@@ -103,8 +100,19 @@ Subject = Astro.createClass({
         return false;
       }
     },
-    hypervideos: function() {
-      return Hypervideos.find({subjectId: this._id}).fetch();
+    // Remove all connections with a specified
+    // Hypervideo by passing its id
+    removeConnections: function(hypervideoId) {
+      var newConnections = [];
+      for (var i=0;i< this.connections.length; i++) {
+        var compConn = this.connections[i];
+        if (hypervideoId !== compConn.first &&
+            hypervideoId !== compConn.second) {
+          newConnections.push(compConn);
+        }
+      }
+      this.set('connections', newConnections);
+      this.save();
     },
     setName: function(newName) {
       this.set('name', newName);
@@ -112,8 +120,9 @@ Subject = Astro.createClass({
         this.save();
       }
     },
-
-    //private methods
+//============================== PRIVATE METHODS =============================//
+    // verify existing connection in
+    // subject connections list
     _hasConnection: function(conn) {
       for (var i=0;i< this.connections.length; i++) {
         var compConn = this.connections[i];

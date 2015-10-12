@@ -16,9 +16,9 @@ Template.newSubjectPanel.events({
     var name = e.target.name;
     var subject;
     if(name)
-      subject = new Subject({name: name});
+      subject = new Subject({_id: Router.current().params._id, name: name});
     else {
-      subject = new Subject();
+      subject = new Subject({_id: Router.current().params._id});
     }
     subject.owner = Meteor.userId();
     if(subject.validate()){
@@ -71,8 +71,8 @@ Template.newSubjectPanel.events({
     if(hypervideo.validate()) {
       hypervideo.save();
       e.target.hypervideo = hypervideo.get();
-      Meteor.subscribe("questions",hypervideo._id);
-      Meteor.subscribe("subvideos",hypervideo._id);
+      // Meteor.subscribe("questions",hypervideo._id);
+      // Meteor.subscribe("subvideos",hypervideo._id);
     }
   },
   'hypervideo-changed hypervideo-node': function(e, template) {
@@ -89,12 +89,15 @@ Template.newSubjectPanel.events({
   'upload-videos hypervideo-composer-area': function(e, template) {
     var composer = e.target;
     FS.Utility.eachFile(e, function(file) {
-      Videos.insert(file, function (err, fileObj) {
+      var tmpfile 	= new FS.File(file);
+      tmpfile.hypervideoId = e.target.hypervideo._id;
+      Videos.insert(tmpfile, function (err, fileObj) {
         if (err){
            // handle error
         } else {
            // handle success depending what you need to do
            var list = composer.fileObjects.splice(0, composer.fileObjects.length);
+           console.log(fileObj);
            list.push(fileObj);
            composer.fileObjects = list;
         }

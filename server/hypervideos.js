@@ -94,9 +94,8 @@ Meteor.startup(function () {
     },
   });
 
-
-  Meteor.publish('videos', function () {  
-    return Videos.find();
+  Meteor.publish('videos', function (hypervideoId) {
+    return Videos.find({hypervideoId: hypervideoId});
   });
 
   Videos.allow({
@@ -108,5 +107,52 @@ Meteor.startup(function () {
     },
     update: function(){
       return true;
-    },
+    }
+  });
+
+  Meteor.publishComposite('fullSubject', function(subjectId) {
+    return {
+        find: function() {
+            return Subjects.find({ _id: subjectId });
+        },
+        children: [
+          {
+            find: function(subject) {
+              return Hypervideos.find({ subjectId: subject._id });
+            },
+            children: [
+              {
+                find: function(hypervideo, subject) {
+                  return Subvideos.find({ hypervideoId: hypervideo._id });
+                }
+              },
+              {
+                find: function(hypervideo, subject) {
+                  return Questions.find({ hypervideoId: hypervideo._id });
+                }
+              },
+              {
+                find: function(hypervideo, subject) {
+                  return  Videos.find({ hypervideoId: hypervideo._id });
+                }
+              },
+            ]
+          }
+        ]
+    };
+  });
+
+  Meteor.publishComposite('userSubjects', function(userId) {
+    return {
+      find: function() {
+          return Subjects.find({ owner: userId });
+      },
+      children: [
+        {
+          find: function(subject) {
+            return Hypervideos.find({ subjectId: subject._id });
+          }
+        }
+      ]
+    };
   });
