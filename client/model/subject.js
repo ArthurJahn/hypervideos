@@ -81,8 +81,6 @@ Subject = Astro.createClass({
     removeConnection: function(connection) {
       var conns = this.connections;
       var length = conns.length;
-      console.log(conns);
-      console.log(connection);
       for (var i=0;i< length; i++) {
         var compConn = conns[i];
         if(compConn.first === connection.first &&

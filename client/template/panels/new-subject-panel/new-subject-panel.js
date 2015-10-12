@@ -11,7 +11,7 @@ Template.newSubjectPanel.helpers({
 
 Template.newSubjectPanel.events({
 
-// ======================== Subject Controll Methods =========================//
+// ======================== Subject Controll Events =========================//
   'subject-created subject-composer-area': function(e, template) {
     var name = e.target.name;
     var subject;
@@ -25,15 +25,22 @@ Template.newSubjectPanel.events({
       subject.save();
       e.target.subject = subject.get();
     }
-    else {
-      var errors = subject.getValidationErrors();
-      console.log(errors);
+    var errors = subject.getValidationErrors();
+    for(var key in errors) {
+      document.querySelector('#notify').message = '';
+      document.querySelector('#notify').message = errors[key+''];
     }
   },
   'subject-changed subject-composer-area': function(e, template) {
     var id = e.target.subject._id;
     var subject = Subject.findOne({_id:id});
     subject.setName(e.target.subject.name);
+
+    var errors = subject.getValidationErrors();
+    document.querySelector('#notify').message = '';
+    for(var key in errors) {
+      document.querySelector('#notify').message = errors[key+''];
+    }
   },
   'subject-deleted subject-composer-area': function(e, template) {
     var subject = Subject.findOne(e.target.subject._id);
@@ -62,7 +69,7 @@ Template.newSubjectPanel.events({
     subject.removeConnection(e.target._connection);
     e.target.subject.connections = subject.connections;
   },
-// ======================= Hypervideo Controll Methods =======================//
+// ======================= Hypervideo Controll Events =======================//
   'hypervideo-created hypervideo-node': function(e, template) {
     var col = e.target._col, row = e.target._row;
     var subjectId = e.target._subjectId;
@@ -71,8 +78,6 @@ Template.newSubjectPanel.events({
     if(hypervideo.validate()) {
       hypervideo.save();
       e.target.hypervideo = hypervideo.get();
-      // Meteor.subscribe("questions",hypervideo._id);
-      // Meteor.subscribe("subvideos",hypervideo._id);
     }
   },
   'hypervideo-changed hypervideo-node': function(e, template) {
@@ -89,7 +94,7 @@ Template.newSubjectPanel.events({
   'upload-videos hypervideo-composer-area': function(e, template) {
     var composer = e.target;
     FS.Utility.eachFile(e, function(file) {
-      var tmpfile 	= new FS.File(file);
+      var tmpfile = new FS.File(file);
       tmpfile.hypervideoId = e.target.hypervideo._id;
       Videos.insert(tmpfile, function (err, fileObj) {
         if (err){
@@ -97,7 +102,6 @@ Template.newSubjectPanel.events({
         } else {
            // handle success depending what you need to do
            var list = composer.fileObjects.splice(0, composer.fileObjects.length);
-           console.log(fileObj);
            list.push(fileObj);
            composer.fileObjects = list;
         }
@@ -120,7 +124,8 @@ Template.newSubjectPanel.events({
     hypervideo.removeConnection(e.target._connection);
     e.stopPropagation();
   },
-  // ======================== Subvideo Controll Methods =======================//
+
+  // ======================== Subvideo Controll Events =======================//
   'subvideo-created subvideo-node': function(e, template) {
     var node = e.target;
     var x = node._x, y = node._y;
@@ -143,7 +148,7 @@ Template.newSubjectPanel.events({
     subvideo.save();
   },
 
- // ======================== Question Controll Methods =======================//
+ // ======================== Question Controll Events =======================//
   'question-created question-node': function(e, template) {
     var node = e.target;
     var x = node._x, y = node._y;

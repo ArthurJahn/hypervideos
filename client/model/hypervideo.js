@@ -100,7 +100,6 @@ Hypervideo = Astro.Class({
     _hasConnection: function(conn) {
       for (var i=0;i< this.connections.length; i++) {
         var compConn = this.connections[i];
-        console.log(compConn);
         if ((conn.first === compConn.first &&
             conn.second === compConn.second) ||
            (conn.second === compConn.first &&
