@@ -67,14 +67,23 @@ Meteor.startup(function () {
   });
 
   Subvideos.allow({
-    insert: function(){
-      return true;
+    insert: function(doc){
+      if(doc.owner === this.userId)
+        return true;
+      else
+        return false;
     },
-    remove: function(){
-      return true;
+    remove: function(doc){
+      if(doc.owner === this.userId)
+        return true;
+      else
+        return false;
     },
-    update: function(){
-      return true;
+    update: function(doc){
+      if(doc.owner === this.userId)
+        return true;
+      else
+        return false;
     },
   });
 
@@ -83,14 +92,23 @@ Meteor.startup(function () {
   });
 
   Questions.allow({
-    insert: function(){
-      return true;
+    insert: function(doc){
+      if(doc.owner === this.userId)
+        return true;
+      else
+        return false;
     },
-    remove: function(){
-      return true;
+    remove: function(doc){
+      if(doc.owner === this.userId)
+        return true;
+      else
+        return false;
     },
-    update: function(){
-      return true;
+    update: function(doc){
+      if(doc.owner === this.userId)
+        return true;
+      else
+        return false;
     },
   });
 
