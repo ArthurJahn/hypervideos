@@ -84,11 +84,14 @@
     }
     .left {
       float: left;
+      margin: 0;
     }
     .toggleDrawer {
-      margin-left: 10px;
+      margin: 5px 0 0 10px;
       width: 75px;
       font-size: 11px;
+      height: 30px;
+      line-height: 15px;
     }
   </style>
   <template>
@@ -239,7 +242,7 @@
         this.fire('upload-videos');
       },
       createQuestion: function() {
-        
+
       },
       connectIdChanged: function (newConnectId) {
         var nodes = 'subvideo-node, connection-node, question-node';

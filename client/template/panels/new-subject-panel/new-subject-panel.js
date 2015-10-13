@@ -90,6 +90,7 @@ Template.newSubjectPanel.events({
     FS.Utility.eachFile(e, function(file) {
       var tmpfile = new FS.File(file);
       tmpfile.hypervideoId = e.target.hypervideo._id;
+      tmpfile.owner = Meteor.userId();
       Videos.insert(tmpfile, function (err, fileObj) {
         if (err){
            // error handled in collection filters
@@ -159,7 +160,7 @@ Template.newSubjectPanel.events({
     question.owner = Meteor.userId();
     question.save();
     node.question = question.get();
-    Template.newSubjectPanel.validate(subvideo);
+    Template.newSubjectPanel.validate(question);
   },
   'question-changed question-node': function(e, template) {
     var question = Question.findOne(e.target.question._id);
