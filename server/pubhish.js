@@ -60,6 +60,24 @@ Meteor.publishComposite('userSubjects', function(userId) {
   };
 });
 
+// Get a subject preview info
+// necessary when watching a subject
+Meteor.publishComposite('oneSubject', function(subjectId) {
+  return {
+    find: function() {
+      return Subjects.find({ _id: subjectId });
+    },
+    children: [
+      {
+        find: function(subject) {
+          return Hypervideos.find({ subjectId: subject._id });
+        }
+      }
+    ]
+  };
+});
+
+
 // Get all hypervideo content: questions, subvideos and videos
 // necessary when watching a hypervideo
 Meteor.publishComposite('fullHypervideo', function(hypervideoId) {
