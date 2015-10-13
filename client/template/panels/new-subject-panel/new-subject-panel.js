@@ -25,22 +25,14 @@ Template.newSubjectPanel.events({
       subject.save();
       e.target.subject = subject.get();
     }
-    var errors = subject.getValidationErrors();
-    for(var key in errors) {
-      document.querySelector('#notify').message = '';
-      document.querySelector('#notify').message = errors[key+''];
-    }
+    Template.newSubjectPanel.validate(subject);
   },
   'subject-changed subject-composer-area': function(e, template) {
     var id = e.target.subject._id;
     var subject = Subject.findOne({_id:id});
     subject.setName(e.target.subject.name);
 
-    var errors = subject.getValidationErrors();
-    document.querySelector('#notify').message = '';
-    for(var key in errors) {
-      document.querySelector('#notify').message = errors[key+''];
-    }
+    Template.newSubjectPanel.validate(subject);
   },
   'subject-deleted subject-composer-area': function(e, template) {
     var subject = Subject.findOne(e.target.subject._id);
@@ -79,6 +71,7 @@ Template.newSubjectPanel.events({
       hypervideo.save();
       e.target.hypervideo = hypervideo.get();
     }
+    Template.newSubjectPanel.validate(hypervideo);
   },
   'hypervideo-changed hypervideo-node': function(e, template) {
     var hypervideo = Hypervideo.findOne(e.target.hypervideo._id);
@@ -86,6 +79,7 @@ Template.newSubjectPanel.events({
     hypervideo.set('col', e.target.hypervideo.col);
     hypervideo.set('row', e.target.hypervideo.row);
     hypervideo.save();
+    Template.newSubjectPanel.validate(hypervideo);
   },
   'hypervideo-deleted hypervideo-node': function(e, template) {
     var hypervideo = Hypervideo.findOne(e.target.hypervideo._id);
@@ -98,9 +92,8 @@ Template.newSubjectPanel.events({
       tmpfile.hypervideoId = e.target.hypervideo._id;
       Videos.insert(tmpfile, function (err, fileObj) {
         if (err){
-           // handle error
+           // error handled in collection filters
         } else {
-           // handle success depending what you need to do
            var list = composer.fileObjects.splice(0, composer.fileObjects.length);
            list.push(fileObj);
            composer.fileObjects = list;
@@ -142,10 +135,13 @@ Template.newSubjectPanel.events({
     subvideo.owner = Meteor.userId();
     subvideo.save();
     node.subvideo = subvideo.get();
+
+    Template.newSubjectPanel.validate(subvideo);
   },
   'subvideo-changed subvideo-node': function(e, template) {
     var subvideo = Subvideo.findOne(e.target.subvideo._id);
     subvideo.save();
+    Template.newSubjectPanel.validate(subvideo);
   },
 
  // ======================== Question Controll Events =======================//
@@ -163,9 +159,19 @@ Template.newSubjectPanel.events({
     question.owner = Meteor.userId();
     question.save();
     node.question = question.get();
+    Template.newSubjectPanel.validate(subvideo);
   },
   'question-changed question-node': function(e, template) {
     var question = Question.findOne(e.target.question._id);
     question.save();
+    Template.newSubjectPanel.validate(subvideo);
   },
 });
+
+Template.newSubjectPanel.validate = function(model) {
+  document.querySelector('#notify').message = '';
+  var errors = model.getValidationErrors();
+  for(var key in errors) {
+    document.querySelector('#notify').message = errors[key+''];
+  }
+};
