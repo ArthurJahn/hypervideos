@@ -1,14 +1,10 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
 
 <dom-module id="hyper-player">
   <style media="screen">
-    .wrapper {
-      display: block;
-      height: auto;
-    }
     #video {
-      min-width: 70%;
-      width: auto;
+      width: 100%;
       height: auto;
       z-index: -100;
       background-size: cover;
@@ -29,7 +25,6 @@
         width: 49%;
       }
     }
-
     @media screen and (max-width: 780px) {
       #video {
         min-width: 100%;
@@ -45,7 +40,9 @@
         <source src="{{source}}" type="video/mp4">
         <source src="{{source}}" type="video/ogg">
       </video>
-      <textarea id="notes"></textarea>
+      <div class="text-container">
+        <paper-textarea label="text area with rows and max-rows" rows="3" max-rows="1"></paper-textarea>
+      </div>
     </div>
   </template>
   <script>

@@ -1,15 +1,51 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 
 <link rel="import" href="../hyper-player/hyper-player.html">
 
 <dom-module id="subject-player">
   <style media="screen">
+    #player {
+      margin-right: 1%;
+      float: left;
+      display: block;
+      width: 60%;
+    }
+    .tabs-container {
+      float: right;
+      width: 39%;
+    }
+    @media screen and (max-width: 800px) {
+      #player {
+        margin-right: 0;
+        float: left;
+        display: block;
+        width: 100%;
+      }
+      .tabs-container {
+        float: right;
+        width: 100%;
+      }
+    }
+
   </style>
   <template>
-    <div id="wrapper"
-    on-mouseover="onHover"
-    on-mouseout="onHout">
+    <div id="wrapper">
       <hyper-player id="player" hypervideo="{{hypervideo}}"></hyper-player>
+      <div class="tabs-container ">
+        <paper-tabs selected="{{selected}}" noink>
+          <paper-tab>ITEM ONE</paper-tab>
+          <paper-tab>ITEM TWO</paper-tab>
+          <paper-tab>ITEM THREE</paper-tab>
+        </paper-tabs>
+        <iron-pages selected="{{selected}}">
+          <div>Page 1</div>
+          <div>Page 2</div>
+          <div>Page 3</div>
+        </iron-pages>
+      </div>
     </div>
   </template>
   <script>
@@ -24,7 +60,11 @@
           type: Object,
         },
         userData: {
-          
+          type: Object,
+        },
+        selected: {
+          type: Number,
+          value: 0
         }
       },
     });
