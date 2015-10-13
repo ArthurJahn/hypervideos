@@ -9,7 +9,7 @@
     <div id="wrapper"
     on-mouseover="onHover"
     on-mouseout="onHout">
-      <hyper-player id="player" source="http://www.w3schools.com/html/mov_bbb.mp4" width="30%"></hyper-player>
+      <hyper-player id="player" hypervideo="{{hypervideo}}"></hyper-player>
     </div>
   </template>
   <script>
@@ -17,8 +17,14 @@
 //======================== Polymer Component Methods =========================//
       is: 'subject-player',
       properties: {
-        source: {
-          type: String,
+        hypervideo: {
+          type: Object,
+        },
+        subject: {
+          type: Object,
+        },
+        userData: {
+          
         }
       },
     });
