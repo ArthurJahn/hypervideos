@@ -89,6 +89,11 @@
         node._x = node._col * this._cSize + 3*this._cSize/4;
         node._y = node._row * this._rSize + this._rSize/2;
         node.moveToPos();
+      },
+      clearNodes: function() {
+        var container = this.$.container;
+        while (container.firstChild)
+          container.removeChild(container.firstChild);
       }
     });
   </script>

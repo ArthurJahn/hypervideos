@@ -153,6 +153,7 @@
     presentHypervideos: function() {
       var self = this;
       if(self.hypervideos) {
+        self.$.hypers.clearNodes();
         self.$.hypers.bounds = self._getGridBounds();
         for(var i=0; i< self.hypervideos.length; i++) {
           var hypervideo = self.hypervideos[i];
