@@ -1,51 +1,12 @@
-/* CSS declarations go here */
-/*@import url(http://fonts.googleapis.com/css?family=Muli);*/
+@import url(http://fonts.googleapis.com/css?family=Muli);
 * :focus {
   outline: none;
-}
-
-:root {
-  --dark-primary-color:       #455A64;
-  --default-primary-color:    #607D8B;
-  --light-primary-color:      #CFD8DC;
-  --text-primary-color:       #FFFFFF;
-  --accent-color:             #FFC107;
-  --sec-accent-color:         #D23216;
-  --trd-accent-color:         #12AE28;
-  --primary-background-color: #CFD8DC;
-  --primary-text-color:       #212121;
-  --secondary-text-color:     #727272;
-  --disabled-text-color:      #BDBDBD;
-  --divider-color:            #B3B3B3;
-  --light-divider-color:      #DCDCDC;
-
-
-  /* Components */
-
-  /* paper-drawer-panel */
-  --drawer-menu-color:           #ffffff;
-  --drawer-border-color:         1px solid #ccc;
-  --drawer-toolbar-border-color: 1px solid rgba(0, 0, 0, 0.22);
-
-  /* paper-menu */
-  --paper-menu-background-color: #fff;
-  --menu-link-color:             #111111;
-
-  /* paper-input */
- --paper-input-container-color:       rgba(255, 255, 255, 0.64);
- --paper-input-container-focus-color: rgba(255, 255, 255, 1);
- --paper-input-container-input-color: #fff;
 }
 
 body {
   font-family: 'Muli', sans-serif;
   margin: 0;
-  /*FIX ME - find a better way to do this*/
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
+
   user-select: none;
 }
 
@@ -119,6 +80,11 @@ body {
   margin: 13px 5px 13px 13px;
 }
 
+#dropShadow.has-shadow.paper-header-panel {
+  z-index: 9;
+}
+
+/*---------------------------------- menus -----------------------------------*/
 .topbar-menu {
   margin: 0;
   padding: 0;
@@ -154,7 +120,7 @@ body {
   margin: 0 15px 0 0;
 }
 
-/*--------------------------------- drawer -----------------------------------*/
+/*--------------------------------- inputs -----------------------------------*/
 .label-is-highlighted.paper-input-container label{
   color: #FFC107  !important;/*var(--accent-color);*/
 }
@@ -162,6 +128,7 @@ body {
   background-color: #FFC107  !important;/*var(--accent-color);*/
 }
 
+/*--------------------------------- login ------------------------------------*/
 #login-buttons .login-button, .accounts-dialog .login-button {
   font-family: 'Muli', sans-serif;
   line-height: 2;
@@ -173,12 +140,17 @@ body {
   background-color: #DCDCDC;
 }
 
-#dropShadow.has-shadow.paper-header-panel {
-  z-index: 9;
-}
-
 paper-spinner {
   position: absolute;
   left: 50%;
   top: 50%;
+}
+
+iron-autogrow-textarea {
+  background-image:
+    repeating-linear-gradient(#CDCDCD, #CDCDCD 1px, white 0, white 24px) !important;
+}
+
+.paper-tabs #selectionBar {
+    background-color: #FFC107  !important;/*var(--accent-color);*/
 }

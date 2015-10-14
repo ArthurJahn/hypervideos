@@ -5,25 +5,21 @@
   <style media="screen">
     #video {
       width: 100%;
-      height: auto;
+      height: 320px;
       z-index: -100;
       background-size: cover;
       overflow: hidden;
     }
     #notes {
-      vertical-align: top;
-      box-sizing: border-box;
-      border: none;
-      width: 29%;
-      height: inherit;
+      height: 100%;
+      background-image:
+        linear-gradient(to bottom, white, white 35px, rgba(0,0,0,0) 0),
+        repeating-linear-gradient(#CDCDCD, #CDCDCD 1px, white 0, white 24px);
     }
-    @media screen and (max-width: 1000px) {
-      #video {
-        min-width: 50%;
-      }
-      #notes {
-        width: 49%;
-      }
+    .text-container {
+      overflow: scroll;
+      min-height: 120px;
+      height: calc( 100vh - 410px );
     }
     @media screen and (max-width: 780px) {
       #video {
@@ -41,7 +37,7 @@
         <source src="{{source}}" type="video/ogg">
       </video>
       <div class="text-container">
-        <paper-textarea label="text area with rows and max-rows" rows="3" max-rows="1"></paper-textarea>
+        <paper-textarea id="notes" label="Anotações do hypervideo" value="{{notes}}"></paper-textarea>
       </div>
     </div>
   </template>
@@ -56,6 +52,10 @@
         source: {
           type: String,
           value: ''
+        },
+        notes: {
+          type: String,
+          value: 'lalalalal'
         }
       },
     });
