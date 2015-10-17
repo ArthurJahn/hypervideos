@@ -55,9 +55,24 @@
         },
         notes: {
           type: String,
-          value: 'lalalalal'
+          value: 'Escreva suas anotações aqui...'
+        },
+        subvideos: {
+          type: Array,
+          value: function() {
+            return [];
+          }
+        },
+        questions: {
+          type: Array,
+          value: function() {
+            return [];
+          },
         }
       },
+      attached: function() {
+        //fire event to get subvideos and questions
+      }
     });
   </script>
 </dom-module>
