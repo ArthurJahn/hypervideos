@@ -7,6 +7,14 @@
 
 <dom-module id="subject-player">
   <style media="screen">
+    #mapTab {
+      position: relative;
+      width: 100%;
+      height: 400px;
+    }
+    #mapTab subject-preview {
+      height: 360px;
+    }
     #player {
       margin-right: 1%;
       float: left;
@@ -29,7 +37,6 @@
         width: 100%;
       }
     }
-
   </style>
   <template>
     <div id="wrapper">
@@ -41,9 +48,15 @@
           <paper-tab>Mapa</paper-tab>
         </paper-tabs>
         <iron-pages selected="{{selected}}">
-          <div>Page 1</div>
-          <div>Page 2</div>
-          <div>Page 3</div>
+          <div id="questionsTab" class="animated fadeIn">
+            Page 1
+          </div>
+          <div id="subvideosTab" class="animated fadeIn">
+            Page 2
+          </div>
+          <div id="mapTab" class="animated fadeIn">
+            <subject-preview id="preview" subject="{{subject}}" hypervideos="{{hypervideos}}"></subject-preview>
+          </div>
         </iron-pages>
       </div>
     </div>
@@ -58,13 +71,34 @@
         },
         subject: {
           type: Object,
+          value: null,
+          observer: "subjectChanged"
+        },
+        hypervideos: {
+          type: Array,
+          value: function() {
+            return [];
+          },
         },
         userData: {
           type: Object,
         },
         selected: {
           type: Number,
-          value: 0
+          value: 2
+        }
+      },
+      attached: function() {
+        Polymer.dom.flush();
+        var self = this;
+        setTimeout(function(){
+          self.subjectChanged();
+        },1);
+      },
+      subjectChanged: function() {
+        var self = this;
+        if (self.subject) {
+          self.fire('get-hypervideos');
         }
       },
     });

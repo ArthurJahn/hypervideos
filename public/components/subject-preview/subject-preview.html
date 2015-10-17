@@ -93,6 +93,7 @@
       if(self.hypervideos) {
         self.$.hypers.clearNodes();
         self.$.hypers.bounds = self._getGridBounds();
+        console.log(self.$.hypers.bounds);
         for(var i=0; i< self.hypervideos.length; i++) {
           var hypervideo = self.hypervideos[i];
           var preview = new hypervideoPreview(hypervideo);
@@ -108,6 +109,7 @@
     _getGridBounds: function() {
       var self = this;
       var rect = self.$.gridarea.getBoundingClientRect();
+      console.log(rect);
       var bounds = {
         width: rect.right - rect.left,
         height: rect.bottom - rect.top,

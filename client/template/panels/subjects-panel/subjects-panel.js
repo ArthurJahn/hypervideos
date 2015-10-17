@@ -15,7 +15,8 @@ Template.subjectsPanel.events({
   'watch-subject subject-box': function (e, template) {
     var subject = e.target.subject;
     Session.set("title", subject.name);
-    Router.go('watchSubject', subject);
+    Session.set("subjectId", subject._id);
+    Router.go('watchSubject', {_id: subject._id});
   },
   'edit-subject subject-box': function (e, template) {
     var subject = e.target.subject;

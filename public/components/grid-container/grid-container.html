@@ -62,6 +62,7 @@
       setBounds: function() {
         var self = this;
         var rect = self.parentNode.getBoundingClientRect();
+        console.log(rect);
         var width = rect.right - rect.left;
         var height = rect.bottom - rect.top;
         self.bounds = {
