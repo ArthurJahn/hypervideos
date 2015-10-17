@@ -68,7 +68,13 @@
           value: function() {
             return [];
           },
-        }
+        },
+        connections: {
+          type: Array,
+          default: function() {
+            return [];
+          }
+        },
       },
       attached: function() {
         //fire event to get subvideos and questions

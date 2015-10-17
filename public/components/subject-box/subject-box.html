@@ -2,8 +2,7 @@
 <link rel="import" href="../../bower_components/paper-header-panel/paper-header-panel.html">
 <link rel="import" href="../../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
 
-<link rel="import" href="../../components/hypervideo-node/hypervideo-preview.html">
-<link rel="import" href="../../components/grid-container/grid-container.html">
+<link rel="import" href="../../components/subject-preview/subject-preview.html">
 
 <dom-module id="subject-box">
   <style>
@@ -35,50 +34,9 @@
       margin: 5px -3px;
       padding: 5px;
     }
-    #mainPanel .wrapper {
+    #mainPanel subject-preview {
       height: 360px;
     }
-    #backcanvas {
-      padding-top: 15px;
-      position: absolute;
-      width: 100%;
-      height: 280px;
-      background-color:rgba(246,246,246,1);/*var(--light-divider-color);*/
-    }
-    #backcanvas canvas{
-      width: 100%;
-      height: 100%;
-    }
-    #gridarea {
-      position: absolute;
-      width: 95%;
-      height: 245px;
-    }
-    #hypers {
-      position: absolute;
-      top:15px;
-    }
-    .wrapper .progress {
-      position: absolute;
-      top: 270px;
-      left: 5px;
-    }
-    progress {
-      position: absolute;
-      top: 290px;
-      left: 0;
-      height: 5px;
-      width: 100%;
-      -webkit-appearance: none;
-      background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
-    }
-    progress::-webkit-progress-bar {
-      background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
-    }
-    progress::-webkit-progress-value {
-      background-color: #FFC107;
-    }
-
     @media screen and (max-width: 800px) {
       #mainPanel {
         float: left;
@@ -98,18 +56,7 @@
           <paper-icon-button icon="delete" on-tap="discardSubject"></paper-icon-button>
         </span>
       </paper-toolbar>
-      <div class="wrapper">
-        <div id="backcanvas">
-          <div id="gridarea"></div>
-          <canvas id="canvas"></canvas>
-        </div>
-        <grid-container id="hypers">
-        </grid-container>
-        <div class="progress">
-          <span>{{progress}}</span> % concluído
-        </div>
-        <progress value="{{progress}}" max="100"></progress>
-      </div>
+      <subject-preview id="preview" subject="{{subject}}" hypervideos="{{hypervideos}}"></subject-preview>
     </paper-header-panel>
   </template>
   <script>
@@ -128,10 +75,6 @@
         },
         observer: "presentHypervideos"
       },
-      progress: {
-        type: Number,
-        value: 50
-      }
     },
     listeners: {
       'iron-resize': '_onIronResize'
@@ -141,26 +84,12 @@
     ],
     attached: function() {
       var self = this;
-      self.$.hypers.bounds = self._getGridBounds();
       self.subjectChanged();
     },
     subjectChanged: function() {
       var self = this;
       if (self.subject) {
         self.fire('get-hypervideos');
-      }
-    },
-    presentHypervideos: function() {
-      var self = this;
-      if(self.hypervideos) {
-        self.$.hypers.clearNodes();
-        self.$.hypers.bounds = self._getGridBounds();
-        for(var i=0; i< self.hypervideos.length; i++) {
-          var hypervideo = self.hypervideos[i];
-          var preview = new hypervideoPreview(hypervideo);
-          self.$.hypers.appendGridChild(preview);
-        }
-        this._drawConnections();
       }
     },
     watchSubject: function() {
@@ -172,55 +101,8 @@
     discardSubject: function() {
       this.fire('subject-deleted');
     },
-    _getGridBounds: function() {
-      var self = this;
-      var rect = self.$.gridarea.getBoundingClientRect();
-      var bounds = {
-        width: rect.right - rect.left,
-        height: rect.bottom - rect.top,
-        x: rect.left,
-        y: rect.top + 10
-      }
-      return bounds;
-    },
     _onIronResize: function() {
-      this.$.hypers.bounds = this._getGridBounds();
-      this._drawConnections();
-    },
-    _drawConnections: function() {
-      var self = this;
-      if(self.subject) {
-        var canvasScale = 3;
-        var lineWidth = 4;
-        var connections = self.subject.connections;
-        var canvas = self.$.canvas;
-        canvas.width  = canvasScale * canvas.offsetWidth;
-        canvas.height = canvasScale * canvas.offsetHeight;
-        var ctx = canvas.getContext("2d");
-
-        ctx.beginPath();
-        for(var i=0; i< connections.length; i++) {
-          var conn = connections[i];
-          var first = self._findHypervideoNode(conn.first);
-          var second = self._findHypervideoNode(conn.second);
-          if(first && second) {
-            var firstPos = first.getPos();
-            var secondPos = second.getPos();
-            var x1 = canvasScale * (firstPos.x);
-            var y1 = canvasScale * (firstPos.y);
-            var x2 = canvasScale * (secondPos.x);
-            var y2 = canvasScale * (secondPos.y);
-            ctx.moveTo(x1, y1);
-            ctx.lineTo(x2, y2);
-          }
-        }
-        ctx.lineWidth = lineWidth;
-        ctx.stroke();
-      }
-    },
-    _findHypervideoNode: function(id) {
-      var self = this;
-      return self.querySelector('#_'+id);
+      this.$.preview.onResize();
     },
   });
   </script>
