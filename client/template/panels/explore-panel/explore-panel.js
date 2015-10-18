@@ -1,15 +1,22 @@
 Template.explorePanel.helpers({
-  counter: function () {
-    return Session.get('counter');
-  },
-  show: function () {
-    return Session.get('activePanel') === "2";
+  subjects: function () {
+    var subjects = [];
+    Subjects.find().fetch().forEach(function(subject){
+      subjects.push(subject.get());
+    });
+    return JSON.stringify(subjects);
   }
 });
 
 Template.explorePanel.events({
-  'click button': function () {
-    // increment the counter when button is clicked
-    Session.set('counter', Session.get('counter') + 1);
-  }
+  'get-hypervideos subject-box': function (e, template) {
+    var subject = Subject.findOne({_id : e.target.subject._id});
+    e.target.hypervideos = subject.hypervideos();
+  },
+  'watch-subject subject-box': function (e, template) {
+    var subject = e.target.subject;
+    Session.set("title", subject.name);
+    Session.set("subjectId", subject._id);
+    Router.go('watchSubject', {_id: subject._id});
+  },
 });

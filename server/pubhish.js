@@ -60,6 +60,24 @@ Meteor.publishComposite('userSubjects', function(userId) {
   };
 });
 
+// Get all subjects, if user is logged, his subjects won't appear
+// Necessary when listing explore subjects preview
+Meteor.publishComposite('exploreSubjects', function(userId) {
+  return {
+    find: function() {
+      return Subjects.find({ owner: { $nin: [ userId ] } });
+    },
+    children: [
+      {
+        find: function(subject) {
+          return Hypervideos.find({ subjectId: subject._id });
+        }
+      }
+    ]
+  };
+});
+
+
 // Get a subject preview info
 // necessary when watching a subject
 Meteor.publishComposite('oneSubject', function(subjectId) {
