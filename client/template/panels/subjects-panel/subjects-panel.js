@@ -8,23 +8,23 @@ Template.subjectsPanel.helpers({
   }
 });
 Template.subjectsPanel.events({
-  'get-hypervideos subject-box': function (e, template) {
+  'get-hypervideos user-subject-box': function (e, template) {
     var subject = Subject.findOne({_id : e.target.subject._id});
     e.target.hypervideos = subject.hypervideos();
   },
-  'watch-subject subject-box': function (e, template) {
+  'watch-subject user-subject-box': function (e, template) {
     var subject = e.target.subject;
     Session.set("title", subject.name);
     Session.set("subjectId", subject._id);
     Router.go('watchSubject', {_id: subject._id});
   },
-  'edit-subject subject-box': function (e, template) {
+  'edit-subject user-subject-box': function (e, template) {
     var subject = e.target.subject;
     Session.set("title", subject.name);
     Session.set("subjectId", subject._id);
     Router.go('subjectPanel', {_id: subject._id});
   },
-  'subject-deleted subject-box': function(e, template) {
+  'subject-deleted user-subject-box': function(e, template) {
     var subject = Subject.findOne(e.target.subject._id);
     subject.remove();
   },

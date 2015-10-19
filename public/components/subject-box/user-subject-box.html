@@ -4,7 +4,7 @@
 
 <link rel="import" href="../../components/subject-preview/subject-preview.html">
 
-<dom-module id="subject-box">
+<dom-module id="user-subject-box">
   <style>
     #mainPanel {
       float: left;
@@ -49,12 +49,8 @@
         <p>{{subject.name}}</p>
         <span>
           <paper-icon-button icon="av:play-circle-filled" on-tap="watchSubject"></paper-icon-button>
-          <template is="dom-if" if="{{inlibrary}}">
-            <paper-icon-button icon="hyper:folder-remove" on-tap="removeFromLib"></paper-icon-button>
-          </template>
-          <template is="dom-if" if="{{!inlibrary}}">
-            <paper-icon-button icon="hyper:folder-add" on-tap="addToLib"></paper-icon-button>
-          </template>
+          <paper-icon-button icon="create" on-tap="editSubject"></paper-icon-button>
+          <paper-icon-button icon="delete" on-tap="discardSubject"></paper-icon-button>
         </span>
       </paper-toolbar>
       <subject-preview id="preview" subject="{{subject}}" hypervideos="{{hypervideos}}"></subject-preview>
@@ -62,7 +58,7 @@
   </template>
   <script>
   Polymer({
-    is: 'subject-box',
+    is: 'user-subject-box',
     properties: {
       subject: {
         type: Object,
@@ -75,10 +71,6 @@
           return [];
         },
       },
-      inlibrary: {
-        type: Boolean,
-        value: false
-      }
     },
     listeners: {
       'iron-resize': '_onIronResize'
@@ -99,13 +91,11 @@
     watchSubject: function() {
       this.fire("watch-subject");
     },
-    removeFromLib: function() {
-      this.fire("remove-subject");
-      this.inlibrary = !this.inlibrary;
+    editSubject: function() {
+      this.fire("edit-subject");
     },
-    addToLib: function() {
-      this.fire('add-subject');
-      this.inlibrary = !this.inlibrary;
+    discardSubject: function() {
+      this.fire('subject-deleted');
     },
     _onIronResize: function() {
       this.$.preview.onResize();
