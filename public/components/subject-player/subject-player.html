@@ -4,13 +4,17 @@
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 
 <link rel="import" href="../hyper-player/hyper-player.html">
+<link rel="import" href="../subvideo-node/subvideo-preview.html">
 
 <dom-module id="subject-player">
   <style media="screen">
+    #questionsTab,
+    #subvideosTab,
     #mapTab {
       position: relative;
       width: 100%;
       height: 400px;
+      overflow: scroll;
     }
     #mapTab subject-preview {
       height: 360px;
@@ -40,7 +44,11 @@
   </style>
   <template>
     <div id="wrapper">
-      <hyper-player id="player" hypervideo="{{hypervideo}}"></hyper-player>
+      <hyper-player id="player"
+        hypervideo="{{hypervideo}}"
+        subvideos="{{subvideos}}"
+        questions="{{questions}}">
+      </hyper-player>
       <div class="tabs-container ">
         <paper-tabs selected="{{selected}}" noink>
           <paper-tab>Questões</paper-tab>
@@ -52,7 +60,9 @@
             Page 1
           </div>
           <div id="subvideosTab" class="animated fadeIn">
-            Page 2
+            <template is="dom-repeat" items="{{subvideos}}" as="subvideo">
+              <subvideo-preview subvideo="{{subvideo}}"></subvideo-preview>
+            </template>
           </div>
           <div id="mapTab" class="animated fadeIn">
             <subject-preview id="preview" subject="{{subject}}" hypervideos="{{hypervideos}}"></subject-preview>
@@ -68,17 +78,32 @@
       properties: {
         hypervideo: {
           type: Object,
-        },
-        subject: {
-          type: Object,
-          value: null,
-          observer: "subjectChanged"
+          notify: true
         },
         hypervideos: {
           type: Array,
           value: function() {
             return [];
           },
+        },
+        subvideos: {
+          type: Array,
+          value: function() {
+            return [];
+          },
+          notify: true
+        },
+        questions: {
+          type: Array,
+          value: function() {
+            return [];
+          },
+          notify: true
+        },
+        subject: {
+          type: Object,
+          value: null,
+          observer: "subjectChanged"
         },
         userData: {
           type: Object,
@@ -100,6 +125,8 @@
         if (self.subject) {
           self.fire('get-hypervideos');
         }
+        if(self.hypervideos.length > 0)
+          self.hypervideo = self.hypervideos[0];
       },
     });
   </script>

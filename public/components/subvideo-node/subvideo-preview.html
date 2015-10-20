@@ -1,0 +1,84 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+<dom-module id="subvideo-preview">
+  <style media="screen">
+    #wrapper {
+      width: 100%;
+      background: #fff;
+      overflow: auto;
+      padding: 5px;
+    }
+    .thumbnail {
+      position: relative;
+      float: left;
+      width: 30%;
+      padding: 12%;
+      box-sizing: border-box;
+      background: #DCDCDC;
+    }
+    #play {
+      position: absolute;
+      display: none;
+      left: 50%;
+      top: 50%;
+      height: 50px;
+      width: 50px;
+      margin-left: -25px;
+      margin-top: -25px;
+      color: #fff;
+    }
+    .info {
+      position: relative;
+      width: 64%;
+      margin-left: 32%;
+      padding: 0 2% 1%;
+    }
+  </style>
+  <template>
+    <div id="wrapper"
+      on-mouseover="onHover"
+      on-mouseout="onHout">
+      <div class="thumbnail">
+        <iron-icon id="play"
+        class="animated fadeIn"
+        icon="av:play-circle-filled"></iron-icon>
+      </div>
+      <div class="info">
+        <h4>{{subvideo.name}}</h4>
+        <span>{{subvideo.description}}</span>
+      </div>
+    </div>
+  </template>
+  <script>
+    Polymer({
+//======================== Polymer Component Methods =========================//
+      is: 'subvideo-preview',
+      properties: {
+        // property that holds the model element: a Subvideo
+        subvideo: {
+          type: Object,
+          value: null,
+          observer: "subvideoChanged"
+        }
+      },
+      attached: function() {
+        this._background = this.$.wrapper.style.background;
+      },
+      onHover: function() {
+        this.$.wrapper.style.background = '#DCDCDC';
+        this.$.play.style.display = "block";
+      },
+      onHout: function() {
+        this.$.wrapper.style.background = this._background;
+        this.$.play.style.display = "none";
+      },
+      subvideoChanged: function() {
+        if(this.subvideo){
+          this.id = "_"+this.subvideo._id;
+        }
+      },
+    });
+  </script>
+</dom-module>

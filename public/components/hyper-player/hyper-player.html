@@ -57,17 +57,24 @@
           type: String,
           value: 'Escreva suas anotações aqui...'
         },
+        hypervideo: {
+          type: Object,
+          observer: "hypervideoChanged",
+          notify: true
+        },
         subvideos: {
           type: Array,
           value: function() {
             return [];
-          }
+          },
+          notify: true
         },
         questions: {
           type: Array,
           value: function() {
             return [];
           },
+          notify: true
         },
         connections: {
           type: Array,
@@ -76,8 +83,9 @@
           }
         },
       },
-      attached: function() {
-        //fire event to get subvideos and questions
+      hypervideoChanged: function() {
+        this.fire('get-subvideos');
+        console.log('get-subvideos');
       }
     });
   </script>
