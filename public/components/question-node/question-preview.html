@@ -1,0 +1,73 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+<dom-module id="question-preview">
+  <style media="screen">
+    #wrapper {
+      width: 100%;
+      background: #fff;
+      overflow: auto;
+      padding: 5px;
+    }
+    #play {
+      position: absolute;
+      display: none;
+      left: 50%;
+      top: 50%;
+      height: 50px;
+      width: 50px;
+      margin-left: -25px;
+      margin-top: -25px;
+      color: #fff;
+    }
+    .info {
+      position: relative;
+      width: 96%;
+      padding: 0 2% 1%;
+    }
+  </style>
+  <template>
+    <div id="wrapper"
+      on-mouseover="onHover"
+      on-mouseout="onHout">
+      <div class="info">
+        <h4>{{question.name}}</h4>
+        <span>{{question.description}}</span>
+      </div>
+      <ul>
+        <template is="dom-repeat" items="{{question.answers}}" as="answer">
+          <li>{{answer}}</li>
+        </template>
+      </ul>
+    </div>
+  </template>
+  <script>
+    Polymer({
+//======================== Polymer Component Methods =========================//
+      is: 'question-preview',
+      properties: {
+        // property that holds the model element: a Subvideo
+        question: {
+          type: Object,
+          value: null,
+          observer: "questionChanged"
+        }
+      },
+      attached: function() {
+        this._background = this.$.wrapper.style.background;
+      },
+      onHover: function() {
+        this.$.wrapper.style.background = '#DCDCDC';
+      },
+      onHout: function() {
+        this.$.wrapper.style.background = this._background;
+      },
+      questionChanged: function() {
+        if(this.question){
+          this.id = "_"+this.question._id;
+        }
+      },
+    });
+  </script>
+</dom-module>

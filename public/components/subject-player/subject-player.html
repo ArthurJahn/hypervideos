@@ -5,6 +5,7 @@
 
 <link rel="import" href="../hyper-player/hyper-player.html">
 <link rel="import" href="../subvideo-node/subvideo-preview.html">
+<link rel="import" href="../question-node/question-preview.html">
 
 <dom-module id="subject-player">
   <style media="screen">
@@ -57,7 +58,9 @@
         </paper-tabs>
         <iron-pages selected="{{selected}}">
           <div id="questionsTab" class="animated fadeIn">
-            Page 1
+            <template is="dom-repeat" items="{{questions}}" as="question">
+              <question-preview question="{{question}}"></question-preview>
+            </template>
           </div>
           <div id="subvideosTab" class="animated fadeIn">
             <template is="dom-repeat" items="{{subvideos}}" as="subvideo">

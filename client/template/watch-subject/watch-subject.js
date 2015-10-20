@@ -15,11 +15,12 @@ Template.watchSubject.events({
   },
   'get-subvideos hyper-player': function (e, template) {
     var hypervideo = Hypervideo.findOne({_id : e.target.hypervideo._id});
-    console.log(hypervideo);
+
     e.target.subvideos = hypervideo.subvideos();
   },
   'get-questions hyper-player': function (e, template) {
     var hypervideo = Hypervideo.findOne({_id : e.target.hypervideo._id});
+    console.log(hypervideo);
     e.target.questions = hypervideo.questions();
   },
 });
