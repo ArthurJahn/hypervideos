@@ -86,6 +86,10 @@
       hypervideoChanged: function() {
         this.fire('get-subvideos');
         this.fire('get-questions');
+        this.getSource();
+      },
+      getSource: function() {
+        this.fire('get-source-subvideo');
       }
     });
   </script>

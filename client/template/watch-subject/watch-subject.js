@@ -20,7 +20,11 @@ Template.watchSubject.events({
   },
   'get-questions hyper-player': function (e, template) {
     var hypervideo = Hypervideo.findOne({_id : e.target.hypervideo._id});
-    console.log(hypervideo);
     e.target.questions = hypervideo.questions();
+  },
+  'get-source-subvideo hyper-player': function (e, template) {
+    var hypervideo = Hypervideo.findOne({_id : e.target.hypervideo._id});
+    var source = Videos.findOne(hypervideo.subvideos()[0].mediaId).url();
+    e.target.source = source;
   },
 });
