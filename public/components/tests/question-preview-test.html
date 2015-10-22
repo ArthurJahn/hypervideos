@@ -1,0 +1,51 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../web-component-tester/browser.js"></script>
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="../question-node/question-preview.html">
+  </head>
+  <body>
+
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <question-preview></question-preview>
+    <div id="newNode"></div>
+    <script>
+      var sNode = document.querySelector('question-preview');
+      function setUp() {
+        sNode.question = {
+          _id: '1',
+          name: 'question',
+          description: "Description",
+          answers: ['ans1','ans2'],
+          x: 10,
+          y: 20,
+        };
+      }
+      suite('<question-preview>', function() {
+        test('defines the "question" property', function() {
+          setUp();
+          assert.equal(sNode.question._id, '1');
+        });
+        test('verify event node id setup', function(){
+          setUp();
+          assert.equal(sNode.id , "_"+sNode.question._id);
+        });
+      });
+    </script>
+  </body>
+</html>
