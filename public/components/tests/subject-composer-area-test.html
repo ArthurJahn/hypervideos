@@ -57,14 +57,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           assert.isTrue(eventFired);
           assert.equal(hComposer.subject.name, 'new name');
         });
-        test('verify "get-hypervideos" event fired',function(){
-          var eventFired = false;
-          hComposer.addEventListener('get-hypervideos', function(){
-            eventFired = true;
-          });
-          hComposer.subject = {_id:'hUdvV2xgK31k9', name:'test'};
-          assert.isTrue(eventFired);
-        });
       });
     </script>
   </body>
