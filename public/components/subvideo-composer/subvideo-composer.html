@@ -106,6 +106,7 @@
         <paper-textarea id="subvideoDescription"
           name="description"
           label="Descrição do Subvideo"
+          value="{{subvideo.description}}"
           on-change="updateSubvideoDescription">
         </paper-textarea>
       </div>
@@ -113,7 +114,6 @@
   </template>
   <script>
     subvideoComposer = Polymer({
-
       is: 'subvideo-composer',
       properties: {
         file: Object,
@@ -156,10 +156,12 @@
         var input = e.target;
         this.name = input.value;
         this.subvideo.name = this.name;
+        this.fire('subvideo-changed');
       },
       updateSubvideoDescription: function(e) {
         var input = e.target;
         this.subvideo.description = input.value;
+        this.fire('subvideo-changed');
       },
       _fireUploaded: function() {
         var self = this;

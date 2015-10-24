@@ -139,8 +139,10 @@ Template.newSubjectPanel.events({
 
     Template.newSubjectPanel.validate(subvideo);
   },
-  'subvideo-changed subvideo-node': function(e, template) {
+  'subvideo-changed subvideo-composer': function(e, template) {
     var subvideo = Subvideo.findOne(e.target.subvideo._id);
+    subvideo.set('name', e.target.subvideo.name);
+    subvideo.set('description', e.target.subvideo.description);
     subvideo.save();
     Template.newSubjectPanel.validate(subvideo);
   },
@@ -162,10 +164,13 @@ Template.newSubjectPanel.events({
     node.question = question.get();
     Template.newSubjectPanel.validate(question);
   },
-  'question-changed question-node': function(e, template) {
+  'question-changed question-composer': function(e, template) {
     var question = Question.findOne(e.target.question._id);
+    question.set('name', e.target.question.name);
+    question.set('description', e.target.question.description);
+    question.set('answers', e.target.question.answers);
     question.save();
-    Template.newSubjectPanel.validate(subvideo);
+    Template.newSubjectPanel.validate(question);
   },
 });
 

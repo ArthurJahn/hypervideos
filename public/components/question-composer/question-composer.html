@@ -126,16 +126,19 @@
         var input = e.target;
         this.name = input.value;
         this.question.name = this.name;
+        this.fire('question-changed');
       },
       updateQuestionDescription: function(e) {
         var self = this;
         var input = e.target;
         self.question.description = input.value;
         self._setCurrentHeight();
+        this.fire('question-changed');
       },
       updateQuestionAnswer: function(e) {
         var input = e.target;
         this.answers[this._answerIndex] = input.value;
+        this.fire('question-changed');
       },
       handleAnswerFocus: function(e){
         var value = e.target.value;
@@ -153,6 +156,7 @@
           self.answers = answers;
           self.question.answers = answers;
           self._setCurrentHeight();
+          this.fire('question-changed');
         } if(self.maxAnswers === 5){
           self.maxAnswers = true;
         }

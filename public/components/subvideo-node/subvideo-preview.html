@@ -39,7 +39,8 @@
   <template>
     <div id="wrapper"
       on-mouseover="onHover"
-      on-mouseout="onHout">
+      on-mouseout="onHout"
+      on-tap="watchSubvideo">
       <div class="thumbnail">
         <iron-icon id="play"
         class="animated fadeIn"
@@ -79,6 +80,9 @@
           this.id = "_"+this.subvideo._id;
         }
       },
+      watchSubvideo: function() {
+        this.fire('watch-subvideo');
+      }
     });
   </script>
 </dom-module>
