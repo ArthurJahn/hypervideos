@@ -122,3 +122,7 @@ Meteor.publishComposite('fullHypervideo', function(hypervideoId) {
     ]
   };
 });
+
+Meteor.publish('videos', function(){
+  return  Videos.find();
+});

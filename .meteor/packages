@@ -23,9 +23,9 @@ accounts-ui
 velocity:console-reporter
 iron:router
 cfs:standard-packages
-cfs:gridfs
 jagi:astronomy
 jagi:astronomy-validators
 jagi:astronomy-timestamp-behavior
 mike:mocha
 reywood:publish-composite
+cfs:filesystem

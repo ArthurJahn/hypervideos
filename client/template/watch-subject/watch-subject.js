@@ -24,7 +24,9 @@ Template.watchSubject.events({
   },
   'get-source-subvideo hyper-player': function (e, template) {
     var hypervideo = Hypervideo.findOne({_id : e.target.hypervideo._id});
-    var source = Videos.findOne(hypervideo.subvideos()[0].mediaId).url();
-    e.target.source = source;
+    var subvideo = hypervideo.subvideos()[0];
+    var sourceSubvideo = subvideo.get();
+    sourceSubvideo.source = subvideo.media().url();
+    e.target.subvideo = sourceSubvideo;
   },
 });

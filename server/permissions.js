@@ -21,8 +21,32 @@ var userPermissions = {
   },
 };
 
+var mediaPermissions = {
+  insert: function(doc){
+    if(doc.owner === this.userId)
+      return true;
+    else
+      return false;
+  },
+  remove: function(doc){
+    if(doc.owner === this.userId)
+      return true;
+    else
+      return false;
+  },
+  update: function(doc){
+    if(doc.owner === this.userId)
+      return true;
+    else
+      return false;
+  },
+  download: function(doc) {
+    return true;
+  }
+};
+
 Subjects.allow(userPermissions);
 Hypervideos.allow(userPermissions);
 Subvideos.allow(userPermissions);
 Questions.allow(userPermissions);
-Videos.allow(userPermissions);
+Videos.allow(mediaPermissions);

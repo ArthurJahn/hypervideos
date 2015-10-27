@@ -5,9 +5,10 @@
   <style media="screen">
     #video {
       width: 100%;
-      height: 320px;
+      height: 295px;
       z-index: -100;
       background-size: cover;
+      background: black;
       overflow: hidden;
     }
     #notes {
@@ -21,6 +22,9 @@
       min-height: 120px;
       height: calc( 100vh - 410px );
     }
+    h5 {
+      margin: 15.5px 0;
+    }
     @media screen and (max-width: 780px) {
       #video {
         min-width: 100%;
@@ -32,9 +36,9 @@
   </style>
   <template>
     <div class="wrapper">
-      <video id="video" controls autoplay poster="{{poster}}">
-        <source src="{{source}}" type="video/mp4">
-        <source src="{{source}}" type="video/ogg">
+      <h5>{{subvideo.name}}</h5>
+      <video id="video" controls autoplay name="media">
+        <source src="{{subvideo.source}}" type="video/mp4">
       </video>
       <div class="text-container">
         <paper-textarea id="notes" label="Anotações do hypervideo" value="{{notes}}"></paper-textarea>
@@ -49,9 +53,9 @@
           type: String,
           value: ''
         },
-        source: {
-          type: String,
-          value: ''
+        subvideo: {
+          type: Object,
+          observer: 'subvideoChanged'
         },
         notes: {
           type: String,
@@ -90,6 +94,11 @@
       },
       getSource: function() {
         this.fire('get-source-subvideo');
+      },
+      subvideoChanged: function() {
+        this.$.video.src = this.subvideo.source;
+        this.$.video.load();
+        this.$.video.play();
       }
     });
   </script>
