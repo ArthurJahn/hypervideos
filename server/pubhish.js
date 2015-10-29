@@ -3,9 +3,13 @@ Meteor.startup(function () {
   if (Subjects.find().count() !== 0) {
     Subjects.remove({});
     Hypervideos.remove({});
-    Videos.remove({});
     Subvideos.remove({});
     Questions.remove({});
+
+    Videos.remove({});
+
+    LibrarySubjects.remove({});
+    VisitedHypervideos.remove({});
   }
 });
 
@@ -56,9 +60,27 @@ Meteor.publishComposite('userSubjects', function(userId) {
           return Hypervideos.find({ subjectId: subject._id });
         }
       }
+    ],
+  };
+});
+
+// Get all logged user's librarySubjects
+// Necessary when showing user library
+Meteor.publishComposite('userLibrary', function(userId) {
+  return {
+    find: function() {
+      return LibrarySubjects.find({userId: userId});
+    },
+    children: [
+      {
+        find: function(librarySubject) {
+          VisitedHypervideos.find({librarySubjectId: librarySubject._id});
+        }
+      }
     ]
   };
 });
+
 
 // Get all subjects, if user is logged, his subjects won't appear
 // Necessary when listing explore subjects preview
@@ -72,7 +94,7 @@ Meteor.publishComposite('exploreSubjects', function(userId) {
         find: function(subject) {
           return Hypervideos.find({ subjectId: subject._id });
         }
-      }
+      },
     ]
   };
 });
@@ -121,8 +143,4 @@ Meteor.publishComposite('fullHypervideo', function(hypervideoId) {
       },
     ]
   };
-});
-
-Meteor.publish('videos', function(){
-  return  Videos.find();
 });

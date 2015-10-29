@@ -15,7 +15,6 @@ Template.watchSubject.events({
   },
   'get-subvideos hyper-player': function (e, template) {
     var hypervideo = Hypervideo.findOne({_id : e.target.hypervideo._id});
-
     e.target.subvideos = hypervideo.subvideos();
   },
   'get-questions hyper-player': function (e, template) {
@@ -28,5 +27,8 @@ Template.watchSubject.events({
     var sourceSubvideo = subvideo.get();
     sourceSubvideo.source = subvideo.media().url();
     e.target.subvideo = sourceSubvideo;
+  },
+  'hypervideo-visited hyper-player': function(e, template) {
+    var hypervideo = Hypervideo.findOne({_id : e.target.hypervideo._id});
   },
 });

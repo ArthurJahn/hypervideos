@@ -13,6 +13,13 @@ LibrarySubject = Astro.Class({
     completed: {
       type: 'number',
       default: 0
+    },
+    _id: {
+      type: 'string',
+      default: function() {
+        return this.userId + this.subjectId;
+      },
+      validator: Validators.unique(),
     }
   },
   methods: {

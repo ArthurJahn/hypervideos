@@ -49,4 +49,8 @@ Subjects.allow(userPermissions);
 Hypervideos.allow(userPermissions);
 Subvideos.allow(userPermissions);
 Questions.allow(userPermissions);
+
 Videos.allow(mediaPermissions);
+
+LibrarySubjects.allow(userPermissions);
+VisitedHypervideos.allow(userPermissions);

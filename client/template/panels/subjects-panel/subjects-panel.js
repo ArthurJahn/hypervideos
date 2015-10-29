@@ -14,9 +14,14 @@ Template.subjectsPanel.events({
   },
   'watch-subject user-subject-box': function (e, template) {
     var subject = e.target.subject;
+    var subjectId = e.target.subject._id;
     Session.set("title", subject.name);
-    Session.set("subjectId", subject._id);
-    Router.go('watchSubject', {_id: subject._id});
+    Session.set("subjectId", subjectId);
+    Router.go('watchSubject', {_id: subjectId});
+  },
+  'add-subject user-subject-box': function (e, template) {
+    var subject = e.target.subject;
+    var id = subject._id;
   },
   'edit-subject user-subject-box': function (e, template) {
     var subject = e.target.subject;
@@ -28,4 +33,5 @@ Template.subjectsPanel.events({
     var subject = Subject.findOne(e.target.subject._id);
     subject.remove();
   },
+
 });
