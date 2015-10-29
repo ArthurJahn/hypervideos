@@ -16,16 +16,13 @@ LibrarySubject = Astro.Class({
     },
     _id: {
       type: 'string',
-      default: function() {
-        return this.userId + this.subjectId;
-      },
       validator: Validators.unique(),
     }
   },
   methods: {
     watchedHypervideos: function() {
       return VisitedHypervideo.fund({librarySubjectId: this._id}).fetch();
-    }
+    },
   },
   behaviors: ['timestamp']
 });
