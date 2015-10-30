@@ -99,7 +99,6 @@ Meteor.publishComposite('exploreSubjects', function(userId) {
   };
 });
 
-
 // Get a subject preview info
 // necessary when watching a subject
 Meteor.publishComposite('oneSubject', function(subjectId) {

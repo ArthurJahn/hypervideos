@@ -29,18 +29,18 @@ Template.explorePanel.events({
       userId: Meteor.userId(),
       subjectId: e.target.subject._id
     });
-    console.log(librarySubject);
     librarySubject.remove();
   }
 });
 
 Template.explorePanel.addLibrarySubject = function(subjectId) {
   var id = (Meteor.userId() + subjectId);
-  console.log(id);
   var librarySubject = new LibrarySubject({
     subjectId: subjectId,
     userId: Meteor.userId(),
     _id: id,
   });
-  librarySubject.save();
+  if(librarySubject.validate()) {
+    librarySubject.save();
+  }
 };
