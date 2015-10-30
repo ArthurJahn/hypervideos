@@ -79,6 +79,7 @@ Meteor.publishComposite('userSubjects', function(userId) {
 });
 
 // Get all logged user's librarySubjects
+// and vinculated subjects and hypervideos
 // Necessary when showing user library
 Meteor.publishComposite('userLibrary', function(userId) {
   return {
@@ -88,7 +89,17 @@ Meteor.publishComposite('userLibrary', function(userId) {
     children: [
       {
         find: function(librarySubject) {
-          VisitedHypervideos.find({librarySubjectId: librarySubject._id});
+          return VisitedHypervideos.find({librarySubjectId: librarySubject._id});
+        }
+      },
+      {
+        find: function(librarySubject) {
+          return Subjects.find({_id: librarySubject.subjectId});
+        }
+      },
+      {
+        find: function(librarySubject) {
+          return Hypervideos.find({subjectId: librarySubject.subjectId});
         }
       }
     ]
