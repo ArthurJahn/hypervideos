@@ -14,8 +14,10 @@ Meteor.startup(function () {
 });
 
 // Get all Subject content: Hypervideos, subvideos, questions and videos
-// necessery when editing a subject.
+// Also get user library referece to this subject, if exists
+// necessery when editing or watching a subject.
 Meteor.publishComposite('fullSubject', function(subjectId) {
+  var userId = this.userId;
   return {
     find: function() {
       return Subjects.find({ _id: subjectId });
@@ -41,6 +43,18 @@ Meteor.publishComposite('fullSubject', function(subjectId) {
               return  Videos.find({ hypervideoId: hypervideo._id });
             }
           },
+        ]
+      },
+      {
+        find: function(subject) {
+          return LibrarySubjects.find({ userId: userId, subjectId: subject._id });
+        },
+        children: [
+          {
+            find: function(librarySubject) {
+              return VisitedHypervideos.find({ librarySubjectId: librarySubject._id });
+            }
+          }
         ]
       }
     ]
@@ -81,7 +95,6 @@ Meteor.publishComposite('userLibrary', function(userId) {
   };
 });
 
-
 // Get all subjects, if user is logged, his subjects won't appear
 // Necessary when listing explore subjects preview
 Meteor.publishComposite('exploreSubjects', function(userId) {
@@ -112,34 +125,6 @@ Meteor.publishComposite('oneSubject', function(subjectId) {
           return Hypervideos.find({ subjectId: subject._id });
         }
       }
-    ]
-  };
-});
-
-
-// Get all hypervideo content: questions, subvideos and videos
-// necessary when watching a hypervideo
-Meteor.publishComposite('fullHypervideo', function(hypervideoId) {
-  return {
-    find: function() {
-      return Hypervideos.find({ _id: hypervideoId });
-    },
-    children: [
-      {
-        find: function(hypervideo) {
-          return Subvideos.find({ hypervideoId: hypervideo._id },{sort:{col: -1, row: -1 }});
-        }
-      },
-      {
-        find: function(hypervideo) {
-          return Questions.find({ hypervideoId: hypervideo._id });
-        }
-      },
-      {
-        find: function(hypervideo) {
-          return  Videos.find({ hypervideoId: hypervideo._id });
-        }
-      },
     ]
   };
 });
