@@ -48,6 +48,10 @@ body {
   color: #727272;/*var(--secondary-text-color);*/
   border-bottom: 1px solid #B3B3B3;/*var(--divider-color);*/
 }
+#drawerHeaderPanel paper-toolbar a {
+  color: #727272;/*var(--secondary-text-color);*/
+  text-decoration: none;
+}
 #drawerHeaderPanel [menu-content] paper-menu {
   padding: 0;
   background-color: #ffffff;/*var(--drawer-menu-color);*/
