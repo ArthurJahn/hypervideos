@@ -1,11 +1,18 @@
 Template.subjectsPanel.helpers({
-  subjects: function () {
+  userSubjects: function () {
     var subjects = [];
-    Subjects.find().fetch().forEach(function(subject){
+    Subjects.find({owner:Meteor.userId()}).fetch().forEach(function(subject){
       subjects.push(subject.get());
     });
     return JSON.stringify(subjects);
-  }
+  },
+  librarySubjects: function () {
+    var subjects = [];
+    Subjects.find({ owner: { $ne: Meteor.userId()}}).fetch().forEach(function(subject){
+      subjects.push(subject.get());
+    });
+    return JSON.stringify(subjects);
+  },
 });
 Template.subjectsPanel.events({
   'get-hypervideos user-subject-box': function (e, template) {
