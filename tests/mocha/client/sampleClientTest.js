@@ -1,8 +1,9 @@
-if (!(typeof MochaWeb === 'undefined')){
+if(typeof MochaWeb !== 'undefined') {
   MochaWeb.testOnly(function(){
-    describe("a group of tests", function(){
-      it("should respect equality", function(){
-        chai.assert.equal(5,5);
+    describe("Subject", function(){
+      it("should create a subject", function(){
+        var subject = new Subject({owner: '1'});
+        chai.assert.isTrue(subject._isNew);
       });
     });
   });
