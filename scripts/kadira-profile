@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# SCRIPT TO RUN METEOR WITH KADIRA PROFILER
+# kadira profiler breaks CI meteor tests, in order
+# to fix this, kadira dependencies are created
+# when script is run to provide analisys in memory
+# and resources usage.
+
+BASEDIR=$(dirname $0)
+
+cd $BASEDIR
+
+cat ../.meteor/packages > packages
+
+echo "meteorhacks:kadira-profiler" >> ../.meteor/packages
+
+echo "Kadira.connect('4xE5gtZb8rAqKrNz2', '7344a831-c1a1-4965-8628-7ad3f1cd83a4');" > ../app/server/kadira.js
+
+remove() {
+  rm ../app/server/kadira.js
+  rm ../.meteor/packages
+  cp packages ../.meteor/
+  rm packages
+}
+
+# trap to remove kadira's dependencies on script termination
+trap remove INT
+
+# run meteor
+meteor
