@@ -36,11 +36,6 @@ Template.watchSubject.events({
     sourceSubvideo.source = subvideo.media().url();
     e.target.subvideo = sourceSubvideo;
   },
-  'hypervideo-visited hyper-player': function(e, template) {
-    
-    var hypervideo = Hypervideo.findOne({_id : e.target.hypervideo._id});
-
-  },
 });
 
 Template.watchSubject.visitHypervideo = function(hypervideoId){
