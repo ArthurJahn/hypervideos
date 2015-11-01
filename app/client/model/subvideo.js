@@ -44,7 +44,10 @@ Subvideo = Astro.Class({
   },
   events: {
     beforeremove: function() {
-      this.media().remove();
+      var media = this.media();
+      if (media) {
+        media.remove();
+      }
     }
   },
   methods: {
