@@ -3,10 +3,11 @@ if(typeof MochaWeb !== 'undefined') {
   MochaWeb.testOnly(function(){
 
     describe("Subject", function(){
+
       beforeEach(function(done) {
-        if (Subject.find().fetch().length) {
-          Subject.remove({_id: '1'});
-        }
+        Subject.find().fetch().forEach(function(subject) {
+          subject.remove();
+        });
         done();
       });
 
@@ -88,11 +89,11 @@ if(typeof MochaWeb !== 'undefined') {
         subject.save();
         var hypervideo = new Hypervideo({owner: '1', subjectId:subject._id});
         hypervideo.save();
-        
+
         chai.assert.deepEqual(subject.hypervideos()[0], hypervideo);
       });
 
-      it("should return hypervideos list", function(){
+      it("should remove hypervideo and its connections", function(){
         var subject = new Subject({owner: '1'});
         subject.save();
         var hypervideo = new Hypervideo({owner: '1', subjectId:subject._id});
@@ -104,6 +105,7 @@ if(typeof MochaWeb !== 'undefined') {
         chai.assert.equal(subject.hypervideos().length, 0);
         chai.assert.equal(subject.connections.length, 0);
       });
+
     });
   });
 }
