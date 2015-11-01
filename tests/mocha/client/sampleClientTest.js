@@ -83,6 +83,27 @@ if(typeof MochaWeb !== 'undefined') {
         chai.assert.deepEqual(subject.connections[0], conn3);
       });
 
+      it("should return hypervideos list", function(){
+        var subject = new Subject({owner: '1'});
+        subject.save();
+        var hypervideo = new Hypervideo({owner: '1', subjectId:subject._id});
+        hypervideo.save();
+        
+        chai.assert.deepEqual(subject.hypervideos()[0], hypervideo);
+      });
+
+      it("should return hypervideos list", function(){
+        var subject = new Subject({owner: '1'});
+        subject.save();
+        var hypervideo = new Hypervideo({owner: '1', subjectId:subject._id});
+        hypervideo.save();
+
+        subject.addConnection({first: hypervideo._id, second: '2'});
+        subject.removeHypervideo(hypervideo._id);
+
+        chai.assert.equal(subject.hypervideos().length, 0);
+        chai.assert.equal(subject.connections.length, 0);
+      });
     });
   });
 }
