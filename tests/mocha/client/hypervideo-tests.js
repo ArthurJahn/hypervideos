@@ -42,6 +42,19 @@ if(typeof MochaWeb !== 'undefined') {
         chai.assert.equal(hypervideo.name, "new name");
       });
 
+      it("should move hypervideo", function() {
+        var hypervideo = new Hypervideo({
+          owner: '1',
+          subjectId: '1',
+          col: 1,
+          row: 1
+        });
+        hypervideo.move(2,3);
+
+        chai.assert.equal(hypervideo.col, 2);
+        chai.assert.equal(hypervideo.row, 3);
+      });
+
       it("should add a connection to hypervideo", function() {
         var hypervideo = new Hypervideo({
           owner: '1',
@@ -118,10 +131,18 @@ if(typeof MochaWeb !== 'undefined') {
           row: 1
         });
         hypervideo.save();
-
+        var subvideo = new Subvideo({
+          owner: '1',
+          hypervideoId: hypervideo._id,
+          mediaId: '1',
+          x: 1,
+          y: 1
+        });
+        subvideo.save();
+        chai.assert.deepEqual(hypervideo.subvideos()[0], subvideo);
       });
 
-      it("should return hypervideos list", function(){
+      it("should return questions list", function(){
         var hypervideo = new Hypervideo({
           owner: '1',
           subjectId: '1',
@@ -129,11 +150,15 @@ if(typeof MochaWeb !== 'undefined') {
           row: 1
         });
         hypervideo.save();
-
-        hypervideo.addConnection({first: '1', second: '2'});
-
+        var question = new Question({
+          owner: '1',
+          hypervideoId: hypervideo._id,
+          x: 1,
+          y: 1
+        });
+        question.save();
+        chai.assert.deepEqual(hypervideo.questions()[0], question);
       });
-
     });
   });
 }
