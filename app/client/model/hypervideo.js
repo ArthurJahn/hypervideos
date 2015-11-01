@@ -65,12 +65,12 @@ Hypervideo = Astro.Class({
         return true;
       }
     },
-    removeConnections: function(hypervideoId) {
+    removeConnections: function(subvideoId) {
       var newConnections = [];
       for (var i=0;i< this.connections.length; i++) {
         var compConn = this.connections[i];
-        if (hypervideoId !== compConn.first &&
-            hypervideoId !== compConn.second) {
+        if (subvideoId !== compConn.first &&
+            subvideoId !== compConn.second) {
           newConnections.push(compConn);
         }
       }
@@ -79,13 +79,18 @@ Hypervideo = Astro.Class({
     },
     removeConnection: function(connection) {
       var conns = this.connections;
-      var i = conns.indexOf(connection);
-      if(i > -1){
-        conns.splice(i,1);
-        this.set('connections', conns);
-        if (this.validate()) {
-          this.save();
+      var length = conns.length;
+      for (var i=0;i< length; i++) {
+        var compConn = conns[i];
+        if(compConn.first === connection.first &&
+           compConn.second === connection.second) {
+          conns.splice(i,1);
+          break;
         }
+      }
+      if(i < length){
+        this.set('connections', conns);
+        this.save();
         return true;
       }
       else {
