@@ -20,7 +20,7 @@ if(typeof MochaWeb !== 'undefined') {
       });
 
       it("should find no subjects", function() {
-        var length = Subject.find({_id:'1'}).fetch().length;
+        var length = Subject.find({owner:'1'}).fetch().length;
         chai.assert.equal(length, 0);
       });
 

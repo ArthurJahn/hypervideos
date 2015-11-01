@@ -27,7 +27,7 @@ if(typeof MochaWeb !== 'undefined') {
       });
 
       it("should find no hypervideos", function() {
-        var length = Hypervideo.find({_id:'1'}).fetch().length;
+        var length = Hypervideo.find({owner:'1'}).fetch().length;
         chai.assert.equal(length, 0);
       });
 
