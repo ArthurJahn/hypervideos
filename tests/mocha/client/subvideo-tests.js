@@ -66,4 +66,4 @@ if(typeof MochaWeb !== 'undefined') {
 
     });
   });
-};
+}

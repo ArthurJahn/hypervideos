@@ -47,4 +47,4 @@ if(typeof MochaWeb !== 'undefined') {
 
     });
   });
-};
+}
