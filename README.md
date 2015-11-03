@@ -1,4 +1,4 @@
-hypervideos
+hypervideos [![Build Status](http://104.236.226.37:8080/job/Hypervideos/badge/icon)](http://104.236.226.37:8080/job/Hypervideos/)
 ===========
 An adaptive educational system due to a better learning.
 
