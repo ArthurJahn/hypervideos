@@ -34,12 +34,11 @@ Template.explorePanel.events({
 });
 
 Template.explorePanel.addLibrarySubject = function(subjectId) {
-  var id = (Meteor.userId() + subjectId);
   var librarySubject = new LibrarySubject({
     subjectId: subjectId,
     userId: Meteor.userId(),
-    _id: id,
   });
+  librarySubject.generateId();
   if(librarySubject.validate()) {
     librarySubject.save();
   }

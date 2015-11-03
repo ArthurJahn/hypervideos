@@ -23,6 +23,9 @@ LibrarySubject = Astro.Class({
     watchedHypervideos: function() {
       return VisitedHypervideo.fund({librarySubjectId: this._id}).fetch();
     },
+    generateId: function() {
+       this._id = (Meteor.userId() + this.subjectId);
+    }
   },
   behaviors: ['timestamp']
 });
