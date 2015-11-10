@@ -1,46 +1,52 @@
 // A logged user is allowed to edit
 // all objects that are owned by him.
 var userPermissions = {
-  insert: function(doc){
-    if(doc.owner === this.userId)
+  insert: function (doc) {
+    if (doc.owner === this.userId) {
       return true;
-    else
+    } else {
       return false;
+    }
   },
-  remove: function(doc){
-    if(doc.owner === this.userId)
+  remove: function (doc) {
+    if (doc.owner === this.userId) {
       return true;
-    else
+    } else {
       return false;
+    }
   },
-  update: function(doc){
-    if(doc.owner === this.userId)
+  update: function (doc) {
+    if (doc.owner === this.userId) {
       return true;
-    else
+    } else {
       return false;
+    }
   },
 };
 
 var mediaPermissions = {
-  insert: function(doc){
-    if(doc.owner === this.userId)
+  insert: function (doc) {
+    if (doc.owner === this.userId) {
       return true;
-    else
+    } else {
       return false;
+    }
   },
-  remove: function(doc){
-    if(doc.owner === this.userId)
+  remove: function (doc) {
+    if (doc.owner === this.userId) {
       return true;
-    else
+    } else {
       return false;
+    }
   },
-  update: function(doc){
-    if(doc.owner === this.userId)
+  update: function (doc) {
+    if (doc.owner === this.userId) {
       return true;
-    else
+    } else {
       return false;
+    }
   },
-  download: function(doc) {
+  download: function (doc) {
     return true;
   }
 };
