@@ -15,7 +15,6 @@ if (typeof MochaWeb !== 'undefined') {
         var question = new Question({
           owner: '1',
           hypervideoId: '1',
-          mediaId: '1',
           x: 1,
           y: 2
         });
@@ -39,7 +38,6 @@ if (typeof MochaWeb !== 'undefined') {
         var question = new Question({
           owner: '1',
           hypervideoId: '1',
-          mediaId: '1',
           x: 1,
           y: 2
         });

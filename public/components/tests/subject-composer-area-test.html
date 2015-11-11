@@ -8,7 +8,6 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-
 <html>
   <head>
     <meta charset="utf-8">
@@ -26,9 +25,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <script>
       var hComposer = document.querySelector('subject-composer-area');
 
-      function setUp() {
-
-      }
       suite('<subject-composer-area>', function() {
         test('verify "connect-id-changed" event fired',function(){
           var eventFired = false;
@@ -56,6 +52,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           hComposer._updateSubject();
           assert.isTrue(eventFired);
           assert.equal(hComposer.subject.name, 'new name');
+        });
+        test('verify composerTap method',function(){
+          var eventFired = false;
+          var e = {
+            detail : {
+              x:1,
+              y:1
+            }
+          };
+          hComposer.subject=null;
+          hComposer.addEventListener('subject-created', function(){
+            eventFired = true;
+            hComposer.subject = {
+              _id: '1'
+            }
+          });
+          hComposer.composerTap(e);
+          assert.isTrue(eventFired);
         });
       });
     </script>

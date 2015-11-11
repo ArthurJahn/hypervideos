@@ -1,2 +1,3 @@
-app/.meteor/**
+.meteor/**
+.output/**
 public/bower_components/**

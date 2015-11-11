@@ -28,4 +28,4 @@ jagi:astronomy-validators
 jagi:astronomy-timestamp-behavior
 mike:mocha
 reywood:publish-composite
-cfs:filesystem
+cfs:gridfs

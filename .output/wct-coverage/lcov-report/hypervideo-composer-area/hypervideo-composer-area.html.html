@@ -1,0 +1,1332 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for hypervideo-composer-area/hypervideo-composer-area.html</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../prettify.css">
+    <link rel="stylesheet" href="../base.css">
+    <style type='text/css'>
+        div.coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class="header medium">
+    <h1>Code coverage report for <span class="entity">hypervideo-composer-area/hypervideo-composer-area.html</span></h1>
+    <h2>
+        Statements: <span class="metric">62.4% <small>(78 / 125)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class="metric">37.5% <small>(6 / 16)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">60.71% <small>(17 / 28)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">62.4% <small>(78 / 125)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
+    </h2>
+    <div class="path"><a href="../index.html">All files</a> &#187; <a href="index.html">hypervideo-composer-area/</a> &#187; hypervideo-composer-area.html</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-yes">5</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&lt;link rel="import" href="../../bower_components/polymer/polymer.html"&gt;
+&lt;link rel="import" href="../../bower_components/paper-input/paper-input.html"&gt;
+&lt;link rel="import" href="../../bower_components/paper-button/paper-button.html"&gt;
+&lt;link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html"&gt;
+&lt;link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html"&gt;
+&nbsp;
+&lt;link rel="import" href="../../components/subvideo-composer/subvideo-composer.html"&gt;
+&lt;link rel="import" href="../../components/question-composer/question-composer.html"&gt;
+&lt;link rel="import" href="../../components/subvideo-node/subvideo-node.html"&gt;
+&lt;link rel="import" href="../../components/question-node/question-node.html"&gt;
+&lt;link rel="import" href="../../components/connection-node/connection-node.html"&gt;
+&nbsp;
+&lt;dom-module id="hypervideo-composer-area"&gt;
+  &lt;style is="custom-style"&gt;
+    #backcanvas {
+      position: absolute;
+      top: 75px;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+    }
+    #backcanvas canvas{
+      width: 100%;
+      height: 100%;
+      background-color:rgba(246,246,246,1);/*var(--light-divider-color);*/
+    }
+    .options {
+      position: relative;
+      width: 100%;
+    }
+    #hypervideoName {
+      width: 50%;
+      margin-left: 15%;
+      float: left;
+    }
+    .box {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .box .row.content {
+      flex: 1 .01 auto;
+      overflow: scroll;
+    }
+    .box .row.footer {
+      flex: 0 1 auto;
+      min-height: 80px;
+      overflow: hidden;
+    }
+    #fileInputArea {
+      color: transparent;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background-color:rgba(220,220,220,0);/*var(--light-divider-color);*/
+      overflow: hidden;
+    }
+    #inputfile{
+      opacity: 0;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+    }
+    #hint-text {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      right: 10px;
+      bottom: 10px;
+      background-color:rgba(220,220,220,0.2);/*var(--light-divider-color);*/
+      color: rgba(200,200,200,1);/*var(--light-divider-color);*/
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      z-index: 0;
+    }
+    #hint-text span {
+      position: absolute;
+      width: 200px;
+      left: 50%;
+      top: 50%;
+      margin:-20px 0 0 -100px;
+    }
+    .left {
+      float: left;
+      margin: 0;
+    }
+    .toggleDrawer {
+      margin: 5px 0 0 10px;
+      width: 75px;
+      font-size: 11px;
+      height: 30px;
+      line-height: 15px;
+    }
+  &lt;/style&gt;
+  &lt;template&gt;
+    &lt;paper-drawer-panel id=videoDrawer&gt;
+      &lt;div drawer&gt;
+        &lt;div class="box"&gt;
+          &lt;div class="row content"&gt;
+            &lt;!-- Here will be displayed uploaded videos --&gt;
+            &lt;template id="files" is="dom-repeat" items="{{fileObjects}}" as="videoFile"&gt;
+              &lt;subvideo-composer file="{{videoFile}}" on-upload-complete="handleUploadComplete"&gt;&lt;/subvideo-composer&gt;
+            &lt;/template&gt;
+          &lt;/div&gt;
+          &lt;div id="fileInputArea"
+            class="row footer"&gt;
+            &lt;input id="inputfile"
+              type="file" multiple
+              accept="video/*"
+              on-change="loadFiles"&gt;
+            &lt;/input&gt;
+            &lt;div id="hint-text"&gt;
+              &lt;span&gt;
+                Clique para fazer upload de vídeos
+              &lt;/span&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div main&gt;
+        &lt;paper-drawer-panel id=questionDrawer&gt;
+          &lt;div drawer&gt;
+            &lt;div class="box"&gt;
+              &lt;div class="row content"&gt;
+                &lt;!-- Here will be displayed uploaded videos --&gt;
+                &lt;template id="files" is="dom-repeat" items="{{questionNodes}}" as="questionNode"&gt;
+                  &lt;question-composer question="{{questionNode.question}}"&gt;&lt;/question-composer&gt;
+                &lt;/template&gt;
+              &lt;/div&gt;
+              &lt;div id="fileInputArea"
+                class="row footer"
+                on-tap="createQuestion"&gt;
+                &lt;div id="hint-text"&gt;
+                  &lt;span&gt;
+                    Clique para adicionar questões
+                  &lt;/span&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div main&gt;
+            &lt;div class="options"&gt;
+              &lt;ul class="list-inline left"&gt;
+                &lt;li&gt;
+                  &lt;paper-button class="toggleDrawer"
+                  on-tap="toggleVideoDrawer"&gt;Videos&lt;/paper-button&gt;
+                &lt;/li&gt;
+                &lt;li&gt;
+                  &lt;paper-button class="toggleDrawer"
+                  on-tap="toggleQuestionDrawer"&gt;Questões&lt;/paper-button&gt;
+                &lt;/li&gt;
+              &lt;/ul&gt;
+              &lt;paper-input id="hypervideoName"
+                name="name"
+                label="Nome do Hypervideo"
+                value="{{hypervideo.name}}"
+                on-change="updateHypervideo"&gt;
+              &lt;/paper-input&gt;
+            &lt;/div&gt;
+            &lt;div id="backcanvas"&gt;
+              &lt;canvas id="canvas"&gt;&lt;/canvas&gt;
+            &lt;/div&gt;
+            &lt;div id="nodesFrame"&gt;
+              &lt;!-- this is where subvideos will be displayed --&gt;
+            &lt;/div&gt;
+            &lt;div id="conns"&gt;
+              &lt;!-- this is where connections will be displayed --&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/paper-drawer-panel&gt;
+      &lt;/div&gt;
+    &lt;/paper-drawer-panel&gt;
+  &lt;/template&gt;
+  &lt;script&gt;
+    Polymer({
+//============================= Polymer Methods ==============================//
+      is: 'hypervideo-composer-area',
+      properties: {
+        fileObjects: {
+          type: Array,
+          value: function() {
+              return [];
+          }
+        },
+        filesProgress: {
+          type: Array,
+          value: function() {
+              return [];
+          }
+        },
+        questionNodes: {
+          type: Array,
+          value: function() {
+              return [];
+          }
+        },
+        hypervideo: {
+          type: Object,
+          value: null,
+        },
+        // if any node is being dragged, this
+        // property handles the redraw of connections
+        dragging: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          observer: "draggingChanged"
+        },
+        connectId: {
+          type: String,
+          value: null,
+          notify: true,
+          observer: "connectIdChanged"
+        },
+        name: {
+          type: String,
+          notify: true
+        }
+      },
+      ready: function() {
+        this.firstTouch = true;
+        this.$.videoDrawer.forceNarrow = true;
+        this.$.videoDrawer.openDrawer();
+        this.$.questionDrawer.forceNarrow = true;
+        this.$.questionDrawer.closeDrawer();
+      },
+//============================= Public Methods ===============================//
+      handleUploadComplete: function(e) {
+        var self = this;
+        self._createSubvideo(e.target);
+      },
+      toggleVideoDrawer: <span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >        this.$.videoDrawer.togglePanel();</span>
+      },
+      toggleQuestionDrawer: <span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >        this.$.questionDrawer.togglePanel();</span>
+      },
+      loadFiles: function(e) {
+        this.files = e.target.files;
+        this.fire('upload-videos');
+      },
+      createQuestion: <span class="fstat-no" title="function not covered" >function() {</span>
+&nbsp;
+      },
+      connectIdChanged: function (newConnectId) {
+        var nodes = 'subvideo-node, connection-node, question-node';
+        var list = this.querySelectorAll(nodes);
+        var length = list.length;
+        for(var i=0; i&lt;length; i++) {
+          var element = list[i];
+          element.connectId = newConnectId;
+        }
+      },
+      draggingChanged: function (newDragging) {
+        var self = this;
+        if(self.dragging) {
+          self._drawInterval = setInterval(<span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >            self._drawConnections();</span>
+          }, 40);
+        } else {
+          clearInterval(self._drawInterval);
+        }
+      },
+      updateHypervideo: function(e) {
+        this.hypervideo.name = e.target.value;
+        this.fire('name-changed');
+      },
+//============================= Private Methods ==============================//
+      _createSubvideo: function(subvideoComposer) {
+        var self = this;
+        var xOffset = 35; // depends on initial definition in toucharea css
+        var yOffset = 100;// depends on initial definition in toucharea css
+        // defines bounds and offset of dragging limits for a hypervideoNode
+        var rect = self.$.backcanvas.getBoundingClientRect();
+        var bounds = {
+          width: rect.right - rect.left,
+          height: rect.bottom - rect.top,
+          x: rect.left-xOffset,
+          y: rect.top-yOffset
+        };
+&nbsp;
+        var pos = self._nextNodePos();
+        var options = {
+          x : pos.x,
+          y : pos.y,
+          bounds: bounds,
+          mediaId: subvideoComposer.file._id,
+          name: subvideoComposer.name,
+          connectId: self.connectId,
+          hypervideoId: self.hypervideo._id,
+        }
+        var subvideoNode = new SubvideoNode(options);
+        self._addNodeListeners(subvideoNode);
+        self.$.nodesFrame.appendChild(subvideoNode);
+        subvideoComposer.subvideo = subvideoNode.subvideo;
+&nbsp;
+        pos = self._nextNodePos();
+        options.x = pos.x;
+        options.y = pos.y;
+        var questionNode = new QuestionNode(options);
+        self._addNodeListeners(questionNode);
+        self.$.nodesFrame.appendChild(questionNode);
+        var list = self.querySelectorAll('question-node');
+        self.questionNodes = Array.prototype.slice.call(list);
+      },
+      _nodesCount: function() {
+        var self = this;
+        var list = self.querySelectorAll('subvideo-node, question-node');
+        return list.length;
+      },
+      _nextNodePos: function() {
+        var self = this;
+        var i = self._nodesCount();
+        var pos = {
+          x: 300 + i * 70,
+          y: 110 + i * 20
+        };
+        return pos;
+      },
+      _connect: function(firstId, secondId) {
+        var self = this;
+        <span class="missing-if-branch" title="if path not taken" >I</span>if(firstId !== secondId) {
+<span class="cstat-no" title="statement not covered" >          this._connection = {first: firstId, second: secondId};</span>
+<span class="cstat-no" title="statement not covered" >          this.fire('connection-created');</span>
+<span class="cstat-no" title="statement not covered" >          if(this._connection){</span>
+<span class="cstat-no" title="statement not covered" >            var connNode = new ConnectionNode(this._connection);</span>
+<span class="cstat-no" title="statement not covered" >            connNode.addEventListener('detached', <span class="fstat-no" title="function not covered" >function(ev){</span></span>
+<span class="cstat-no" title="statement not covered" >              self._connectionListener(this);</span>
+            });
+<span class="cstat-no" title="statement not covered" >            self.$.conns.appendChild(connNode);</span>
+<span class="cstat-no" title="statement not covered" >            self._resetConnecting();</span>
+          }
+<span class="cstat-no" title="statement not covered" >          self._resetConnecting();</span>
+        }
+        self._drawConnections();
+      },
+      _drawConnections: function() {
+        var xOffset = 10; // depends on initial definition in toucharea css
+        var yOffset = 75;// depends on initial definition in toucharea css
+        var self = this;
+        var canvasScale = 3;
+        var lineWidth = 4;
+        var connections = self.$.conns.querySelectorAll('connection-node');
+        var canvas = self.$.canvas;
+        canvas.width  = canvasScale * canvas.offsetWidth;
+        canvas.height = canvasScale * canvas.offsetHeight;
+        var ctx = canvas.getContext("2d");
+        ctx.beginPath();
+        for(var i=0; i&lt; connections.length; i++) {
+<span class="cstat-no" title="statement not covered" >          var conn = connections[i].connection;</span>
+          //FIX ME find a better way to do it...
+<span class="cstat-no" title="statement not covered" >          var first = self._findNode(conn.first);</span>
+<span class="cstat-no" title="statement not covered" >          var second = self._findNode(conn.second);</span>
+<span class="cstat-no" title="statement not covered" >          if(first &amp;&amp; second) {</span>
+<span class="cstat-no" title="statement not covered" >            var firstPos = first.getPos();</span>
+<span class="cstat-no" title="statement not covered" >            var secondPos = second.getPos();</span>
+<span class="cstat-no" title="statement not covered" >            var x1 = canvasScale * (firstPos.x - xOffset);</span>
+<span class="cstat-no" title="statement not covered" >            var y1 = canvasScale * (firstPos.y - yOffset);</span>
+<span class="cstat-no" title="statement not covered" >            var x2 = canvasScale * (secondPos.x - xOffset);</span>
+<span class="cstat-no" title="statement not covered" >            var y2 = canvasScale * (secondPos.y - yOffset);</span>
+<span class="cstat-no" title="statement not covered" >            ctx.moveTo(x1, y1);</span>
+<span class="cstat-no" title="statement not covered" >            ctx.lineTo(x2, y2);</span>
+<span class="cstat-no" title="statement not covered" >            self._showConnection(conn, firstPos, secondPos);</span>
+          }
+        }
+        ctx.lineWidth = lineWidth;
+        ctx.stroke();
+      },
+      _findNode: <span class="fstat-no" title="function not covered" >function(id) {</span>
+<span class="cstat-no" title="statement not covered" >        var self = this;</span>
+<span class="cstat-no" title="statement not covered" >        return self.$.nodesFrame.querySelector('#_'+id);</span>
+      },
+      _resetConnecting: <span class="fstat-no" title="function not covered" >function(){</span>
+<span class="cstat-no" title="statement not covered" >        var self = this;</span>
+<span class="cstat-no" title="statement not covered" >        self.connectId = null;</span>
+<span class="cstat-no" title="statement not covered" >        self._firstId = null;</span>
+      },
+      //subvideo listener functions
+      _connectListener: function(snInstance) {
+        var self = this;
+        self.connectId = snInstance.connectId;
+        <span class="missing-if-branch" title="else path not taken" >E</span>if(self.connectId) {
+          if(!self._firstId) {
+            self._firstId = self.connectId;
+          } else {
+            self._connect(self._firstId, self.connectId);
+          }
+        } else {
+<span class="cstat-no" title="statement not covered" >          self._firstId = self.connectId;</span>
+        }
+      },
+      _draggingListener: <span class="fstat-no" title="function not covered" >function(snInstance) {</span>
+<span class="cstat-no" title="statement not covered" >        var self = this;</span>
+<span class="cstat-no" title="statement not covered" >        self.dragging = snInstance.dragging;</span>
+      },
+      _addNodeListeners: function(node) {
+        var self = this;
+        node.addEventListener('connect-id-changed', function(ev){
+          self._connectListener(this);
+        });
+        node.addEventListener('dragging-changed', <span class="fstat-no" title="function not covered" >function(ev){</span>
+<span class="cstat-no" title="statement not covered" >          self._draggingListener(this);</span>
+        });
+      },
+      //connection Listener functions
+      _connectionListener: <span class="fstat-no" title="function not covered" >function(connInstance) {</span>
+<span class="cstat-no" title="statement not covered" >        var self = this;</span>
+<span class="cstat-no" title="statement not covered" >        this._connection = connInstance.connection;</span>
+<span class="cstat-no" title="statement not covered" >        this.fire('connection-removed');</span>
+<span class="cstat-no" title="statement not covered" >        self._drawConnections();</span>
+      },
+      _showConnection: <span class="fstat-no" title="function not covered" >function(connection, firstPos, secondPos) {</span>
+<span class="cstat-no" title="statement not covered" >        var self = this;</span>
+<span class="cstat-no" title="statement not covered" >        var xmid = (firstPos.x + secondPos.x)/2;</span>
+<span class="cstat-no" title="statement not covered" >        var ymid = (firstPos.y + secondPos.y)/2;</span>
+<span class="cstat-no" title="statement not covered" >        var list = self.querySelectorAll('connection-node');</span>
+<span class="cstat-no" title="statement not covered" >        for(var i=0; i&lt;list.length; i++) {</span>
+<span class="cstat-no" title="statement not covered" >          var connNode = list[i];</span>
+<span class="cstat-no" title="statement not covered" >          if(connNode.connection === connection) {</span>
+<span class="cstat-no" title="statement not covered" >              connNode.setPos(xmid, ymid);</span>
+<span class="cstat-no" title="statement not covered" >              return;</span>
+          }
+        }
+      }
+    });
+  &lt;/script&gt;
+&lt;/dom-module&gt;
+&nbsp;</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Nov 11 2015 02:32:23 GMT-0200 (BRST)</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

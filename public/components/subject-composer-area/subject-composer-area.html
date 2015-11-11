@@ -9,20 +9,20 @@
 -->
 
 <!-- Polymer components used -->
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
-<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
-<link rel="import" href="../../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel='import' href='../../bower_components/polymer/polymer.html'>
+<link rel='import' href='../../bower_components/paper-input/paper-input.html'>
+<link rel='import' href='../../bower_components/paper-dialog/paper-dialog.html'>
+<link rel='import' href='../../bower_components/neon-animation/neon-animations.html'>
+<link rel='import' href='../../bower_components/iron-resizable-behavior/iron-resizable-behavior.html'>
 
 <!-- Custom implemented components -->
-<link rel="import" href="../../components/hypervideo-node/hypervideo-node.html">
-<link rel="import" href="../../components/connection-node/connection-node.html">
-<link rel="import" href="../../components/grid-container/grid-container.html">
+<link rel='import' href='../../components/hypervideo-node/hypervideo-node.html'>
+<link rel='import' href='../../components/connection-node/connection-node.html'>
+<link rel='import' href='../../components/grid-container/grid-container.html'>
 
-<dom-module id="subject-composer-area">
-  <style is="custom-style">
-  
+<dom-module id='subject-composer-area'>
+  <style is='custom-style'>
+
     .options {
       position: absolute;
       margin: 0 1%;
@@ -110,78 +110,82 @@
     }
   </style>
   <template>
-    <div class="options">
-      <paper-input id="subjectName"
-        name="name"
-        label="Nome do Curso"
-        on-change="_updateSubject">
+    <div class='options'>
+      <paper-input id='subjectName'
+        name='name'
+        label='Nome do Curso'
+        on-change='_updateSubject'>
       </paper-input>
-      <paper-button id="publishButton" disabled>
-        <iron-icon icon="social:public"></iron-icon>
+      <paper-button id='publishButton' disabled>
+        <iron-icon icon='social:public'></iron-icon>
         Publicar
       </paper-button>
-      <paper-button id="deleteButton" disabled on-tap="discard">
-        <iron-icon icon="delete"></iron-icon>
+      <paper-button id='deleteButton' disabled on-tap='discard'>
+        <iron-icon icon='delete'></iron-icon>
         Deletar
       </paper-button>
     </div>
-    <div id="backcanvas">
-      <canvas id="canvas"></canvas>
+    <div id='backcanvas'>
+      <canvas id='canvas'></canvas>
     </div>
-    <div id="toucharea"
-      on-tap="composerTap">
-      <template is="dom-if" if="{{empty}}">
-        <div id="hint-text">Clique para adicionar um hypervideo</div>
+    <div id='toucharea'
+      on-tap='composerTap'>
+      <template is='dom-if' if='{{empty}}'>
+        <div id='hint-text'>Clique para adicionar um hypervideo</div>
       </template>
     </div>
-    <paper-dialog id="confirmation"
-    entry-animation="scale-up-animation"
-    exit-animation="scale-down-animation"
-    on-iron-overlay-closed="onDismiss"
+    <paper-dialog id='confirmation'
+    entry-animation='scale-up-animation'
+    exit-animation='scale-down-animation'
+    on-iron-overlay-closed='onDismiss'
     with-backdrop>
       Deseja excluir o hypervideo?
-      <paper-button id="confirmButton"
-      on-tap="confirmDelete"
+      <paper-button id='confirmButton'
+      on-tap='confirmDelete'
       dialog-confirm>SIM!</paper-button>
     </paper-dialog>
-    <div id="nodes">
-      <grid-container id="hypers">
+    <div id='nodes'>
+      <grid-container id='hypers'>
         <!-- this is where hypervideo-nodes will be displayed -->
       </grid-container>
-      <div id="conns">
+      <div id='conns'>
         <!-- this is where connection-nodes will be displayed -->
       </div>
     </div>
   </template>
   <script>
     Polymer({
-//======================== Polymer Component Methods =========================//
+//=========================== Polymer Definitions ============================//
       is: 'subject-composer-area',
       properties: {
+
         // when connecting hypervideos, this property
         // catches the ids for creating connections
         connectId: {
           type: String,
           value: null,
           notify: true,
-          observer: "connectIdChanged"
+          observer: 'connectIdChanged'
         },
+
         // if any hypervideo is being dragged, this
         // property handles the redraw of connections
         dragging: {
           type: Boolean,
           value: false,
           notify: true,
-          observer: "draggingChanged"
+          observer: 'draggingChanged'
         },
+
         // if any hypervideo is being deleted, this
         // property handles the confirmation request
         deleting: {
           type: Boolean,
           value: false,
           notify: true,
-          observer: "deletingChanged"
+          observer: 'deletingChanged'
         },
+
         // property that holds the model element: a Subject
         subject: {
           type: Object,
@@ -191,10 +195,7 @@
           type: Object,
           value: null,
         },
-        empty: {
-          type: Boolean,
-          value: true,
-        },
+
         name: {
           type: String,
         }
@@ -215,10 +216,42 @@
           self._setSubjectData();
         }, 1);
       },
-//========================= Custom Component Methods =========================//
+
+//========================== Custom Events Methods ===========================//
+// when these events are fired, an API should handle them to execute the action.
+
+      // Method for handling subject creation event
+      subjectCreated: function() {
+        this.fire('subject-created');
+        if(!this.subject) {
+          throw new Error('no handler for fired event: subject-created');
+        }
+      },
+
+      // Method for handling subject changed event
+      subjectChanged: function() {
+        this.fire('subject-changed');
+        if(!this.subject) {
+          throw new Error('no handler for fired event: subject-changed');
+        }
+      },
+
+      // Method for handling subject deleted event
+      subjectDeleted: function() {
+        this.fire('subject-deleted');
+        if(this.subject) {
+          throw new Error('no handler for fired event: subject-deleted');
+        }
+      },
+
+//======================== Custom Component Methods ==========================//
+// methods that define component's external interface 
+
       composerTap: function(e) {
         this.$.hypers.bounds = this._getTouchableBounds();
-        this._updateSubject(e);
+        if(this.empty && !this.subject) {
+          this.subjectCreated();
+        }
         this._createHypervideo(e);
         this.emptyComposer();
       },
@@ -272,7 +305,9 @@
         this.fire('subject-deleted');
         this._resetComposer();
       },
+
 //===================== Custom Component Private Methods =====================//
+
       _createHypervideo: function(e) {
         var self = this;
         // defines bounds and offset of dragging limits for a hypervideoNode
@@ -293,9 +328,6 @@
       },
       _updateSubject: function() {
         this.name =  this.$.subjectName.value;
-        if(!this.subject) {
-          this.fire('subject-created');
-        }
         if(this.subject) {
           if(this.name === '') {
             this.name = this.subject.name;
@@ -333,7 +365,7 @@
         var canvas = self.$.canvas;
         canvas.width  = canvasScale * canvas.offsetWidth;
         canvas.height = canvasScale * canvas.offsetHeight;
-        var ctx = canvas.getContext("2d");
+        var ctx = canvas.getContext('2d');
         ctx.beginPath();
         for(var i=0; i< connections.length; i++) {
           var conn = connections[i].connection;
@@ -441,11 +473,13 @@
         var delButton = this.$.deleteButton;
         var publish = this.$.publishButton;
         if(this.empty) {
-          publish.setAttribute("disabled","true");
-          delButton.setAttribute("disabled","true");
+          publish.setAttribute('disabled','true');
+          delButton.setAttribute('disabled','true');
         } else {
-          delButton.removeAttribute("disabled");
+          delButton.removeAttribute('disabled');
         }
+        //should return if buttons are enabled
+        return ! this.empty;
       },
       _setSubjectData: function() {
         var self = this;
@@ -500,8 +534,8 @@
             self._resetConnecting();
           });
         }
-        self.emptyComposer();
-        self._drawConnections();
+        // self.emptyComposer();
+        // self._drawConnections();
       }
     });
   </script>

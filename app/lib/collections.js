@@ -6,7 +6,7 @@ Subvideos = new Mongo.Collection('subvideos');
 
 Questions = new Mongo.Collection('questions');
 
-VidStore = new FS.Store.FileSystem('medias', {
+VidStore = new FS.Store.GridFS('medias', {
   path: '~/Documents/git/hypervideos/uploads/medias'
 });
 Videos = new FS.Collection('videos', {
