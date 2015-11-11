@@ -3,8 +3,8 @@
 # SCRIPT TO RUN METEOR WITH KADIRA PROFILER
 # kadira profiler breaks CI meteor tests, in order
 # to fix this, kadira dependencies are created
-# when script is run to provide analisys in memory
-# and resources usage.
+# when script is ran to provide an overall system
+# analysis, like memory and resources' usage.
 
 BASEDIR=$(dirname $0)
 

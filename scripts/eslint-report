@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# SCRIPT TO RUN ESLINT STATIC ANALYSER
+# eslint provides great reports when combined
+# with eslint html reporter, in order to
+# generate this files at the correct place,
+# this script creates xml and html reports
+
+eslint . -f ~/node_modules/eslint-html-reporter/reporter.js -o .output/eslint-report/report.html
+
+eslint . -f checkstyle > .output/eslint-report/report.xml
