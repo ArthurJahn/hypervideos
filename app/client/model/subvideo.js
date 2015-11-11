@@ -10,10 +10,10 @@ Subvideo = Astro.Class({
       type: 'string',
       default: 'Novo subvideo',
       validator: Validators.and([
-          Validators.required('O nome não pode ser vazio'),
-          Validators.string(),
-          Validators.minLength(3,'Nome muito curto'),
-        ])
+        Validators.required('O nome não pode ser vazio'),
+        Validators.string(),
+        Validators.minLength(3, 'Nome muito curto'),
+      ])
     },
     hypervideoId: {
       type: 'string',
@@ -27,11 +27,11 @@ Subvideo = Astro.Class({
       type: 'string',
       default: 'Descrição desse subvideo',
       validator: Validators.and([
-          Validators.required('A descrição não pode ser vazia'),
-          Validators.string(),
-          Validators.minLength(10,'descrição muito curto'),
-          Validators.maxLength(3000,'descrição muito longo')
-        ])
+        Validators.required('A descrição não pode ser vazia'),
+        Validators.string(),
+        Validators.minLength(10, 'descrição muito curto'),
+        Validators.maxLength(3000, 'descrição muito longo')
+      ])
     },
     x: {
       type: 'number',
@@ -43,7 +43,7 @@ Subvideo = Astro.Class({
     },
   },
   events: {
-    beforeremove: function() {
+    beforeremove: function () {
       var media = this.media();
       if (media) {
         media.remove();
@@ -51,10 +51,12 @@ Subvideo = Astro.Class({
     }
   },
   methods: {
-    media: function() {
-      return Videos.findOne({_id: this.mediaId});
+    media: function () {
+      return Videos.findOne({
+        _id: this.mediaId
+      });
     },
-    move: function(x,y) {
+    move: function (x, y) {
       this.x = x;
       this.y = y;
     }

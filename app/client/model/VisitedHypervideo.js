@@ -31,7 +31,7 @@ VisitedHypervideo = Astro.Class({
     // specified hypervideo
     subvideos: {
       type: 'array',
-      default: function() {
+      default: function () {
         return [];
       }
     },
@@ -40,24 +40,22 @@ VisitedHypervideo = Astro.Class({
     // specified hypervideo
     questions: {
       type: 'array',
-      default: function() {
+      default: function () {
         return [];
       }
     }
   },
   methods: {
-
-    addWatchedSubvideo: function(subvideoId) {
-      if(this.subvideos.indexOf(subvideoId)!== -1) {
+    addWatchedSubvideo: function (subvideoId) {
+      if (this.subvideos.indexOf(subvideoId) !== -1) {
         this.push('subvideos', subvideoId);
         return true;
       }
       return false;
     },
-
-    addAnsweredQuestion: function(questionAnswer) {
-      if(questionAnswer.questionId && questionAnswer.answer) {
-        if(this.questions.indexOf(questionAnswer)!== -1){
+    addAnsweredQuestion: function (questionAnswer) {
+      if (questionAnswer.questionId && questionAnswer.answer) {
+        if (this.questions.indexOf(questionAnswer) !== -1) {
           this.push('questions', questionAnswer);
           return true;
         }

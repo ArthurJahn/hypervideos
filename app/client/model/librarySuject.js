@@ -20,11 +20,13 @@ LibrarySubject = Astro.Class({
     }
   },
   methods: {
-    watchedHypervideos: function() {
-      return VisitedHypervideo.fund({librarySubjectId: this._id}).fetch();
+    watchedHypervideos: function () {
+      return VisitedHypervideo.fund({
+        librarySubjectId: this._id
+      }).fetch();
     },
-    generateId: function() {
-       this._id = (Meteor.userId() + this.subjectId);
+    generateId: function () {
+      this._id = (Meteor.userId() + this.subjectId);
     }
   },
   behaviors: ['timestamp']

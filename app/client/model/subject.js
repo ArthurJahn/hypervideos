@@ -14,14 +14,14 @@ Subject = Astro.createClass({
       type: 'string',
       default: 'Novo Curso',
       validator: Validators.and([
-          Validators.required('O nome não pode ser vazio'),
-          Validators.string(),
-          Validators.minLength(5,'Nome muito curto')
-        ])
+        Validators.required('O nome não pode ser vazio'),
+        Validators.string(),
+        Validators.minLength(5, 'Nome muito curto')
+      ])
     },
     connections: {
       type: 'array',
-      default: function() {
+      default: function () {
         return [];
       }
     },
@@ -29,15 +29,15 @@ Subject = Astro.createClass({
       type: 'boolean',
       default: true,
       validator: Validators.and([
-          Validators.required(),
-          Validators.boolean()
-        ])
+        Validators.required(),
+        Validators.boolean()
+      ])
     },
   },
   events: {
-    beforeremove: function() {
+    beforeremove: function () {
       var self = this;
-      self.hypervideos().forEach(function(hypervideo){
+      self.hypervideos().forEach(function (hypervideo) {
         self.removeConnections(hypervideo._id);
       });
     }
@@ -45,31 +45,34 @@ Subject = Astro.createClass({
   methods: {
     // returns the list of hypervideos
     //  that belongs to this subject
-    hypervideos: function() {
-      return Hypervideos.find({subjectId: this._id}).fetch();
+    hypervideos: function () {
+      return Hypervideos.find({
+        subjectId: this._id
+      }).fetch();
     },
     // given a hypervideo _id, remove all of its connections
     // and then, remove the hypervideo
-    removeHypervideo: function(hypervideoId) {
+    removeHypervideo: function (hypervideoId) {
       this.removeConnections(hypervideoId);
-      var hypervideo = Hypervideo.findOne({_id: hypervideoId});
+      var hypervideo = Hypervideo.findOne({
+        _id: hypervideoId
+      });
       hypervideo.remove();
     },
     // when set as editing, a subject is not publishe yet,
     // so it cannot be found by general users, only its owner
-    setEditing: function(editing) {
+    setEditing: function (editing) {
       this.set('editing', editing);
       if (this.validate()) {
         this.save();
       }
     },
     // Add a connection between two hypervideos
-    addConnection: function(conn) {
-      if(this._hasConnection(conn)) {
+    addConnection: function (conn) {
+      if (this._hasConnection(conn)) {
         return false;
-      }
-      else {
-        this.push('connections',conn);
+      } else {
+        this.push('connections', conn);
         if (this.validate()) {
           this.save();
         }
@@ -77,62 +80,61 @@ Subject = Astro.createClass({
       }
     },
     // Remove a connection from subject
-    removeConnection: function(connection) {
+    removeConnection: function (connection) {
       var conns = this.connections;
       var length = conns.length;
-      for (var i=0;i< length; i++) {
+      for (var i = 0; i < length; i++) {
         var compConn = conns[i];
-        if(compConn.first === connection.first &&
-           compConn.second === connection.second) {
-          conns.splice(i,1);
+        if (compConn.first === connection.first &&
+          compConn.second === connection.second) {
+          conns.splice(i, 1);
           break;
         }
       }
-      if(i < length){
+      if (i < length) {
         this.set('connections', conns);
         this.save();
         return true;
-      }
-      else {
+      } else {
         return false;
       }
     },
     // Remove all connections with a specified
     // Hypervideo by passing its id
-    removeConnections: function(hypervideoId) {
+    removeConnections: function (hypervideoId) {
       var newConnections = [];
-      for (var i=0;i< this.connections.length; i++) {
+      for (var i = 0; i < this.connections.length; i++) {
         var compConn = this.connections[i];
         if (hypervideoId !== compConn.first &&
-            hypervideoId !== compConn.second) {
+          hypervideoId !== compConn.second) {
           newConnections.push(compConn);
         }
       }
       this.set('connections', newConnections);
       this.save();
     },
-    setName: function(newName) {
+    setName: function (newName) {
       this.set('name', newName);
       if (this.validate()) {
         this.save();
       }
     },
-//============================== PRIVATE METHODS =============================//
+    //============================ PRIVATE METHODS ===========================//
     // verify existing connection in
     // subject connections list
-    _hasConnection: function(conn) {
-      for (var i=0;i< this.connections.length; i++) {
+    _hasConnection: function (conn) {
+      for (var i = 0; i < this.connections.length; i++) {
         var compConn = this.connections[i];
         if ((conn.first === compConn.first &&
             conn.second === compConn.second) ||
-           (conn.second === compConn.first &&
-             conn.first === compConn.second)) {
+          (conn.second === compConn.first &&
+            conn.first === compConn.second)) {
           return true;
         }
       }
       return false;
     },
   },
-  // Add "timestamp" behavior that adds "createdAt" and "updatedAt" fields.
+  // Add 'timestamp' behavior that adds 'createdAt' and 'updatedAt' fields.
   behaviors: ['timestamp']
 });

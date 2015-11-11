@@ -8,18 +8,18 @@ if (Meteor.isClient) {
   Router.onBeforeAction('loading');
 }
 
-Router.map(function() {
+Router.map(function () {
 
   //subject composer route
   this.route('subjectPanel', {
-    path:"/subjectPanel/:_id",
-    template: "newSubjectPanel",
-    waitOn: function() {
+    path: '/subjectPanel/:_id',
+    template: 'newSubjectPanel',
+    waitOn: function () {
       if (Meteor.user()) {
-        if(this.params._id === 'new') {
+        if (this.params._id === 'new') {
           this.params._id = Random.id();
         }
-        return this.subscribe("fullSubject", this.params._id);
+        return this.subscribe('fullSubject', this.params._id);
       }
     },
     onBeforeAction: function (pause) {
@@ -36,11 +36,12 @@ Router.map(function() {
 
   //subjects list route
   this.route('subjects', {
-    template: "subjectsPanel",
-    waitOn: function() {
+    template: 'subjectsPanel',
+    waitOn: function () {
       if (Meteor.user()) {
-        return [this.subscribe("userSubjects",Meteor.userId()),
-                this.subscribe("userLibrary",Meteor.userId())];
+        return [this.subscribe('userSubjects', Meteor.userId()),
+          this.subscribe('userLibrary', Meteor.userId())
+        ];
       }
     },
     onBeforeAction: function (pause) {
@@ -57,7 +58,7 @@ Router.map(function() {
 
   //user profile route
   this.route('profile', {
-    template: "profilePanel",
+    template: 'profilePanel',
     onBeforeAction: function (pause) {
       if (Meteor.user()) {
         this.next();
@@ -72,13 +73,14 @@ Router.map(function() {
 
   //explore route
   this.route('home', {
-    path: "/",
-    template: "explorePanel",
-    waitOn: function() {
-        return [this.subscribe("exploreSubjects",Meteor.userId()),
-                this.subscribe("userLibrary",Meteor.userId())];
+    path: '/',
+    template: 'explorePanel',
+    waitOn: function () {
+      return [this.subscribe('exploreSubjects', Meteor.userId()),
+        this.subscribe('userLibrary', Meteor.userId())
+      ];
     },
-    action: function() {
+    action: function () {
       this.render();
     }
   });
@@ -86,11 +88,11 @@ Router.map(function() {
   // watch a subject route
   this.route('watchSubject', {
     path: '/subject/:_id',
-    waitOn: function() {
+    waitOn: function () {
       //change to single hypervideo subscribe
-      return this.subscribe("fullSubject", this.params._id);
+      return this.subscribe('fullSubject', this.params._id);
     },
-    action: function() {
+    action: function () {
       this.render();
     }
   });

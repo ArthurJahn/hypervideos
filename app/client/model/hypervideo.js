@@ -10,18 +10,18 @@ Hypervideo = Astro.Class({
       type: 'string',
       validator: Validators.required(),
     },
-    name:{
+    name: {
       type: 'string',
       default: 'Novo Hypervideo',
       validator: Validators.and([
-          Validators.required('O nome não pode ser vazio'),
-          Validators.string(),
-          Validators.minLength(5,'Nome muito curto')
-        ])
+        Validators.required('O nome não pode ser vazio'),
+        Validators.string(),
+        Validators.minLength(5, 'Nome muito curto')
+      ])
     },
     connections: {
       type: 'array',
-      default: function() {
+      default: function () {
         return [];
       }
     },
@@ -35,80 +35,82 @@ Hypervideo = Astro.Class({
     },
   },
   events: {
-    beforeremove: function() {
-      this.subvideos().forEach(function(subvideo){
+    beforeremove: function () {
+      this.subvideos().forEach(function (subvideo) {
         subvideo.remove();
       });
-      this.questions().forEach(function(question){
+      this.questions().forEach(function (question) {
         question.remove();
       });
     }
   },
   methods: {
-    move: function(col,row) {
+    move: function (col, row) {
       this.col = col;
       this.row = row;
     },
-    subvideos: function() {
-      return Subvideo.find({hypervideoId: this._id}).fetch();
+    subvideos: function () {
+      return Subvideo.find({
+        hypervideoId: this._id
+      }).fetch();
     },
-    questions: function() {
-      return Question.find({hypervideoId: this._id}).fetch();
+    questions: function () {
+      return Question.find({
+        hypervideoId: this._id
+      }).fetch();
     },
-    addConnection: function(conn) {
-      if(this._hasConnection(conn)) {
+    addConnection: function (conn) {
+      if (this._hasConnection(conn)) {
         return false;
-      }
-      else {
-        this.push('connections',conn);
+      } else {
+        this.push('connections', conn);
         this.save();
         return true;
       }
     },
-    removeConnections: function(subvideoId) {
+    removeConnections: function (subvideoId) {
       var newConnections = [];
-      for (var i=0;i< this.connections.length; i++) {
+      for (var i = 0; i < this.connections.length; i++) {
         var compConn = this.connections[i];
         if (subvideoId !== compConn.first &&
-            subvideoId !== compConn.second) {
+          subvideoId !== compConn.second) {
           newConnections.push(compConn);
         }
       }
       this.set('connections', newConnections);
       this.save();
     },
-    removeConnection: function(connection) {
+    removeConnection: function (connection) {
       var conns = this.connections;
       var length = conns.length;
-      for (var i=0;i< length; i++) {
+      for (var i = 0; i < length; i++) {
         var compConn = conns[i];
-        if(compConn.first === connection.first &&
-           compConn.second === connection.second) {
-          conns.splice(i,1);
+        if (compConn.first === connection.first &&
+          compConn.second === connection.second) {
+          conns.splice(i, 1);
           break;
         }
       }
-      if(i < length){
+      if (i < length) {
         this.set('connections', conns);
         this.save();
         return true;
-      }
-      else {
+      } else {
         return false;
       }
     },
-    setName: function(newName) {
+    setName: function (newName) {
       this.set('name', newName);
       this.save();
     },
     //private methods
-    _hasConnection: function(conn) {
-      for (var i=0;i< this.connections.length; i++) {
+    _hasConnection: function (conn) {
+      for (var i = 0; i < this.connections.length; i++) {
         var compConn = this.connections[i];
         if ((conn.first === compConn.first &&
             conn.second === compConn.second) ||
-           (conn.second === compConn.first &&
-             conn.first === compConn.second)) {
+          (conn.second === compConn.first &&
+            conn.first === compConn.second)) {
           return true;
         }
       }

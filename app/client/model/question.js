@@ -10,10 +10,10 @@ Question = Astro.Class({
       type: 'string',
       default: 'Nova questão',
       validator: Validators.and([
-          Validators.required('O nome não pode ser vazio'),
-          Validators.string(),
-          Validators.minLength(3,'Nome muito curto'),
-        ])
+        Validators.required('O nome não pode ser vazio'),
+        Validators.string(),
+        Validators.minLength(3, 'Nome muito curto'),
+      ])
     },
     hypervideoId: {
       type: 'string',
@@ -23,21 +23,21 @@ Question = Astro.Class({
       type: 'string',
       default: 'Enunciado da questão',
       validator: Validators.and([
-          Validators.required('O nome não pode ser vazio'),
-          Validators.string(),
-          Validators.minLength(10,'Enunciado muito curto'),
-          Validators.maxLength(3000,'Enunciado muito longo')
-        ])
+        Validators.required('O nome não pode ser vazio'),
+        Validators.string(),
+        Validators.minLength(10, 'Enunciado muito curto'),
+        Validators.maxLength(3000, 'Enunciado muito longo')
+      ])
     },
     answers: {
       type: 'array',
-      default: function() {
-        return ["resposta 1", "resposta 2"];
+      default: function () {
+        return ['resposta 1', 'resposta 2'];
       },
       validator: Validators.and([
-          Validators.required('A questão precisa ter respostas'),
-          Validators.minLength(2,'Mínimo duas respostas'),
-        ])
+        Validators.required('A questão precisa ter respostas'),
+        Validators.minLength(2, 'Mínimo duas respostas'),
+      ])
     },
     x: {
       type: 'number',
@@ -49,7 +49,7 @@ Question = Astro.Class({
     },
   },
   methods: {
-    move: function(x,y) {
+    move: function (x, y) {
       this.x = x;
       this.y = y;
     }

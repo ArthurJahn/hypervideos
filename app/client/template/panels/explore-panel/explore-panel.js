@@ -1,7 +1,7 @@
 Template.explorePanel.helpers({
   subjects: function () {
     var subjects = [];
-    Subjects.find().fetch().forEach(function(subject){
+    Subjects.find().fetch().forEach(function (subject) {
       subjects.push(subject.get());
     });
     return JSON.stringify(subjects);
@@ -10,15 +10,19 @@ Template.explorePanel.helpers({
 
 Template.explorePanel.events({
   'get-hypervideos subject-box': function (e, template) {
-    var subject = Subject.findOne({_id : e.target.subject._id});
+    var subject = Subject.findOne({
+      _id: e.target.subject._id
+    });
     e.target.hypervideos = subject.hypervideos();
   },
   'watch-subject subject-box': function (e, template) {
     var subject = e.target.subject;
-    Session.set("title", subject.name);
-    Session.set("subjectId", subject._id);
+    Session.set('title', subject.name);
+    Session.set('subjectId', subject._id);
     Template.explorePanel.addLibrarySubject(subject._id);
-    Router.go('watchSubject', {_id: subject._id});
+    Router.go('watchSubject', {
+      _id: subject._id
+    });
   },
   'add-library-subject subject-box': function (e, template) {
     var subject = e.target.subject;
@@ -33,13 +37,13 @@ Template.explorePanel.events({
   }
 });
 
-Template.explorePanel.addLibrarySubject = function(subjectId) {
+Template.explorePanel.addLibrarySubject = function (subjectId) {
   var librarySubject = new LibrarySubject({
     subjectId: subjectId,
     userId: Meteor.userId(),
   });
   librarySubject.generateId();
-  if(librarySubject.validate()) {
+  if (librarySubject.validate()) {
     librarySubject.save();
   }
 };
