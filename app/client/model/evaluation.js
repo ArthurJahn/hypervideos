@@ -1,4 +1,4 @@
-User = Astro.Class({
+Evaluation = Astro.Class({
   name: 'Evaluation',
   collection: Evaluation,
   fields: {
@@ -14,7 +14,7 @@ User = Astro.Class({
     directScore: {
       type: 'number',
       default: '10',
-      validator:  Validators.and([
+      validator: Validators.and([
         Validators.minLength(0),
         Validators.maxLength(10)
       ])
@@ -24,7 +24,7 @@ User = Astro.Class({
     directReliability: {
       type: 'number',
       default: '7',
-      validator:  Validators.and([
+      validator: Validators.and([
         Validators.minLength(0),
         Validators.maxLength(10)
       ])
@@ -34,7 +34,7 @@ User = Astro.Class({
     indirectScore: {
       type: 'number',
       default: '10',
-      validator:  Validators.and([
+      validator: Validators.and([
         Validators.minLength(0),
         Validators.maxLength(10)
       ])
@@ -44,7 +44,7 @@ User = Astro.Class({
     indirectReliability: {
       type: 'number',
       default: '10',
-      validator:  Validators.and([
+      validator: Validators.and([
         Validators.minLength(0),
         Validators.maxLength(10)
       ])
@@ -52,10 +52,10 @@ User = Astro.Class({
   },
 
   methods: {
-    calculateScore: function() {
+    calculateScore: function () {
       //calculate direct and indirect scores
     },
-    calculateReliability: function() {
+    calculateReliability: function () {
       //calculate direct and indirect reliabilitys
     },
   },

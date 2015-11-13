@@ -3,7 +3,7 @@ Template.profilePanel.helpers({
     return Session.get('counter');
   },
   show: function () {
-    return Session.get('activePanel') === "1";
+    return Session.get('activePanel') === '1';
   }
 });
 

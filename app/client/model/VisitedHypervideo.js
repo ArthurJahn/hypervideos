@@ -52,8 +52,8 @@ VisitedHypervideo = Astro.Class({
     }
   },
   methods: {
-    evaluation: function() {
-      
+    evaluation: function () {
+      //fetch evaluation from database
     },
 
     addWatchedSubvideo: function (subvideoId) {

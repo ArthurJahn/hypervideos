@@ -5,7 +5,7 @@ Accounts.ui.config({
   passwordSignupFields: 'USERNAME_AND_EMAIL'
 });
 Template.mainMenu.helpers({
-  connected: function() {
+  connected: function () {
     return Meteor.status().connected;
   },
 });
@@ -23,6 +23,8 @@ Template.mainMenu.events({
   'click #highlighted': function () {
     Session.set('title', 'Novo Curso');
     Session.set('subjectId', 'new');
-    Router.go('subjectPanel', {_id:'new'});
+    Router.go('subjectPanel', {
+      _id: 'new'
+    });
   }
-});
+});A
