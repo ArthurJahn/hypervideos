@@ -27,4 +27,4 @@ Template.mainMenu.events({
       _id: 'new'
     });
   }
-});A
+});
