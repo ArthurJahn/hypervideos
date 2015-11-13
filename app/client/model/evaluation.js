@@ -1,6 +1,6 @@
 User = Astro.Class({
   name: 'Evaluation',
-  collection: Meteor.users,
+  collection: Evaluation,
   fields: {
 
     // id that interconnects the visited hypervideo

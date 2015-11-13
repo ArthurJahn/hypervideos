@@ -23,3 +23,5 @@ FS.config.uploadChunkSize = 100000; // 100 KB
 LibrarySubjects = new Mongo.Collection('libsubjects');
 
 VisitedHypervideos = new Mongo.Collection('visitednodes');
+
+Evaluations = new Mongo.Collection('evaluations');
