@@ -41,6 +41,11 @@ Subvideo = Astro.Class({
       type: 'number',
       validator: Validators.required(),
     },
+    visibility: {
+      type: 'number',
+      default: 1,
+      validator: Validators.choice([1, 2, 3, 4, 5])
+    }
   },
   events: {
     beforeremove: function () {

@@ -43,9 +43,19 @@ VisitedHypervideo = Astro.Class({
       default: function () {
         return [];
       }
+    },
+
+    // user notes about the content of the
+    // watched hypervideo
+    notes: {
+      type: 'string',
     }
   },
   methods: {
+    evaluation: function() {
+      
+    },
+
     addWatchedSubvideo: function (subvideoId) {
       if (this.subvideos.indexOf(subvideoId) !== -1) {
         this.push('subvideos', subvideoId);
@@ -62,7 +72,6 @@ VisitedHypervideo = Astro.Class({
       }
       return false;
     },
-
   },
   behaviors: ['timestamp']
 });
