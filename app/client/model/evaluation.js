@@ -1,6 +1,6 @@
 Evaluation = Astro.Class({
   name: 'Evaluation',
-  collection: Evaluation,
+  collection: Evaluations,
   fields: {
 
     // id that interconnects the visited hypervideo

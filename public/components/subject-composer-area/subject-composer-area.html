@@ -190,6 +190,7 @@
         subject: {
           type: Object,
           value: null,
+          observer: '_updateSubject'
         },
         hypervideos: {
           type: Object,
@@ -245,7 +246,7 @@
       },
 
 //======================== Custom Component Methods ==========================//
-// methods that define component's external interface 
+// methods that define component's external interface
 
       composerTap: function(e) {
         this.$.hypers.bounds = this._getTouchableBounds();

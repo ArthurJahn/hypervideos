@@ -149,10 +149,10 @@ paper-spinner {
   top: 50%;
 }
 
-iron-autogrow-textarea {
+/*iron-autogrow-textarea {
   background-image:
     repeating-linear-gradient(#CDCDCD, #CDCDCD 1px, white 0, white 24px) !important;
-}
+}*/
 
 .paper-tabs #selectionBar {
     background-color: #FFC107  !important;/*var(--accent-color);*/
