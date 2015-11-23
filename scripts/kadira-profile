@@ -27,4 +27,4 @@ remove() {
 trap remove INT
 
 # run meteor
-meteor
+meteor --production

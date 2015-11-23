@@ -29,8 +29,8 @@
     #closeButton {
       float: right;
       z-index: 999;
-      width: 25px;
-      height: 25px;
+      width: 35px;
+      height: 35px;
       margin: 0;
     }
     #icon {
@@ -109,7 +109,7 @@
       border-radius: 30px;
       background-color:#DCDCDC;/*var(--light-divider-color);*/
       color: #212121;/*var(--light-divider-color);*/
-      padding: 25px 30px;
+      padding: 25px 10px;
       text-align: center;
       font-size: 16px;
       opacity: 0;
@@ -121,7 +121,7 @@
       transition:all .2s ease;
     }
     #composerdialog {
-      width: 100%;
+      width: 95%;
       height: 550px;
     }
   </style>
@@ -354,7 +354,7 @@
         }
         if(this.$.preview.style.opacity !== "1") {
           this.$.preview.style.opacity = "1";
-          this.$.preview.style.width = "150px";
+          this.$.preview.style.width = "200px";
         }
         else {
           this.$.preview.style.opacity = "0";
