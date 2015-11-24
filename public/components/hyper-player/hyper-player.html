@@ -12,6 +12,8 @@
       overflow: hidden;
     }
     #notes {
+      margin-top: -20px;
+      padding-top: 20px;
       height: 100%;
       background-image:
         linear-gradient(to bottom, white, white 35px, rgba(0,0,0,0) 0),
@@ -23,7 +25,8 @@
       height: calc( 100vh - 420px );
     }
     h5 {
-      margin: 15.5px 0;
+      font-size: 20px;
+      margin: 12px 0;
     }
     @media screen and (max-width: 780px) {
       #video {
@@ -59,7 +62,6 @@
         },
         notes: {
           type: String,
-          value: 'Escreva suas anotações aqui...'
         },
         hypervideo: {
           type: Object,

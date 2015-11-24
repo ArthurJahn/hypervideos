@@ -76,9 +76,7 @@ Router.map(function () {
     path: '/',
     template: 'explorePanel',
     waitOn: function () {
-      return [this.subscribe('exploreSubjects', Meteor.userId()),
-        this.subscribe('userLibrary', Meteor.userId())
-      ];
+      return this.subscribe('exploreSubjects', Meteor.userId());
     },
     action: function () {
       this.render();
