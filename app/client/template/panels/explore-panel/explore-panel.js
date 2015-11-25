@@ -1,10 +1,21 @@
+var options = {
+  keepHistory: 0,
+  localSearch: true
+};
+var fields = ['name'];
+
+SubjectsSearch = new SearchSource('subjects', fields, options);
+
 Template.explorePanel.helpers({
   subjects: function () {
-    var subjects = [];
-    Subjects.find().fetch().forEach(function (subject) {
-      subjects.push(subject.get());
+    var subjects = SubjectsSearch.getData({
+      sort: {name: -1}
     });
     return JSON.stringify(subjects);
+  },
+  isLoading: function() {
+    var loading = SubjectsSearch.getStatus().loading || false;
+    return loading;
   }
 });
 
@@ -34,6 +45,10 @@ Template.explorePanel.events({
       subjectId: e.target.subject._id
     });
     librarySubject.remove();
+  },
+  'search-subjects hyper-search': function(e) {
+    var text = e.originalEvent.detail.query;
+    SubjectsSearch.search(text);
   }
 });
 

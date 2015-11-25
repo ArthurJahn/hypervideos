@@ -1,0 +1,54 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<dom-module id="hyper-search">
+  <style media="screen">
+    .toolbar {
+      width: calc(100% - 10px);
+      margin: 0 5px 10px 5px;
+    }
+    .toolbar * {
+      color: #616161;
+      font-size: 15px;
+      margin: 5px 0;
+    }
+    .toolbar iron-icon {
+      margin: 5px 0  5px 10px;
+    }
+    .toolbar input {
+      width: calc(100% - 47px);
+      height: 30px;
+      border: 0;
+    }
+  </style>
+  <template>
+    <paper-card class="toolbar">
+        <iron-icon icon="search"></iron-icon>
+        <input type="text" placeholder="Procure cursos aqui..." value="{{query::input}}"/>
+    </paper-card>
+    <template is="dom-if" if="{{loading}}">
+      <paper-spinner class="animated fadeIn" active></paper-spinner>
+    </template>
+    <div class="results">
+      <content></content>
+    </div>
+  </template>
+  <script type="text/javascript">
+    Polymer({
+      is:"hyper-search",
+      properties: {
+        loading: Boolean,
+        query: {
+          type: String,
+          observer:"search"
+        }
+      },
+      attached: function() {
+        this.fire('search-subjects',{query:''});
+      },
+      search: function(e) {
+        var text = this.query.trim();
+        this.fire('search-subjects',{query:text});
+      }
+    });
+  </script>

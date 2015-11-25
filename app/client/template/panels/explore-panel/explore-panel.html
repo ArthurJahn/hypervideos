@@ -1,3 +1,5 @@
 <template name="explorePanel">
-  <subjects-list subjects="{{subjects}}"></subjects-list>
+  <hyper-search loading="{{isLoading}}">
+    <subjects-list subjects="{{subjects}}"></subjects-list>
+  </hyper-search>
 </template>

@@ -6,7 +6,7 @@
 <dom-module id="subject-preview">
   <style>
     .wrapper {
-      height: 360px;
+      height: 300px;
     }
     #backcanvas {
       padding-top: 15px;
@@ -31,11 +31,14 @@
     .wrapper .progress {
       position: absolute;
       top: 270px;
-      left: 5px;
+      width: 100%;
     }
-    progress {
+    .progress span {
+      margin-left: 5px;
+    }
+    .progress progress {
       position: absolute;
-      top: 290px;
+      top: 25px;
       left: 0;
       height: 5px;
       width: 100%;
@@ -59,8 +62,9 @@
       </grid-container>
       <div class="progress">
         <span>{{progress}}</span> % concluído
+        <progress value="{{progress}}" max="100"></progress>
       </div>
-      <progress value="{{progress}}" max="100"></progress>
+
     </div>
   </template>
   <script>
