@@ -9,11 +9,13 @@ SubjectsSearch = new SearchSource('subjects', fields, options);
 Template.explorePanel.helpers({
   subjects: function () {
     var subjects = SubjectsSearch.getData({
-      sort: {name: -1}
+      sort: {
+        name: -1
+      }
     });
     return JSON.stringify(subjects);
   },
-  isLoading: function() {
+  isLoading: function () {
     var loading = SubjectsSearch.getStatus().loading || false;
     return loading;
   }
@@ -46,7 +48,7 @@ Template.explorePanel.events({
     });
     librarySubject.remove();
   },
-  'search-subjects hyper-search': function(e) {
+  'search-subjects hyper-search': function (e) {
     var text = e.originalEvent.detail.query;
     SubjectsSearch.search(text);
   }
