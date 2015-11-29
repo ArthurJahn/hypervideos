@@ -69,7 +69,7 @@ Subject = Astro.createClass({
     },
     // Add a connection between two hypervideos
     addConnection: function (conn) {
-      if (this._hasConnection(conn)) {
+      if (this._hasConnection(conn) > -1) {
         return false;
       } else {
         this.push('connections', conn);
@@ -82,16 +82,9 @@ Subject = Astro.createClass({
     // Remove a connection from subject
     removeConnection: function (connection) {
       var conns = this.connections;
-      var length = conns.length;
-      for (var i = 0; i < length; i++) {
-        var compConn = conns[i];
-        if (compConn.first === connection.first &&
-          compConn.second === connection.second) {
-          conns.splice(i, 1);
-          break;
-        }
-      }
-      if (i < length) {
+      var i = this._hasConnection(connection);
+      if (i !== -1) {
+        conns.splice(i,1);
         this.set('connections', conns);
         this.save();
         return true;
@@ -129,10 +122,10 @@ Subject = Astro.createClass({
             conn.second === compConn.second) ||
           (conn.second === compConn.first &&
             conn.first === compConn.second)) {
-          return true;
+          return i;
         }
       }
-      return false;
+      return -1;
     },
   },
   // Add 'timestamp' behavior that adds 'createdAt' and 'updatedAt' fields.

@@ -60,7 +60,7 @@ Hypervideo = Astro.Class({
       }).fetch();
     },
     addConnection: function (conn) {
-      if (this._hasConnection(conn)) {
+      if (this._hasConnection(conn) > -1) {
         return false;
       } else {
         this.push('connections', conn);
@@ -68,12 +68,35 @@ Hypervideo = Astro.Class({
         return true;
       }
     },
-    removeConnections: function (subvideoId) {
+    // given a subvideo _id, remove all of its connections
+    // and then, remove the subvideo
+    removeSubvideo: function (subvideoId) {
+      this.removeConnections(subvideoId);
+      var subvideo = Subvideo.findOne({
+        _id: subvideoId
+      });
+      subvideo.remove();
+    },
+    // given a subvideo _id, remove all of its
+    // connections and then, remove the subvideo
+    removeQuestion: function (questionId) {
+      this.removeConnections(questionId);
+      var question = Question.findOne({
+        _id: questionId
+      });
+      question.remove();
+    },
+    // given a subvideo or question _id,
+    // remove all of its connections.
+    // Recieves as parameter a nodeId,
+    // which represents a question or
+    // subvideo _id.
+    removeConnections: function (nodeId) {
       var newConnections = [];
       for (var i = 0; i < this.connections.length; i++) {
         var compConn = this.connections[i];
-        if (subvideoId !== compConn.first &&
-          subvideoId !== compConn.second) {
+        if (nodeId !== compConn.first &&
+          nodeId !== compConn.second) {
           newConnections.push(compConn);
         }
       }
@@ -82,16 +105,9 @@ Hypervideo = Astro.Class({
     },
     removeConnection: function (connection) {
       var conns = this.connections;
-      var length = conns.length;
-      for (var i = 0; i < length; i++) {
-        var compConn = conns[i];
-        if (compConn.first === connection.first &&
-          compConn.second === connection.second) {
-          conns.splice(i, 1);
-          break;
-        }
-      }
-      if (i < length) {
+      var i = this._hasConnection(connection);
+      if (i !== -1) {
+        conns.splice(i,1);
         this.set('connections', conns);
         this.save();
         return true;
@@ -103,6 +119,7 @@ Hypervideo = Astro.Class({
       this.set('name', newName);
       this.save();
     },
+    
     //private methods
     _hasConnection: function (conn) {
       for (var i = 0; i < this.connections.length; i++) {
@@ -111,10 +128,10 @@ Hypervideo = Astro.Class({
             conn.second === compConn.second) ||
           (conn.second === compConn.first &&
             conn.first === compConn.second)) {
-          return true;
+          return i;
         }
       }
-      return false;
+      return -1;
     },
   },
   behaviors: ['timestamp']
