@@ -3,6 +3,7 @@
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
 
 <dom-module id="subvideo-composer">
   <style media="screen">
@@ -26,10 +27,11 @@
       margin-top: -22px;
     }
     progress {
+      margin-top: -5px;
       -webkit-appearance: none;
       position: absolute;
       height: 5px;
-      width: 92%;
+      width: calc(100% - 10px);
       background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
     }
     progress::-webkit-progress-bar {
@@ -75,6 +77,11 @@
       -o-transition:all .2s ease;
       transition:all .2s ease;
     }
+    paper-slider.green {
+      --paper-slider-knob-color: #12AE28;
+      --paper-slider-active-color: #12AE28;
+      --paper-slider-pin-color: #12AE28;
+    }
   </style>
   <template>
     <div id="wrapper">
@@ -109,6 +116,12 @@
           value="{{subvideo.description}}"
           on-change="updateSubvideoDescription">
         </paper-textarea>
+        <span>visibilidade</span>
+        <paper-slider pin
+          value="{{subvideo.visibility}}"
+          class="green" min="1" max="5"
+          on-change="visibilityChanged">
+        </paper-slider>
       </div>
     </div>
   </template>
@@ -161,6 +174,11 @@
       updateSubvideoDescription: function(e) {
         var input = e.target;
         this.subvideo.description = input.value;
+        this.fire('subvideo-changed');
+      },
+      visibilityChanged: function(e) {
+        var input = e.target;
+        this.subvideo.visibility = input.value;
         this.fire('subvideo-changed');
       },
       _fireUploaded: function() {

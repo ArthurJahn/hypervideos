@@ -168,6 +168,7 @@ Template.newSubjectPanel.events({
     var subvideo = Subvideo.findOne(e.target.subvideo._id);
     subvideo.set('name', e.target.subvideo.name);
     subvideo.set('description', e.target.subvideo.description);
+    subvideo.set('visibility', e.target.subvideo.visibility);
     subvideo.save();
     Template.newSubjectPanel.showValidationErrors(subvideo);
   },
@@ -195,6 +196,7 @@ Template.newSubjectPanel.events({
     question.set('name', e.target.question.name);
     question.set('description', e.target.question.description);
     question.set('answers', e.target.question.answers);
+    question.set('visibility', e.target.question.visibility);
     question.save();
     Template.newSubjectPanel.showValidationErrors(question);
   },
