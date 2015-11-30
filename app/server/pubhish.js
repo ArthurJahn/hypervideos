@@ -54,6 +54,53 @@ Meteor.publishComposite('fullSubject', function (subjectId) {
           });
         }
       }, ]
+    } ]
+  };
+});
+
+// Get Subject content: Hypervideos, subvideos, questions and videos
+// Also get user library referece to this subject
+// necessery when watching a subject.
+Meteor.publishComposite('watchSubject', function (subjectId, userId) {
+  var userLevel = Meteor.users.findOne(userId).level || 1;
+  return {
+    find: function () {
+      return Subjects.find({
+        _id: subjectId
+      });
+    },
+    children: [{
+      find: function (subject) {
+        return Hypervideos.find({
+          subjectId: subject._id
+        });
+      },
+      children: [{
+        find: function (hypervideo, subject) {
+          return Subvideos.find({
+            hypervideoId: hypervideo._id,
+            visibility: userLevel
+          }, {
+            sort: {
+              col: -1,
+              row: -1
+            }
+          });
+        }
+      }, {
+        find: function (hypervideo, subject) {
+          return Questions.find({
+            hypervideoId: hypervideo._id,
+            visibility: userLevel
+          });
+        }
+      }, {
+        find: function (hypervideo, subject) {
+          return Videos.find({
+            hypervideoId: hypervideo._id
+          });
+        }
+      }, ]
     }, {
       find: function (subject) {
         return LibrarySubjects.find({

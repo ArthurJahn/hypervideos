@@ -88,7 +88,7 @@ Router.map(function () {
     path: '/subject/:_id',
     waitOn: function () {
       //change to single hypervideo subscribe
-      return this.subscribe('fullSubject', this.params._id);
+      return this.subscribe('watchSubject', this.params._id, Meteor.userId());
     },
     action: function () {
       this.render();
