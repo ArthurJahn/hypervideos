@@ -210,6 +210,12 @@
       behaviors: [
         Polymer.IronResizableBehavior
       ],
+      ready: function() {
+        //canvas scale to draw smoothly
+        this._canvasScale = 3;
+        //canvas lineWidth
+        this._lineWidth = 4;
+      },
       attached: function() {
         var self = this;
         Polymer.dom.flush();
@@ -360,13 +366,12 @@
       },
       _drawConnections: function() {
         var self = this;
-        var canvasScale = 3;
-        var lineWidth = 4;
         var connections = self.$.conns.querySelectorAll('connection-node');
         var canvas = self.$.canvas;
-        canvas.width  = canvasScale * canvas.offsetWidth;
-        canvas.height = canvasScale * canvas.offsetHeight;
+        canvas.width  = self._canvasScale * canvas.offsetWidth;
+        canvas.height = self._canvasScale * canvas.offsetHeight;
         var ctx = canvas.getContext('2d');
+        //ctx.clear();
         ctx.beginPath();
         for(var i=0; i< connections.length; i++) {
           var conn = connections[i].connection;
@@ -376,16 +381,19 @@
           if(first && second) {
             var firstPos = first.getPos();
             var secondPos = second.getPos();
-            var x1 = canvasScale * (firstPos.x);
-            var y1 = canvasScale * (firstPos.y);
-            var x2 = canvasScale * (secondPos.x);
-            var y2 = canvasScale * (secondPos.y);
+            var x1 = self._canvasScale * (firstPos.x);
+            var y1 = self._canvasScale * (firstPos.y);
+            var x2 = self._canvasScale * (secondPos.x);
+            var y2 = self._canvasScale * (secondPos.y);
             ctx.moveTo(x1, y1);
             ctx.lineTo(x2, y2);
-            self._showConnection(conn, firstPos, secondPos);
+            self._showConnectionIcon(connections[i], firstPos, secondPos);
+          }
+          else {
+            self.$.conns.removeChild(connections[i]);
           }
         }
-        ctx.lineWidth = lineWidth;
+        ctx.lineWidth = self._lineWidth;
         ctx.stroke();
       },
       _redrawConnections: function(connections) {
@@ -443,18 +451,11 @@
         self.fire('connection-removed');
         self._drawConnections();
       },
-      _showConnection: function(connection, firstPos, secondPos) {
+      _showConnectionIcon: function(connection, firstPos, secondPos) {
         var self = this;
         var xmid = (firstPos.x + secondPos.x)/2;
         var ymid = (firstPos.y + secondPos.y)/2;
-        var list = self.$.conns.querySelectorAll('connection-node');
-        for(var i=0; i<list.length; i++) {
-          var connNode = list[i];
-          if(connNode.connection === connection) {
-              connNode.setPos(xmid, ymid);
-              return;
-          }
-        }
+        connection.setPos(xmid, ymid);
       },
       _getTouchableBounds: function() {
         var self = this;
@@ -537,6 +538,9 @@
         }
         self.emptyComposer();
         self._drawConnections();
+      },
+      getConnections: function() {
+
       }
     });
   </script>

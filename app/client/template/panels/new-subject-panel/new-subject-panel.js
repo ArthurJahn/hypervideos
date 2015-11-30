@@ -101,8 +101,10 @@ Template.newSubjectPanel.events({
     Template.newSubjectPanel.showValidationErrors(hypervideo);
   },
   'hypervideo-deleted hypervideo-node': function (e, template) {
-    var hypervideo = Hypervideo.findOne(e.target.hypervideo._id);
-    hypervideo.remove();
+    var subject = Subject.findOne(e.target.hypervideo.subjectId);
+    if (subject) {
+      subject.removeHypervideo(e.target.hypervideo._id);
+    }
   },
   'upload-videos hypervideo-composer-area': function (e, template) {
     var composer = e.target;
@@ -172,6 +174,10 @@ Template.newSubjectPanel.events({
     subvideo.save();
     Template.newSubjectPanel.showValidationErrors(subvideo);
   },
+  'subvideo-deleted subvideo-composer': function (e, template) {
+    var subvideo = Subvideo.findOne(e.target.subvideo._id);
+    subvideo.remove();
+  },
 
   // ======================== Question Controll Events =======================//
   'question-created question-node': function (e, template) {
@@ -199,6 +205,10 @@ Template.newSubjectPanel.events({
     question.set('visibility', e.target.question.visibility);
     question.save();
     Template.newSubjectPanel.showValidationErrors(question);
+  },
+  'question-deleted question-node': function (e, template) {
+    var question = Question.findOne(e.target.question._id);
+    question.remove();
   },
 });
 

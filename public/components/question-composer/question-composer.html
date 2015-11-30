@@ -157,7 +157,7 @@
         this._answerIndex = this.question.answers.indexOf(value);
       },
       answerLabel: function(index) {
-        return "Resposta "+ (index+1);
+        return "Resposta "+ (index+1);  
       },
       addAnswer: function() {
         var self = this;
@@ -182,6 +182,7 @@
         var height = this.$.toggle.scrollHeight;
         this.$.toggle.style.height = height+"px";
       },
+
     });
   </script>
 </dom-module>
