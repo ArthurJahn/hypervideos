@@ -12,13 +12,11 @@ SearchSource.defineSource('subjects', function (searchText, options) {
     var selector = {
       $and: [{
         name: regExp
-      },
-      {
+      }, {
         owner: {
           $ne: this.userId
         },
-      },
-      {
+      }, {
         editing: false
       }]
     };

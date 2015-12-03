@@ -47,7 +47,7 @@ Hypervideo = Astro.Class({
   methods: {
     // verify if the hypervideo
     // is ready to be published.
-    ready: function() {
+    ready: function () {
       return (this.subvideos().length > 0);
     },
     move: function (col, row) {
@@ -112,7 +112,7 @@ Hypervideo = Astro.Class({
       var conns = this.connections;
       var i = this._hasConnection(connection);
       if (i !== -1) {
-        conns.splice(i,1);
+        conns.splice(i, 1);
         this.set('connections', conns);
         this.save();
         return true;

@@ -48,9 +48,9 @@ Subject = Astro.createClass({
     // if the subject can be published
     ready: function () {
       var ready = ((this.hypervideos().length > 0) &&
-      this.hypervideos().every(function (hypervideo) {
-        return hypervideo.ready() === true;
-      }));
+        this.hypervideos().every(function (hypervideo) {
+          return hypervideo.ready() === true;
+        }));
       return ready;
     },
 
@@ -99,7 +99,7 @@ Subject = Astro.createClass({
       var conns = this.connections;
       var i = this._hasConnection(connection);
       if (i !== -1) {
-        conns.splice(i,1);
+        conns.splice(i, 1);
         this.set('connections', conns);
         this.save();
         return true;
