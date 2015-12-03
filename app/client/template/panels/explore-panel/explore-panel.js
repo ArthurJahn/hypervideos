@@ -1,6 +1,6 @@
 var options = {
   keepHistory: 0,
-  localSearch: true
+  localSearch: false
 };
 var fields = ['name'];
 

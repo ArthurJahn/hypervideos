@@ -196,7 +196,7 @@
         // if all subject's hypervideos are already built,
         // having at least one subvideo, than the course
         // is ready to be published
-        ready: {
+        readyToPublish: {
           type: Boolean,
           value: false,
           observer: "_enablePublishing"
@@ -283,10 +283,12 @@
       },
       draggingChanged: function (newDragging) {
         var self = this;
+        clearInterval(self._drawInterval);
         self._drawInterval = setInterval(function() {
           self._drawConnections();
-        }, 1);
+        }, 5);
         if(!self.dragging) {
+          self._drawConnections();
           clearInterval(self._drawInterval);
         }
       },
@@ -380,11 +382,12 @@
       _drawConnections: function() {
         var self = this;
         var connections = self.$.conns.querySelectorAll('connection-node');
+
         var canvas = self.$.canvas;
         canvas.width  = self._canvasScale * canvas.offsetWidth;
         canvas.height = self._canvasScale * canvas.offsetHeight;
+
         var ctx = canvas.getContext('2d');
-        //ctx.clear();
         ctx.beginPath();
         for(var i=0; i< connections.length; i++) {
           var conn = connections[i].connection;
@@ -551,13 +554,12 @@
       },
       _enablePublishing: function() {
         var publish = this.$.publishButton;
-        console.log(this.ready);
-        if(this.ready) {
+        if(this.readyToPublish) {
           publish.removeAttribute('disabled');
         } else {
           publish.setAttribute('disabled','true');
         }
-        return this.ready;
+        return this.readyToPublish;
       }
     });
   </script>
