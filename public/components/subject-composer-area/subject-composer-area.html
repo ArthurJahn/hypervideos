@@ -116,7 +116,7 @@
         label='Nome do Curso'
         on-change='_updateSubject'>
       </paper-input>
-      <paper-button id='publishButton' disabled>
+      <paper-button id='publishButton' disabled on-tap='publish'>
         <iron-icon icon='social:public'></iron-icon>
         Publicar
       </paper-button>
@@ -192,6 +192,16 @@
           value: null,
           observer: '_updateSubject'
         },
+
+        // if all subject's hypervideos are already built,
+        // having at least one subvideo, than the course
+        // is ready to be published
+        ready: {
+          type: Boolean,
+          value: false,
+          observer: "_enablePublishing"
+        },
+
         hypervideos: {
           type: Object,
           value: null,
@@ -311,6 +321,9 @@
       discard: function() {
         this.fire('subject-deleted');
         this._resetComposer();
+      },
+      publish: function() {
+        this.fire('subject-published');
       },
 
 //===================== Custom Component Private Methods =====================//
@@ -471,18 +484,6 @@
       _onIronResize: function() {
         this.$.hypers.bounds = this._getTouchableBounds();
       },
-      _toggleActionButtons: function() {
-        var delButton = this.$.deleteButton;
-        var publish = this.$.publishButton;
-        if(this.empty) {
-          publish.setAttribute('disabled','true');
-          delButton.setAttribute('disabled','true');
-        } else {
-          delButton.removeAttribute('disabled');
-        }
-        //should return if buttons are enabled
-        return ! this.empty;
-      },
       _setSubjectData: function() {
         var self = this;
         self._resetComposer();
@@ -539,8 +540,24 @@
         self.emptyComposer();
         self._drawConnections();
       },
-      getConnections: function() {
-
+      _toggleActionButtons: function() {
+        var delButton = this.$.deleteButton;
+        if(this.empty) {
+          delButton.setAttribute('disabled','true');
+        } else {
+          delButton.removeAttribute('disabled');
+        }
+        return ! this.empty;
+      },
+      _enablePublishing: function() {
+        var publish = this.$.publishButton;
+        console.log(this.ready);
+        if(this.ready) {
+          publish.removeAttribute('disabled');
+        } else {
+          publish.setAttribute('disabled','true');
+        }
+        return this.ready;
       }
     });
   </script>

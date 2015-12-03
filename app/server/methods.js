@@ -1,6 +1,5 @@
 // Model methods defined to be run only in the server.
 
-//
 SearchSource.defineSource('subjects', function (searchText, options) {
   var options = {
     sort: {
@@ -13,10 +12,14 @@ SearchSource.defineSource('subjects', function (searchText, options) {
     var selector = {
       $and: [{
         name: regExp
-      }, {
+      },
+      {
         owner: {
           $ne: this.userId
-        }
+        },
+      },
+      {
+        editing: false
       }]
     };
     return Subjects.find(selector, options).fetch();
@@ -24,7 +27,8 @@ SearchSource.defineSource('subjects', function (searchText, options) {
     return Subjects.find({
       owner: {
         $ne: this.userId
-      }
+      },
+      editing: false
     }, options).fetch();
   }
 });

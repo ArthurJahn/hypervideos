@@ -178,7 +178,8 @@ Meteor.publishComposite('exploreSubjects', function (userId) {
       return Subjects.find({
         owner: {
           $nin: [userId]
-        }
+        },
+        editing: false
       });
     },
     children: [{

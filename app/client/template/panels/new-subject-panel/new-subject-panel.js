@@ -8,6 +8,14 @@ Template.newSubjectPanel.helpers({
       return JSON.stringify(subject.get());
     }
     return null;
+  },
+  readyToPublish: function () {
+    var subject = Subject.findOne();
+    var readyToPublish = false;
+    if (subject) {
+      readyToPublish = subject.ready();
+    }
+    return readyToPublish;
   }
 });
 
@@ -47,6 +55,10 @@ Template.newSubjectPanel.events({
     var subject = Subject.findOne(e.target.subject._id);
     subject.remove();
     e.target.subject = null;
+  },
+  'subject-published subject-composer-area': function (e, template) {
+    var subject = Subject.findOne(e.target.subject._id);
+    subject.setEditing(false);
   },
   'get-hypervideos subject-composer-area': function (e, template) {
     var subject = Subject.findOne({

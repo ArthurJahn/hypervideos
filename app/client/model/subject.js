@@ -1,15 +1,17 @@
-//A subject is compound by an undirected graph of hypervideos. It has a name
-// and a flag to indicate whether this subject is still under edition or ready
-// to be published.
+//A subject is compound by an undirected graph of hypervideos. It has also a
+// name and a flag to indicate whether this subject is still under edition or
+// ready to be published.
 
 Subject = Astro.createClass({
   name: 'Subject',
   collection: Subjects,
   fields: {
+
     owner: {
       type: 'string',
       validator: Validators.required(),
     },
+
     name: {
       type: 'string',
       default: 'Novo Curso',
@@ -19,12 +21,18 @@ Subject = Astro.createClass({
         Validators.minLength(5, 'Nome muito curto')
       ])
     },
+
+    // connections between hypervideos
+    // that belong to this subject
     connections: {
       type: 'array',
       default: function () {
         return [];
       }
     },
+
+    // editing subjects cannot
+    // be published to the network
     editing: {
       type: 'boolean',
       default: true,
@@ -34,15 +42,18 @@ Subject = Astro.createClass({
       ])
     },
   },
-  events: {
-    beforeremove: function () {
-      var self = this;
-      self.hypervideos().forEach(function (hypervideo) {
-        self.removeConnections(hypervideo._id);
-      });
-    }
-  },
   methods: {
+
+    // returns a boolean that verifies
+    // if the subject can be published
+    ready: function () {
+      var ready = ((this.hypervideos().length > 0) &&
+      this.hypervideos().every(function (hypervideo) {
+        return hypervideo.ready() === true;
+      }));
+      return ready;
+    },
+
     // returns the list of hypervideos
     //  that belongs to this subject
     hypervideos: function () {
@@ -50,6 +61,7 @@ Subject = Astro.createClass({
         subjectId: this._id
       }).fetch();
     },
+
     // given a hypervideo _id, remove all of its connections
     // and then, remove the hypervideo
     removeHypervideo: function (hypervideoId) {
@@ -59,6 +71,7 @@ Subject = Astro.createClass({
       });
       hypervideo.remove();
     },
+
     // when set as editing, a subject is not publishe yet,
     // so it cannot be found by general users, only its owner
     setEditing: function (editing) {
@@ -67,6 +80,7 @@ Subject = Astro.createClass({
         this.save();
       }
     },
+
     // Add a connection between two hypervideos
     addConnection: function (conn) {
       if (this._hasConnection(conn) > -1) {
@@ -79,6 +93,7 @@ Subject = Astro.createClass({
         return true;
       }
     },
+
     // Remove a connection from subject
     removeConnection: function (connection) {
       var conns = this.connections;
@@ -92,6 +107,7 @@ Subject = Astro.createClass({
         return false;
       }
     },
+
     // Remove all connections with a specified
     // Hypervideo by passing its id
     removeConnections: function (hypervideoId) {
@@ -106,6 +122,7 @@ Subject = Astro.createClass({
       this.set('connections', newConnections);
       this.save();
     },
+
     setName: function (newName) {
       this.set('name', newName);
       if (this.validate()) {
