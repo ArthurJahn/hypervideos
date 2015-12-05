@@ -39,6 +39,29 @@
     #mainPanel subject-preview {
       height: 320px;
     }
+    #mainPanel .progress {
+      position: absolute;
+      top: 270px;
+      width: 100%;
+    }
+    .progress span {
+      margin-left: 5px;
+    }
+    .progress progress {
+      position: absolute;
+      top: 25px;
+      left: 0;
+      height: 5px;
+      width: 100%;
+      -webkit-appearance: none;
+      background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
+    }
+    progress::-webkit-progress-bar {
+      background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
+    }
+    progress::-webkit-progress-value {
+      background-color: #FFC107;
+    }
     @media screen and (max-width: 800px) {
       #mainPanel {
         width: calc(100% - 10px);
@@ -61,6 +84,10 @@
         </span>
       </paper-toolbar>
       <subject-preview id="preview" subject="{{subject}}" hypervideos="{{hypervideos}}"></subject-preview>
+      <div class="progress">
+        <span>{{progress}}</span> % concluído
+        <progress value="{{progress}}" max="100"></progress>
+      </div>
     </paper-header-panel>
   </paper-card>
   </template>
@@ -79,6 +106,10 @@
           return [];
         },
       },
+      progress: {
+        type: Number,
+        value: 50
+      }
     },
     listeners: {
       'iron-resize': '_onIronResize'

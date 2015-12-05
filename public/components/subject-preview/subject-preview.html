@@ -28,29 +28,6 @@
       position: absolute;
       top:15px;
     }
-    .wrapper .progress {
-      position: absolute;
-      top: 270px;
-      width: 100%;
-    }
-    .progress span {
-      margin-left: 5px;
-    }
-    .progress progress {
-      position: absolute;
-      top: 25px;
-      left: 0;
-      height: 5px;
-      width: 100%;
-      -webkit-appearance: none;
-      background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
-    }
-    progress::-webkit-progress-bar {
-      background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
-    }
-    progress::-webkit-progress-value {
-      background-color: #FFC107;
-    }
   </style>
   <template>
     <div class="wrapper">
@@ -60,11 +37,6 @@
       </div>
       <grid-container id="hypers">
       </grid-container>
-      <div class="progress">
-        <span>{{progress}}</span> % concluído
-        <progress value="{{progress}}" max="100"></progress>
-      </div>
-
     </div>
   </template>
   <script>
@@ -81,10 +53,6 @@
           return [];
         },
         observer: "presentHypervideos"
-      },
-      progress: {
-        type: Number,
-        value: 50
       }
     },
     attached: function() {

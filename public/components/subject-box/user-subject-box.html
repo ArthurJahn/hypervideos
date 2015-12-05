@@ -8,9 +8,9 @@
   <style>
     #mainPanel {
       float: left;
-      width: 49%;
-      margin: 0.5%;
-      height: 400px;
+      width: calc(50% - 10px);
+      margin: 15px 5px;
+      height: 340px;
     }
     #mainPanel paper-toolbar {
       font-size: 15px;
@@ -36,26 +36,28 @@
       padding: 5px;
     }
     #mainPanel subject-preview {
-      height: 360px;
+      height: 320px;
     }
     @media screen and (max-width: 800px) {
       #mainPanel {
-        width: 99%;
+        width: calc(100% - 10px);
       }
     }
   </style>
   <template>
-    <paper-header-panel id="mainPanel" mode="seamed">
-      <paper-toolbar>
-        <p>{{subject.name}}</p>
-        <span>
-          <paper-icon-button icon="av:play-circle-filled" on-tap="watchSubject"></paper-icon-button>
-          <paper-icon-button icon="create" on-tap="editSubject"></paper-icon-button>
-          <paper-icon-button icon="delete" on-tap="discardSubject"></paper-icon-button>
-        </span>
-      </paper-toolbar>
-      <subject-preview id="preview" subject="{{subject}}" hypervideos="{{hypervideos}}"></subject-preview>
-    </paper-header-panel>
+    <paper-card id="mainPanel">
+      <paper-header-panel mode="seamed">
+        <paper-toolbar>
+          <p>{{subject.name}}</p>
+          <span>
+            <paper-icon-button icon="av:play-circle-filled" on-tap="watchSubject"></paper-icon-button>
+            <paper-icon-button icon="create" on-tap="editSubject"></paper-icon-button>
+            <paper-icon-button icon="delete" on-tap="discardSubject"></paper-icon-button>
+          </span>
+        </paper-toolbar>
+        <subject-preview id="preview" subject="{{subject}}" hypervideos="{{hypervideos}}"></subject-preview>
+      </paper-header-panel>
+    </paper-card>
   </template>
   <script>
   Polymer({
