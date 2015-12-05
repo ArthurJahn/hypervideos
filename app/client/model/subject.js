@@ -53,11 +53,15 @@ Subject = Astro.createClass({
   },
   events: {
     'afterFind': function (e) {
+      if (e.data) {
         var id = e.data.result._id;
-        var libSubject = LibrarySubject.findOne({subjectId:id});
+        var libSubject = LibrarySubject.findOne({
+          subjectId: id
+        });
         var inLibrary = (libSubject !== undefined);
         e.data.result.inLibrary = inLibrary;
-      },
+      }
+    },
   },
   methods: {
 
@@ -82,7 +86,9 @@ Subject = Astro.createClass({
     // returns a boolean that indicates if this
     // subject is already in current user's library
     inUserLibrary: function () {
-      var libSubject = LibrarySubject.findOne({subjectId:subject._id});
+      var libSubject = LibrarySubject.findOne({
+        subjectId: subject._id
+      });
       var inLibrary = (libSubject !== undefined);
       this.inLibrary = inLibrary;
     },

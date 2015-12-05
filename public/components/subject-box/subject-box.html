@@ -100,12 +100,12 @@
       this.fire("watch-subject");
     },
     removeFromLib: function() {
-      this.fire("remove-library-subject");
       this.subject.inLibrary = !this.subject.inLibrary;
+      this.fire("remove-library-subject");
     },
     addToLib: function() {
-      this.fire('add-library-subject');
       this.subject.inLibrary = !this.subject.inLibrary;
+      this.fire('add-library-subject');
     },
     _onIronResize: function() {
       this.$.preview.onResize();
