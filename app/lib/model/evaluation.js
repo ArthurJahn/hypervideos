@@ -1,3 +1,5 @@
+Evaluations = new Mongo.Collection('evaluations');
+
 Evaluation = Astro.Class({
   name: 'Evaluation',
   collection: Evaluations,

@@ -1,3 +1,5 @@
+Questions = new Mongo.Collection('questions');
+
 Question = Astro.Class({
   name: 'Question',
   collection: Questions,

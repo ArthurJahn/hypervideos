@@ -1,117 +1,139 @@
 // REMOVE ME - only for tests
 Meteor.startup(function () {
-  if (Subjects.find().count() !== 0) {
-    Subjects.remove({});
-    Hypervideos.remove({});
-    Subvideos.remove({});
-    Questions.remove({});
+  if (Subject.find().count() !== 0) {
+    Subject.remove({});
+    Hypervideo.remove({});
+    Subvideo.remove({});
+    Question.remove({});
 
     Videos.remove({});
 
-    LibrarySubjects.remove({});
-    VisitedHypervideos.remove({});
+    LibrarySubject.remove({});
+    VisitedHypervideo.remove({});
   }
 });
 
-// Get all Subject content: Hypervideos, subvideos, questions and videos
+// Get all Subject content: Hypervideo, subvideos, questions and videos
 // Also get user library referece to this subject, if exists
 // necessery when editing or watching a subject.
 Meteor.publishComposite('fullSubject', function (subjectId) {
   var userId = this.userId;
   return {
     find: function () {
-      return Subjects.find({
+      return Subject.find({
         _id: subjectId
+      }, {
+        transform: null
       });
     },
     children: [{
       find: function (subject) {
-        return Hypervideos.find({
+        return Hypervideo.find({
           subjectId: subject._id
+        }, {
+          transform: null
         });
       },
       children: [{
         find: function (hypervideo, subject) {
-          return Subvideos.find({
+          return Subvideo.find({
             hypervideoId: hypervideo._id
           }, {
             sort: {
               col: -1,
               row: -1
-            }
+            },
+            transform: null
           });
         }
       }, {
         find: function (hypervideo, subject) {
-          return Questions.find({
+          return Question.find({
             hypervideoId: hypervideo._id
+          }, {
+            transform: null
           });
         }
       }, {
         find: function (hypervideo, subject) {
           return Videos.find({
             hypervideoId: hypervideo._id
+          }, {
+            transform: null
           });
         }
       }, ]
-    } ]
+    }]
   };
 });
 
-// Get Subject content: Hypervideos, subvideos, questions and videos
+// Get Subject content: Hypervideo, subvideos, questions and videos
 // Also get user library referece to this subject
 // necessery when watching a subject.
 Meteor.publishComposite('watchSubject', function (subjectId, userId) {
   var userLevel = Meteor.users.findOne(userId).level || 1;
   return {
     find: function () {
-      return Subjects.find({
+      return Subject.find({
         _id: subjectId
+      }, {
+        transform: null
       });
     },
     children: [{
       find: function (subject) {
-        return Hypervideos.find({
+        return Hypervideo.find({
           subjectId: subject._id
+        }, {
+          transform: null
         });
       },
       children: [{
         find: function (hypervideo, subject) {
-          return Subvideos.find({
+          return Subvideo.find({
             hypervideoId: hypervideo._id,
             visibility: userLevel
           }, {
             sort: {
               col: -1,
               row: -1
-            }
+            },
+            transform: null
           });
         }
       }, {
         find: function (hypervideo, subject) {
-          return Questions.find({
+          return Question.find({
             hypervideoId: hypervideo._id,
             visibility: userLevel
+          }, {
+            transform: null
           });
         }
       }, {
         find: function (hypervideo, subject) {
           return Videos.find({
             hypervideoId: hypervideo._id
+          }, {
+            transform: null
           });
         }
       }, ]
     }, {
       find: function (subject) {
-        return LibrarySubjects.find({
+        return LibrarySubject.find({
           userId: userId,
           subjectId: subject._id
+        }, {
+          transform: null
         });
       },
       children: [{
         find: function (librarySubject) {
-          return VisitedHypervideos.find({
+          return VisitedHypervideo.find({
             librarySubjectId: librarySubject._id
+          }, {
+            transform: null
           });
         }
       }]
@@ -124,46 +146,58 @@ Meteor.publishComposite('watchSubject', function (subjectId, userId) {
 Meteor.publishComposite('userSubjects', function (userId) {
   return {
     find: function () {
-      return Subjects.find({
+      return Subject.find({
         owner: userId
+      }, {
+        transform: null
       });
     },
     children: [{
       find: function (subject) {
-        return Hypervideos.find({
+        return Hypervideo.find({
           subjectId: subject._id
+        }, {
+          transform: null
         });
       }
     }],
   };
 });
 
-// Get all logged user's librarySubjects
+// Get all logged user's librarySubject
 // and vinculated subjects and hypervideos
 // Necessary when showing user library
 Meteor.publishComposite('userLibrary', function (userId) {
   return {
     find: function () {
-      return LibrarySubjects.find({
+      return LibrarySubject.find({
         userId: userId
+      }, {
+        transform: null
       });
     },
     children: [{
       find: function (librarySubject) {
-        return VisitedHypervideos.find({
+        return VisitedHypervideo.find({
           librarySubjectId: librarySubject._id
+        }, {
+          transform: null
         });
       }
     }, {
       find: function (librarySubject) {
-        return Subjects.find({
+        return Subject.find({
           _id: librarySubject.subjectId
+        }, {
+          transform: null
         });
       }
     }, {
       find: function (librarySubject) {
-        return Hypervideos.find({
+        return Hypervideo.find({
           subjectId: librarySubject.subjectId
+        }, {
+          transform: null
         });
       }
     }]
@@ -175,17 +209,21 @@ Meteor.publishComposite('userLibrary', function (userId) {
 Meteor.publishComposite('exploreSubjects', function (userId) {
   return {
     find: function () {
-      return Subjects.find({
+      return Subject.find({
         owner: {
           $nin: [userId]
         },
         editing: false
+      }, {
+        transform: null
       });
     },
     children: [{
       find: function (subject) {
-        return Hypervideos.find({
+        return Hypervideo.find({
           subjectId: subject._id
+        }, {
+          transform: null
         });
       }
     }, ]
@@ -197,14 +235,18 @@ Meteor.publishComposite('exploreSubjects', function (userId) {
 Meteor.publishComposite('oneSubject', function (subjectId) {
   return {
     find: function () {
-      return Subjects.find({
+      return Subject.find({
         _id: subjectId
+      }, {
+        transform: null
       });
     },
     children: [{
       find: function (subject) {
-        return Hypervideos.find({
+        return Hypervideo.find({
           subjectId: subject._id
+        }, {
+          transform: null
         });
       }
     }]

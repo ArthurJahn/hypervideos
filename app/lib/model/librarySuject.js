@@ -1,3 +1,5 @@
+LibrarySubjects = new Mongo.Collection('libsubjects');
+
 LibrarySubject = Astro.Class({
   name: 'LibrarySubject',
   collection: LibrarySubjects,

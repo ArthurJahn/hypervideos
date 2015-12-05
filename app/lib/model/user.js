@@ -3,10 +3,19 @@ User = Astro.Class({
   collection: Meteor.users,
   fields: {
     username: {
-      type: 'string',
+      type: 'string'
     },
     emails: {
-      type: 'array',
+      type: 'array'
+    },
+    profile: {
+      type: 'object'
+    },
+    roles: {
+      type: 'array'
+    },
+    services: {
+      type: 'object'
     },
     level: {
       type: 'number',

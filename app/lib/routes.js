@@ -1,3 +1,5 @@
+Astro.config.verbose = false;
+
 Router.configure({
   layoutTemplate: 'mainMenu',
   notFoundTemplate: 'NotFound',

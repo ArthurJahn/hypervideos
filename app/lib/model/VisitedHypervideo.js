@@ -1,3 +1,5 @@
+VisitedHypervideos = new Mongo.Collection('visitednodes');
+
 VisitedHypervideo = Astro.Class({
   name: 'VisitedHypervideo',
   collection: VisitedHypervideos,

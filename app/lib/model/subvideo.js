@@ -1,3 +1,18 @@
+Subvideos = new Mongo.Collection('subvideos');
+
+VidStore = new FS.Store.GridFS('medias', {
+  path: '~/Documents/git/hypervideos/uploads/medias'
+});
+Videos = new FS.Collection('videos', {
+  stores: [VidStore],
+  filter: {
+    maxSize: 100000000, // 100 MB
+    onInvalid: function (msg) {
+      document.querySelector('#notify').message = msg;
+    }
+  }
+});
+
 Subvideo = Astro.Class({
   name: 'Subvideo',
   collection: Subvideos,

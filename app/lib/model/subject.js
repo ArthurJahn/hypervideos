@@ -1,6 +1,7 @@
 //A subject is compound by an undirected graph of hypervideos. It has also a
 // name and a flag to indicate whether this subject is still under edition or
 // ready to be published.
+Subjects = new Mongo.Collection('subjects');
 
 Subject = Astro.createClass({
   name: 'Subject',
@@ -53,7 +54,7 @@ Subject = Astro.createClass({
   },
   events: {
     'afterFind': function (e) {
-      if (e.data) {
+      if (e.data.result) {
         var id = e.data.result._id;
         var libSubject = LibrarySubject.findOne({
           subjectId: id

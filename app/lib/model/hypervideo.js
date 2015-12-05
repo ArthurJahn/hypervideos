@@ -1,3 +1,5 @@
+Hypervideos = new Mongo.Collection('hypervideos');
+
 Hypervideo = Astro.Class({
   name: 'Hypervideo',
   collection: Hypervideos,
