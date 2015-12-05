@@ -8,16 +8,9 @@ SubjectsSearch = new SearchSource('subjects', fields, options);
 
 Template.explorePanel.helpers({
   subjects: function () {
-    var subjects = [];
-    var data = SubjectsSearch.getData({
+    var subjects =  SubjectsSearch.getData({
       sort: {
         name: -1
-      }
-    });
-    data.every(function (elm) {
-      if (elm) {
-        var subject = Subject.findOne({_id:elm._id});
-        subjects.push(subject);
       }
     });
     return JSON.stringify(subjects);
