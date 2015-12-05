@@ -4,6 +4,8 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 
 <dom-module id="subvideo-composer">
   <style media="screen">
@@ -14,24 +16,28 @@
       width: 92%;
       padding: 5px 10px 0 10px;
     }
+    .title-bar .left {
+      width: 70%;
+      float: left;
+    }
+    .title-bar .right {
+      width: 30%;
+      float: right;
+    }
     p {
       margin: 0px;
       padding: 10px 5px 0 0;
-      max-width: 80%;
+      max-width: 100%;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-    }
-    iron-icon {
-      float: right;
-      margin-top: -22px;
     }
     progress {
       margin-top: -5px;
       -webkit-appearance: none;
       position: absolute;
       height: 5px;
-      width: calc(100% - 10px);
+      width: calc(100% - 20px);
       background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
     }
     progress::-webkit-progress-bar {
@@ -68,6 +74,7 @@
       }
     }
     #toggle {
+      width: 100%;
       height: 0;
       overflow: hidden;
 
@@ -85,24 +92,31 @@
   </style>
   <template>
     <div id="wrapper">
-      <p>{{name}}</p>
-      <progress value="{{progress}}" max="100">
-      </progress>
-      <template is="dom-if" if="{{waiting}}">
-        <div class="waiting"></div>
-      </template>
-      <template is="dom-if" if="{{uploaded}}">
-        <template is="dom-if" if="{{!opened}}">
-          <iron-icon icon="expand-more"
-          class="animated fadeIn"
-          on-tap="toggleDetails"></iron-icon>
-        </template>
-        <template is="dom-if" if="{{opened}}">
-          <iron-icon icon="expand-less"
-          class="animated fadeIn"
-          on-tap="toggleDetails"></iron-icon>
-        </template>
-      </template>
+      <div class="title-bar">
+        <div class="left">
+          <p>{{name}}</p>
+          <progress value="{{progress}}" max="100">
+          </progress>
+          <template is="dom-if" if="{{waiting}}">
+            <div class="waiting"></div>
+          </template>
+        </div>
+        <div class="right">
+          <template is="dom-if" if="{{uploaded}}">
+            <template is="dom-if" if="{{!opened}}">
+              <paper-icon-button icon="expand-more"
+              class="animated fadeIn"
+              on-tap="toggleDetails"></paper-icon-button>
+            </template>
+            <template is="dom-if" if="{{opened}}">
+              <paper-icon-button icon="expand-less"
+              class="animated fadeIn"
+              on-tap="toggleDetails"></paper-icon-button>
+            </template>
+          </template>
+        </div>
+
+      </div>
       <div id="toggle">
         <paper-input id="subvideoName"
           name="name"
@@ -122,6 +136,11 @@
           class="green" min="1" max="5"
           on-change="visibilityChanged">
         </paper-slider>
+        <paper-button>
+          <iron-icon icon="delete"
+          class="animated fadeIn"></iron-icon>
+          Deletar Subvídeo
+        </paper-button>
       </div>
     </div>
   </template>
@@ -156,7 +175,8 @@
         self._setFileInfo();
       },
       toggleDetails: function() {
-        var height = this.$.toggle.scrollHeight;
+        var margin = 15;
+        var height = this.$.toggle.scrollHeight + margin;
         if(this.opened) {
           this.$.toggle.style.height = "0";
         }

@@ -4,6 +4,8 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 
 <dom-module id="question-composer">
   <style media="screen">
@@ -14,6 +16,14 @@
       width: 92%;
       padding: 5px 10px 0 10px;
     }
+    .title-bar .left {
+      width: 70%;
+      float: left;
+    }
+    .title-bar .right {
+      width: 30%;
+      float: right;
+    }
     p {
       margin: 0px;
       padding: 10px 5px 0 0;
@@ -22,11 +32,8 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    iron-icon {
-      float: right;
-      margin-top: -22px;
-    }
     #toggle {
+      width: 100%;
       height: 0;
       overflow: hidden;
 
@@ -44,17 +51,23 @@
   </style>
   <template>
     <div id="wrapper">
-      <p>{{name}}</p>
-      <template is="dom-if" if="{{!opened}}">
-        <iron-icon icon="expand-more"
-        class="animated fadeIn"
-        on-tap="toggleDetails"></iron-icon>
-      </template>
-      <template is="dom-if" if="{{opened}}">
-        <iron-icon icon="expand-less"
-        class="animated fadeIn"
-        on-tap="toggleDetails"></iron-icon>
-      </template>
+      <div class="title-bar">
+        <div class="left">
+          <p>{{name}}</p>
+        </div>
+        <div class="right">
+          <template is="dom-if" if="{{!opened}}">
+            <paper-icon-button icon="expand-more"
+            class="animated fadeIn"
+            on-tap="toggleDetails"></paper-icon-button>
+          </template>
+          <template is="dom-if" if="{{opened}}">
+            <paper-icon-button icon="expand-less"
+            class="animated fadeIn"
+            on-tap="toggleDetails"></paper-icon-button>
+          </template>
+        </div>
+      </div>
       <div id="toggle">
         <paper-input id="questionName"
           name="name"
@@ -84,6 +97,11 @@
         <template is="dom-if" if="{{!maxAnswers}}">
           <paper-icon-button icon="add" on-tap="addAnswer"></paper-icon-button>
         </template>
+        <paper-button>
+          <iron-icon icon="delete"
+          class="animated fadeIn"></iron-icon>
+          Deletar Questão
+        </paper-button>
       </div>
     </div>
   </template>
@@ -157,7 +175,7 @@
         this._answerIndex = this.question.answers.indexOf(value);
       },
       answerLabel: function(index) {
-        return "Resposta "+ (index+1);  
+        return "Resposta "+ (index+1);
       },
       addAnswer: function() {
         var self = this;
@@ -169,7 +187,7 @@
           self.question.answers = answers;
           self._setCurrentHeight();
           this.fire('question-changed');
-        } if(self.maxAnswers === 5){
+        } if(questionAns.length === 5){
           self.maxAnswers = true;
         }
       },
