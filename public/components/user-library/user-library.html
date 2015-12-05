@@ -12,14 +12,16 @@
       <paper-tab>Meus Cursos</paper-tab>
       <paper-tab>Estou Assistindo</paper-tab>
     </paper-tabs>
-    <iron-pages selected="{{selected}}">
+    <template is="dom-if" if="{{!selected}}">
       <div class="animated fadeIn">
         <user-subjects-list subjects="{{userSubjects}}"></user-subjects-list>
       </div>
+    </template>
+    <template is="dom-if" if="{{selected}}">
       <div class="animated fadeIn">
         <subjects-list subjects="{{librarySubjects}}"></subjects-list>
       </div>
-    </iron-pages>
+    </template>
   </template>
   <script>
   Polymer({
