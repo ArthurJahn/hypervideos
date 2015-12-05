@@ -76,7 +76,9 @@ Router.map(function () {
     path: '/',
     template: 'explorePanel',
     waitOn: function () {
-      return this.subscribe('exploreSubjects', Meteor.userId());
+      return [this.subscribe('exploreSubjects', Meteor.userId()),
+        this.subscribe('userLibrary', Meteor.userId())
+      ];
     },
     action: function () {
       this.render();
@@ -87,7 +89,6 @@ Router.map(function () {
   this.route('watchSubject', {
     path: '/subject/:_id',
     waitOn: function () {
-      //change to single hypervideo subscribe
       return this.subscribe('watchSubject', this.params._id, Meteor.userId());
     },
     action: function () {

@@ -8,9 +8,16 @@ SubjectsSearch = new SearchSource('subjects', fields, options);
 
 Template.explorePanel.helpers({
   subjects: function () {
-    var subjects = SubjectsSearch.getData({
+    var subjects = [];
+    var data = SubjectsSearch.getData({
       sort: {
         name: -1
+      }
+    });
+    data.every(function (elm) {
+      if (elm) {
+        var subject = Subject.findOne({_id:elm._id});
+        subjects.push(subject);
       }
     });
     return JSON.stringify(subjects);
@@ -55,12 +62,15 @@ Template.explorePanel.events({
 });
 
 Template.explorePanel.addLibrarySubject = function (subjectId) {
-  var librarySubject = new LibrarySubject({
-    subjectId: subjectId,
-    userId: Meteor.userId(),
-  });
-  librarySubject.generateId();
-  if (librarySubject.validate()) {
-    librarySubject.save();
+  var librarySubject = LibrarySubject.findOne({subjectId: subjectId});
+  if (!librarySubject) {
+    librarySubject = new LibrarySubject({
+      subjectId: subjectId,
+      userId: Meteor.userId(),
+    });
+    librarySubject.generateId();
+    if (librarySubject.validate()) {
+      librarySubject.save();
+    }
   }
 };

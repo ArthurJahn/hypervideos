@@ -41,6 +41,23 @@ Subject = Astro.createClass({
         Validators.boolean()
       ])
     },
+
+    inLibrary: {
+      type: 'boolean',
+      default: false,
+      validator: Validators.and([
+        Validators.required(),
+        Validators.boolean()
+      ])
+    }
+  },
+  events: {
+    'afterFind': function (e) {
+        var id = e.data.result._id;
+        var libSubject = LibrarySubject.findOne({subjectId:id});
+        var inLibrary = (libSubject !== undefined);
+        e.data.result.inLibrary = inLibrary;
+      },
   },
   methods: {
 
@@ -60,6 +77,14 @@ Subject = Astro.createClass({
       return Hypervideos.find({
         subjectId: this._id
       }).fetch();
+    },
+
+    // returns a boolean that indicates if this
+    // subject is already in current user's library
+    inUserLibrary: function () {
+      var libSubject = LibrarySubject.findOne({subjectId:subject._id});
+      var inLibrary = (libSubject !== undefined);
+      this.inLibrary = inLibrary;
     },
 
     // given a hypervideo _id, remove all of its connections

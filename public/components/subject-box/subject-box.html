@@ -52,10 +52,10 @@
         <p>{{subject.name}}</p>
         <span>
           <paper-icon-button icon="av:play-circle-filled" on-tap="watchSubject"></paper-icon-button>
-          <template is="dom-if" if="{{inlibrary}}">
+          <template is="dom-if" if="{{subject.inLibrary}}">
             <paper-icon-button icon="hyper:folder-remove" on-tap="removeFromLib"></paper-icon-button>
           </template>
-          <template is="dom-if" if="{{!inlibrary}}">
+          <template is="dom-if" if="{{!subject.inLibrary}}">
             <paper-icon-button icon="hyper:folder-add" on-tap="addToLib"></paper-icon-button>
           </template>
         </span>
@@ -79,10 +79,6 @@
           return [];
         },
       },
-      inlibrary: {
-        type: Boolean,
-        value: false
-      }
     },
     listeners: {
       'iron-resize': '_onIronResize'
@@ -105,11 +101,11 @@
     },
     removeFromLib: function() {
       this.fire("remove-library-subject");
-      this.inlibrary = !this.inlibrary;
+      this.subject.inLibrary = !this.subject.inLibrary;
     },
     addToLib: function() {
       this.fire('add-library-subject');
-      this.inlibrary = !this.inlibrary;
+      this.subject.inLibrary = !this.subject.inLibrary;
     },
     _onIronResize: function() {
       this.$.preview.onResize();
