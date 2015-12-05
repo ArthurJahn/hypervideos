@@ -80,12 +80,16 @@
           label="Descrição da Questão"
           on-change="updateQuestionDescription">
         </paper-textarea>
-        <span>visibilidade</span>
+        <span>Visibilidade</span>
         <paper-slider pin
           value="{{question.visibility}}"
           class="green" min="1" max="5"
           on-change="visibilityChanged">
         </paper-slider>
+        <span>Respostas</span>
+        <template is="dom-if" if="{{!maxAnswers}}">
+          <paper-icon-button icon="add" on-tap="addAnswer"></paper-icon-button>
+        </template>
         <template is="dom-repeat" items="{{answers}}" as="answer">
           <paper-input name="name"
             label="{{answerLabel(index)}}"
@@ -93,9 +97,6 @@
             value="{{answer}}"
             on-change="updateQuestionAnswer">
           </paper-input>
-        </template>
-        <template is="dom-if" if="{{!maxAnswers}}">
-          <paper-icon-button icon="add" on-tap="addAnswer"></paper-icon-button>
         </template>
         <paper-button>
           <iron-icon icon="delete"
@@ -187,7 +188,7 @@
           self.question.answers = answers;
           self._setCurrentHeight();
           this.fire('question-changed');
-        } if(questionAns.length === 5){
+        } if(questionAns.length === 4){
           self.maxAnswers = true;
         }
       },
