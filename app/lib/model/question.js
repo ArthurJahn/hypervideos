@@ -63,3 +63,16 @@ Question = Astro.Class({
   },
   behaviors: ['timestamp']
 });
+
+//right answers must exist only in server
+if (Meteor.isServer) {
+  Question.extend({
+    fields: {
+      rightAnswer: {
+        type: 'number',
+        default: 0,
+        validator: Validators.choice([0, 1, 2, 3, 4])
+      }
+    }
+  });
+}

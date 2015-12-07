@@ -1,6 +1,7 @@
 //A subject is compound by an undirected graph of hypervideos. It has also a
 // name and a flag to indicate whether this subject is still under edition or
 // ready to be published.
+
 Subjects = new Mongo.Collection('subjects');
 
 Subject = Astro.createClass({
@@ -8,11 +9,13 @@ Subject = Astro.createClass({
   collection: Subjects,
   fields: {
 
+    // user id that created this subject
     owner: {
       type: 'string',
       validator: Validators.required(),
     },
 
+    //subject's name
     name: {
       type: 'string',
       default: 'Novo Curso',
@@ -43,6 +46,8 @@ Subject = Astro.createClass({
       ])
     },
 
+    // indicates if subject is
+    // added to current user's library
     inLibrary: {
       type: 'boolean',
       default: false,
@@ -53,6 +58,10 @@ Subject = Astro.createClass({
     }
   },
   events: {
+
+    // after find, verify if subject
+    // has a related Library Subject
+    // if so,
     'afterFind': function (e) {
       if (e.data.result) {
         var id = e.data.result._id;
@@ -65,6 +74,7 @@ Subject = Astro.createClass({
     },
   },
   methods: {
+    //============================ PUBLIC METHODS ===========================//
 
     // returns a boolean that verifies
     // if the subject can be published
@@ -155,12 +165,15 @@ Subject = Astro.createClass({
       this.save();
     },
 
+    // set, validates and saves the
+    // subject with specified new name
     setName: function (newName) {
       this.set('name', newName);
       if (this.validate()) {
         this.save();
       }
     },
+
     //============================ PRIVATE METHODS ===========================//
     // verify existing connection in
     // subject connections list

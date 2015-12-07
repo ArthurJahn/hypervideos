@@ -107,7 +107,10 @@ Meteor.publishComposite('watchSubject', function (subjectId, userId) {
             hypervideoId: hypervideo._id,
             visibility: userLevel
           }, {
-            transform: null
+            transform: null,
+            // when watching a subject, the right
+            // answer must not be sent to user
+            rightAnswer: -1
           });
         }
       }, {
