@@ -47,6 +47,15 @@ VisitedHypervideo = Astro.Class({
       }
     },
 
+    // user question's answers collected from
+    // specified hypervideo
+    answers: {
+      type: 'array',
+      default: function () {
+        return [];
+      }
+    },
+
     // user notes about the content of the
     // watched hypervideo
     notes: {
@@ -59,21 +68,22 @@ VisitedHypervideo = Astro.Class({
     },
 
     addWatchedSubvideo: function (subvideoId) {
-      if (this.subvideos.indexOf(subvideoId) !== -1) {
-        this.push('subvideos', subvideoId);
-        return true;
-      }
-      return false;
+      this.pull('subvideos', subvideoId);
+      this.push('subvideos', subvideoId);
     },
-    addAnsweredQuestion: function (questionAnswer) {
-      if (questionAnswer.questionId && questionAnswer.answer) {
-        if (this.questions.indexOf(questionAnswer) !== -1) {
-          this.push('questions', questionAnswer);
-          return true;
-        }
+    addQuestion: function (questionId, answer) {
+      var answers = this.answers;
+      var i = this.questions.indexOf(questionId);
+      this.pull('questions', questionId);
+      this.push('questions', questionId);
+      if (i !== -1) {
+        answers.splice(i,1);
       }
-      return false;
-    },
+      else {
+        answers.push(answer);
+      }
+      this.set('answers', answers);
+    }
   },
   behaviors: ['timestamp']
 });
