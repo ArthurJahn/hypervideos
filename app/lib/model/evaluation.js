@@ -63,3 +63,22 @@ Evaluation = Astro.Class({
   },
   behaviors: ['timestamp']
 });
+
+// server side methods defined
+// for the evaluation class
+Meteor.methods({
+
+  // calculate direct and
+  // indirect user score
+  calculateScore: function (doc) {
+    // calculus of QRN scores must be defined here...
+    doc.directScore = 7;
+    doc.indirectScore = 8;
+  },
+  calculateReliability: function (doc) {
+    // calculus of QRN reliability must be defined here...
+    doc.directReliability = 7;
+    doc.indirectReliability = 4;
+  }
+
+});

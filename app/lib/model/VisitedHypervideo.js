@@ -64,24 +64,23 @@ VisitedHypervideo = Astro.Class({
   },
   methods: {
     evaluation: function () {
-      //fetch evaluation from database
+      return evaluation.findOne({visitedHypervideoId: this._id});
     },
 
     addWatchedSubvideo: function (subvideoId) {
       this.pull('subvideos', subvideoId);
       this.push('subvideos', subvideoId);
     },
+
     addQuestion: function (questionId, answer) {
       var answers = this.answers;
       var i = this.questions.indexOf(questionId);
       this.pull('questions', questionId);
       this.push('questions', questionId);
       if (i !== -1) {
-        answers.splice(i,1);
+        answers.splice(i, 1);
       }
-      else {
-        answers.push(answer);
-      }
+      answers.push(answer);
       this.set('answers', answers);
     }
   },

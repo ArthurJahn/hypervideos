@@ -8,7 +8,17 @@ Template.watchSubject.helpers({
       return JSON.stringify(subject.get());
     }
     return null;
-  }
+  },
+  librarySubject: function () {
+    var id = Session.get('subjectId');
+    var librarySubject = librarySubject.findOne({
+      subjectId: id
+    });
+    if (librarySubject) {
+      return JSON.stringify(librarySubject.get());
+    }
+    return null;
+  },
 });
 Template.watchSubject.events({
   'get-hypervideos subject-player': function (e, template) {
@@ -20,6 +30,7 @@ Template.watchSubject.events({
       hypervideos.push(hypervideo.get());
     });
     e.target.hypervideos = hypervideos;
+
     //FIX_ME: calculate hypervideo to be seen at first
     e.target.hypervideo = hypervideos[0];
     Template.watchSubject.visitHypervideo(hypervideos[0]._id);
@@ -40,6 +51,7 @@ Template.watchSubject.events({
     var hypervideo = Hypervideo.findOne({
       _id: e.target.hypervideo._id
     });
+
     //FIX-ME: calculate next subvideo to be played
     var subvideo = hypervideo.subvideos()[0];
     var sourceSubvideo = subvideo.get();
