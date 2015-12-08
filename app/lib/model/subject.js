@@ -57,22 +57,6 @@ Subject = Astro.createClass({
       ])
     }
   },
-  events: {
-
-    // after find, verify if subject
-    // has a related Library Subject
-    // if so,
-    'afterFind': function (e) {
-      if (e.data.result) {
-        var id = e.data.result._id;
-        var libSubject = LibrarySubject.findOne({
-          subjectId: id
-        });
-        var inLibrary = (libSubject !== undefined);
-        e.data.result.inLibrary = inLibrary;
-      }
-    },
-  },
   methods: {
     //============================ PUBLIC METHODS ===========================//
 
@@ -98,10 +82,12 @@ Subject = Astro.createClass({
     // subject is already in current user's library
     inUserLibrary: function () {
       var libSubject = LibrarySubject.findOne({
-        subjectId: subject._id
+        subjectId: this._id
       });
       var inLibrary = (libSubject !== undefined);
-      this.inLibrary = inLibrary;
+      this.set('inLibrary', inLibrary);
+      this.save();
+      return inLibrary;
     },
 
     // given a hypervideo _id, remove all of its connections

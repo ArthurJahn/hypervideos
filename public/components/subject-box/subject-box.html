@@ -75,10 +75,10 @@
         <p>{{subject.name}}</p>
         <span>
           <paper-icon-button icon="av:play-circle-filled" on-tap="watchSubject"></paper-icon-button>
-          <template is="dom-if" if="{{subject.inLibrary}}">
+          <template is="dom-if" if="{{inLibrary}}">
             <paper-icon-button icon="hyper:folder-remove" on-tap="removeFromLib"></paper-icon-button>
           </template>
-          <template is="dom-if" if="{{!subject.inLibrary}}">
+          <template is="dom-if" if="{{!inLibrary}}">
             <paper-icon-button icon="hyper:folder-add" on-tap="addToLib"></paper-icon-button>
           </template>
         </span>
@@ -109,6 +109,10 @@
       progress: {
         type: Number,
         value: 50
+      },
+      inLibrary: {
+        type: Boolean,
+        default: false
       }
     },
     listeners: {
@@ -125,17 +129,18 @@
       var self = this;
       if (self.subject) {
         self.fire('get-hypervideos');
+        this.inLibrary = this.subject.inLibrary;
       }
     },
     watchSubject: function() {
       this.fire("watch-subject");
     },
     removeFromLib: function() {
-      this.subject.inLibrary = !this.subject.inLibrary;
+      this.inLibrary = !this.inLibrary;
       this.fire("remove-library-subject");
     },
     addToLib: function() {
-      this.subject.inLibrary = !this.subject.inLibrary;
+      this.inLibrary = !this.inLibrary;
       this.fire('add-library-subject');
     },
     _onIronResize: function() {

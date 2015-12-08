@@ -8,10 +8,16 @@ SubjectsSearch = new SearchSource('subjects', fields, options);
 
 Template.explorePanel.helpers({
   subjects: function () {
-    var subjects =  SubjectsSearch.getData({
+    var data =  SubjectsSearch.getData({
       sort: {
         name: -1
       }
+    });
+    var subjects = [];
+    data.forEach(function (subject) {
+      var localSubject = Subject.findOne({_id: subject._id});
+      localSubject.inUserLibrary();
+      subjects.push(localSubject.get());
     });
     return JSON.stringify(subjects);
   },
@@ -29,24 +35,34 @@ Template.explorePanel.events({
     e.target.hypervideos = subject.hypervideos();
   },
   'watch-subject subject-box': function (e, template) {
-    var subject = e.target.subject;
+    var subject = Subject.findOne({
+      _id: e.target.subject._id
+    });
     Session.set('title', subject.name);
     Session.set('subjectId', subject._id);
     Template.explorePanel.addLibrarySubject(subject._id);
+    subject.save();
     Router.go('watchSubject', {
       _id: subject._id
     });
   },
   'add-library-subject subject-box': function (e, template) {
-    var subject = e.target.subject;
+    var subject = Subject.findOne({
+      _id: e.target.subject._id
+    });
     Template.explorePanel.addLibrarySubject(subject._id);
+    subject.save();
   },
   'remove-library-subject subject-box': function (e, template) {
+    var subject = Subject.findOne({
+      _id: e.target.subject._id
+    });
     var librarySubject = LibrarySubject.findOne({
       userId: Meteor.userId(),
-      subjectId: e.target.subject._id
+      subjectId: subject._id
     });
     librarySubject.remove();
+    subject.save();
   },
   'search-subjects hyper-search': function (e) {
     var text = e.originalEvent.detail.query;
