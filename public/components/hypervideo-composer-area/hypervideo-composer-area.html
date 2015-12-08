@@ -5,6 +5,7 @@
 <link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
 
 <link rel="import" href="../../components/subvideo-composer/subvideo-composer.html">
+<link rel="import" href="../../components/subvideo-composer/upload-item.html">
 <link rel="import" href="../../components/question-composer/question-composer.html">
 <link rel="import" href="../../components/subvideo-node/subvideo-node.html">
 <link rel="import" href="../../components/question-node/question-node.html">
@@ -100,7 +101,10 @@
           <div class="row content">
             <!-- Here will be displayed uploaded videos -->
             <template id="files" is="dom-repeat" items="{{fileObjects}}" as="videoFile">
-              <subvideo-composer file="{{videoFile}}" on-upload-complete="handleUploadComplete"></subvideo-composer>
+              <upload-item file="{{videoFile}}" on-upload-complete="handleUploadComplete"></upload-item>
+            </template>
+            <template id="files" is="dom-repeat" items="{{subvideoNodes}}" as="subvideoNode">
+              <subvideo-composer subvideo="{{subvideoNode.subvideo}}"></subvideo-composer>
             </template>
           </div>
           <div id="fileInputArea"
@@ -189,6 +193,14 @@
               return [];
           }
         },
+
+        subvideoNodes: {
+          type: Array,
+          value: function() {
+              return [];
+          }
+        },
+
         questionNodes: {
           type: Array,
           value: function() {
@@ -228,7 +240,10 @@
 //============================= Public Methods ===============================//
       handleUploadComplete: function(e) {
         var self = this;
-        self._createSubvideo(e.target);
+        var file = e.target.file;
+        self._createSubvideo(file);
+        var index = self.fileObjects.indexOf(file);
+        this.splice('fileObjects', index, 1);
       },
       toggleVideoDrawer: function() {
         this.$.videoDrawer.togglePanel();
@@ -267,7 +282,7 @@
         this.fire('name-changed');
       },
 //============================= Private Methods ==============================//
-      _createSubvideo: function(subvideoComposer) {
+      _createSubvideo: function(file) {
         var self = this;
         var xOffset = 35; // depends on initial definition in toucharea css
         var yOffset = 100;// depends on initial definition in toucharea css
@@ -285,15 +300,16 @@
           x : pos.x,
           y : pos.y,
           bounds: bounds,
-          mediaId: subvideoComposer.file._id,
-          name: subvideoComposer.name,
+          mediaId: file._id,
+          name: file.data.blob.name,
           connectId: self.connectId,
           hypervideoId: self.hypervideo._id,
         }
         var subvideoNode = new SubvideoNode(options);
         self._addNodeListeners(subvideoNode);
         self.$.nodesFrame.appendChild(subvideoNode);
-        subvideoComposer.subvideo = subvideoNode.subvideo;
+        var subvideosList = self.$.nodesFrame.querySelectorAll('subvideo-node');
+        self.subvideoNodes = Array.prototype.slice.call(subvideosList);
 
         pos = self._nextNodePos();
         options.x = pos.x;
@@ -301,8 +317,8 @@
         var questionNode = new QuestionNode(options);
         self._addNodeListeners(questionNode);
         self.$.nodesFrame.appendChild(questionNode);
-        var list = self.querySelectorAll('question-node');
-        self.questionNodes = Array.prototype.slice.call(list);
+        var questionsList = self.$.nodesFrame.querySelectorAll('question-node');
+        self.questionNodes = Array.prototype.slice.call(questionsList);
       },
       _nodesCount: function() {
         var self = this;
@@ -394,6 +410,13 @@
         var self = this;
         self.dragging = snInstance.dragging;
       },
+      _deletingListener: function(snInstance) {
+        var self = this;
+        var subvideosList = self.querySelectorAll('subvideo-node');
+        self.subvideoNodes = Array.prototype.slice.call(subvideosList);
+        var questionsList = self.querySelectorAll('question-node');
+        self.questionNodes = Array.prototype.slice.call(questionsList);
+      },
       _addNodeListeners: function(node) {
         var self = this;
         node.addEventListener('connect-id-changed', function(ev){
@@ -401,6 +424,9 @@
         });
         node.addEventListener('dragging-changed', function(ev){
           self._draggingListener(this);
+        });
+        node.addEventListener('on-deatach', function(ev){
+          self._deletingListener(this);
         });
       },
       //connection Listener functions

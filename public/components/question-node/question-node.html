@@ -90,7 +90,6 @@
         this._name = options.name;
         this.question = null;
         this.connectId = options.connectId;
-        this.mediaId = options.mediaId;
         this.hypervideoId = options.hypervideoId;
       },
       attached: function() {
@@ -99,7 +98,6 @@
 
         this._moveToPos();
         this.fire('question-created');
-        this.questionChanged();
       },
       detached: function() {
         this.remove();

@@ -79,8 +79,8 @@
         // property that holds the model element: a Subvideo
         subvideo: {
           type: Object,
-          value: null,
-          observer: "subvideoChanged"
+          observer: "subvideoChanged",
+          notify: true
         }
       },
       factoryImpl: function(options) {
@@ -88,7 +88,6 @@
         this._x = options.x;
         this._y = options.y;
         this._name = options.name;
-        this.subvideo = null;
         this.hypervideoId = options.hypervideoId;
         this.connectId = options.connectId;
         this.mediaId = options.mediaId;
@@ -96,12 +95,9 @@
       attached: function() {
         Polymer.dom.flush();
         this._w = this.$.icon.clientWidth;
+
         this._moveToPos();
         this.fire('subvideo-created');
-
-      },
-      detached: function() {
-        this.remove();
       },
 //============================= Public Methods ===============================//
       handleConnectId: function() {
@@ -181,13 +177,13 @@
           ? this._bounds.y + 20 : y;
         this._moveToPos();
       },
-      remove: function() {
-        this.fire('subvideo-deleted');
-      },
       subvideoChanged: function() {
         if(this.subvideo){
           this.id = "_"+this.subvideo._id;
           this.subvideoId = this.subvideo._id;
+        }
+        else {
+          this.remove();
         }
       },
 //============================= Private Methods ==============================//

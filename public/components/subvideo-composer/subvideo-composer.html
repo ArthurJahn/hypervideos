@@ -12,7 +12,7 @@
     #wrapper {
       position: relative;
       height: auto;
-      color: #CFD8DC;/*var(--light-primary-color)*/
+      color: #12AE28;
       width: 92%;
       padding: 5px 10px 0 10px;
     }
@@ -31,47 +31,6 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-    }
-    progress {
-      margin-top: -5px;
-      -webkit-appearance: none;
-      position: absolute;
-      height: 5px;
-      width: calc(100% - 20px);
-      background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
-    }
-    progress::-webkit-progress-bar {
-      background-color: rgba(240,240,240,1);/*var(--light-divider-color);*/
-    }
-    progress::-webkit-progress-value {
-      background-color: #CFD8DC;/*var(--light-primary-color)*/
-    }
-    /* if upload is waiting to begin */
-    .waiting {
-      position: absolute;
-      top: 10px; left: 10px; bottom: 0; right: 10px;
-      background-image: linear-gradient(
-        -45deg,
-        rgba(220, 220, 220, .2) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(220, 220, 220, .2) 50%,
-        rgba(220, 220, 220, .2) 75%,
-        transparent 75%,
-        transparent
-      );
-      z-index: 1;
-      background-size: 50px 50px;
-      animation: move 2s linear infinite;
-      overflow: hidden;
-    }
-    @keyframes move {
-      0% {
-        background-position: 0 0;
-      }
-      100% {
-        background-position: 50px 50px;
-      }
     }
     #toggle {
       width: 100%;
@@ -95,27 +54,19 @@
       <div class="title-bar">
         <div class="left">
           <p>{{name}}</p>
-          <progress value="{{progress}}" max="100">
-          </progress>
-          <template is="dom-if" if="{{waiting}}">
-            <div class="waiting"></div>
-          </template>
         </div>
         <div class="right">
-          <template is="dom-if" if="{{uploaded}}">
-            <template is="dom-if" if="{{!opened}}">
-              <paper-icon-button icon="expand-more"
-              class="animated fadeIn"
-              on-tap="toggleDetails"></paper-icon-button>
-            </template>
-            <template is="dom-if" if="{{opened}}">
-              <paper-icon-button icon="expand-less"
-              class="animated fadeIn"
-              on-tap="toggleDetails"></paper-icon-button>
-            </template>
+          <template is="dom-if" if="{{!opened}}">
+            <paper-icon-button icon="expand-more"
+            class="animated fadeIn"
+            on-tap="toggleDetails"></paper-icon-button>
+          </template>
+          <template is="dom-if" if="{{opened}}">
+            <paper-icon-button icon="expand-less"
+            class="animated fadeIn"
+            on-tap="toggleDetails"></paper-icon-button>
           </template>
         </div>
-
       </div>
       <div id="toggle">
         <paper-input id="subvideoName"
@@ -136,7 +87,7 @@
           class="green" min="1" max="5"
           on-change="visibilityChanged">
         </paper-slider>
-        <paper-button>
+        <paper-button on-tap="subvideoDeleted">
           <iron-icon icon="delete"
           class="animated fadeIn"></iron-icon>
           Deletar Subvídeo
@@ -148,18 +99,10 @@
     subvideoComposer = Polymer({
       is: 'subvideo-composer',
       properties: {
-        file: Object,
-        progress: Number,
-        waiting: {
-          type: Boolean,
-          value: true
-        },
-        uploaded: {
-          type: Boolean,
-          value: false
-        },
         subvideo: {
           type: Object,
+          observer: "subvideoChanged",
+          notify: true
         },
         name: {
           type: String,
@@ -172,7 +115,7 @@
       },
       ready: function () {
         var self = this;
-        self._setFileInfo();
+        self.subvideoChanged();
       },
       toggleDetails: function() {
         var margin = 15;
@@ -201,31 +144,16 @@
         this.subvideo.visibility = input.value;
         this.fire('subvideo-changed');
       },
-      _fireUploaded: function() {
-        var self = this;
-        self.querySelector('progress').style.opacity = 0;
-        self.uploaded = true;
-        self.$.wrapper.style.color = "#12AE28";//--trd-accent-color
-        self.fire('upload-complete');
+      subvideoDeleted: function () {
+        this.fire('subvideo-deleted');
       },
-      _setFileInfo: function() {
+      subvideoChanged: function() {
         var self = this;
-        if(self.file) {
-          self.name = self.file.data.blob.name;
-          self._progressInterval = setInterval(function() {
-            self._setProgress();
-          },100);
+        if(self.subvideo) {
+          self.name = self.subvideo.name;
         }
-      },
-      _setProgress: function() {
-        var self = this;
-        self.progress = self.file.uploadProgress();
-        if(self.progress !== 0) {
-          self.waiting = false;
-        }
-        if(self.progress === 100) {
-          clearInterval(self._progressInterval);
-          self._fireUploaded();
+        else {
+          this.remove();
         }
       },
     });

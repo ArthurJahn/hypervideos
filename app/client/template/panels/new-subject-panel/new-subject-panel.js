@@ -179,16 +179,22 @@ Template.newSubjectPanel.events({
     Template.newSubjectPanel.showValidationErrors(subvideo);
   },
   'subvideo-changed subvideo-composer': function (e, template) {
-    var subvideo = Subvideo.findOne(e.target.subvideo._id);
-    subvideo.set('name', e.target.subvideo.name);
-    subvideo.set('description', e.target.subvideo.description);
-    subvideo.set('visibility', e.target.subvideo.visibility);
-    subvideo.save();
-    Template.newSubjectPanel.showValidationErrors(subvideo);
+    if (e.target.subvideo) {
+      var subvideo = Subvideo.findOne(e.target.subvideo._id);
+      subvideo.set('name', e.target.subvideo.name);
+      subvideo.set('description', e.target.subvideo.description);
+      subvideo.set('visibility', e.target.subvideo.visibility);
+      subvideo.save();
+      Template.newSubjectPanel.showValidationErrors(subvideo);
+    }
   },
+
   'subvideo-deleted subvideo-composer': function (e, template) {
-    var subvideo = Subvideo.findOne(e.target.subvideo._id);
-    subvideo.remove();
+    if (e.target.subvideo) {
+      var subvideo = Subvideo.findOne(e.target.subvideo._id);
+      subvideo.remove();
+      e.target.subvideo = null;
+    }
   },
 
   // ======================== Question Controll Events =======================//
