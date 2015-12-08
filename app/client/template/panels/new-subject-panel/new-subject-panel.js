@@ -216,17 +216,23 @@ Template.newSubjectPanel.events({
     Template.newSubjectPanel.showValidationErrors(question);
   },
   'question-changed question-composer': function (e, template) {
-    var question = Question.findOne(e.target.question._id);
-    question.set('name', e.target.question.name);
-    question.set('description', e.target.question.description);
-    question.set('answers', e.target.question.answers);
-    question.set('visibility', e.target.question.visibility);
-    question.save();
-    Template.newSubjectPanel.showValidationErrors(question);
+    if (e.target.question) {
+      var question = Question.findOne(e.target.question._id);
+      question.set('name', e.target.question.name);
+      question.set('description', e.target.question.description);
+      question.set('answers', e.target.question.answers);
+      question.set('visibility', e.target.question.visibility);
+      question.save();
+      Template.newSubjectPanel.showValidationErrors(question);
+    }
   },
-  'question-deleted question-node': function (e, template) {
-    var question = Question.findOne(e.target.question._id);
-    question.remove();
+
+  'question-deleted question-composer': function (e, template) {
+    if (e.target.question) {
+      var question = Question.findOne(e.target.question._id);
+      question.remove();
+      e.target.question = null;
+    }
   },
 });
 

@@ -79,7 +79,7 @@
         // property that holds the model element: a Question
         question: {
           type: Object,
-          value: null,
+          notify: true,
           observer: "questionChanged"
         }
       },
@@ -88,7 +88,6 @@
         this._x = options.x;
         this._y = options.y;
         this._name = options.name;
-        this.question = null;
         this.connectId = options.connectId;
         this.hypervideoId = options.hypervideoId;
       },
@@ -180,13 +179,13 @@
           ? this._bounds.y + 20 : y;
         this._moveToPos();
       },
-      remove: function() {
-        this.fire('question-deleted');
-      },
       questionChanged: function() {
         if(this.question) {
           this.id = "_"+this.question._id;
           this.questionId = this.question._id;
+        }
+        else {
+          this.remove();
         }
       },
 //============================= Private Methods ==============================//

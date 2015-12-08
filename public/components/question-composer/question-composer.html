@@ -98,7 +98,7 @@
             on-change="updateQuestionAnswer">
           </paper-input>
         </template>
-        <paper-button>
+        <paper-button on-tap="questionDeleted">
           <iron-icon icon="delete"
           class="animated fadeIn"></iron-icon>
           Deletar Questão
@@ -117,6 +117,7 @@
         },
         question: {
           type: Object,
+          notify: true,
           observer: "questionChanged"
         },
         name: {
@@ -152,6 +153,9 @@
           self.name = self.question.name;
           self.answers = self.question.answers;
         }
+        else {
+          this.remove();
+        }
       },
       updateQuestionName: function(e) {
         var input = e.target;
@@ -170,6 +174,9 @@
         var input = e.target;
         this.answers[this._answerIndex] = input.value;
         this.fire('question-changed');
+      },
+      questionDeleted: function () {
+        this.fire('question-deleted');
       },
       handleAnswerFocus: function(e){
         var value = e.target.value;
