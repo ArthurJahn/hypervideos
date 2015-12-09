@@ -103,7 +103,7 @@
             <template id="files" is="dom-repeat" items="{{fileObjects}}" as="videoFile">
               <upload-item file="{{videoFile}}" on-upload-complete="handleUploadComplete"></upload-item>
             </template>
-            <template id="files" is="dom-repeat" items="{{subvideoNodes}}" as="subvideoNode">
+            <template id="subvideos" is="dom-repeat" items="{{subvideoNodes}}" as="subvideoNode">
               <subvideo-composer subvideo="{{subvideoNode.subvideo}}"></subvideo-composer>
             </template>
           </div>
@@ -128,7 +128,7 @@
             <div class="box">
               <div class="row content">
                 <!-- Here will be displayed uploaded videos -->
-                <template id="files" is="dom-repeat" items="{{questionNodes}}" as="questionNode">
+                <template id="questions" is="dom-repeat" items="{{questionNodes}}" as="questionNode">
                   <question-composer question="{{questionNode.question}}"></question-composer>
                 </template>
               </div>
@@ -410,11 +410,13 @@
         var self = this;
         self.dragging = snInstance.dragging;
       },
-      _deletingListener: function(snInstance) {
+      _deletingListener: function() {
         var self = this;
-        var subvideosList = self.querySelectorAll('subvideo-node');
+
+        var subvideosList = self.$.nodesFrame.querySelectorAll('subvideo-node');
         self.subvideoNodes = Array.prototype.slice.call(subvideosList);
-        var questionsList = self.querySelectorAll('question-node');
+
+        var questionsList = self.$.nodesFrame.querySelectorAll('question-node');
         self.questionNodes = Array.prototype.slice.call(questionsList);
       },
       _addNodeListeners: function(node) {
@@ -425,8 +427,8 @@
         node.addEventListener('dragging-changed', function(ev){
           self._draggingListener(this);
         });
-        node.addEventListener('on-deatach', function(ev){
-          self._deletingListener(this);
+        node.addEventListener('node-removed', function(ev){
+          self._deletingListener();
         });
       },
       //connection Listener functions

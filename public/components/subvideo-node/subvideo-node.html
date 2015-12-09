@@ -99,6 +99,9 @@
         this._moveToPos();
         this.fire('subvideo-created');
       },
+      detached: function() {
+        this.fire('node-removed');
+      },
 //============================= Public Methods ===============================//
       handleConnectId: function() {
         var className = this.$.icon.className;
@@ -204,9 +207,6 @@
         this.$.icon.style.cursor = "pointer";
         this.dragging = false;
         this.fire('subvideo-changed');
-      },
-      _toggleEditing: function() {
-
       },
       _moveToPos: function() {
         this.$.wrapper.style.left = this._x - this._w/2+"px";

@@ -99,7 +99,7 @@
         this.fire('question-created');
       },
       detached: function() {
-        this.remove();
+        this.fire('node-removed');
       },
 //============================= Public Methods ===============================//
       handleConnectId: function() {
@@ -206,9 +206,6 @@
         this.$.icon.style.cursor = "pointer";
         this.dragging = false;
         this.fire('question-changed');
-      },
-      _toggleEditing: function() {
-
       },
       _moveToPos: function() {
         this.$.wrapper.style.left = this._x - this._w/2+"px";
