@@ -11,6 +11,9 @@ Template.mainMenu.helpers({
 });
 
 Template.mainMenu.events({
+  'click #home': function () {
+    Session.set('title', 'Explorar');
+  },
   'click #subjects': function () {
     Session.set('title', 'Meus Cursos');
   },
