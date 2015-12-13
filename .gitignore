@@ -1,0 +1,3 @@
+app/public/bower_components/*
+.vagrant/
+
