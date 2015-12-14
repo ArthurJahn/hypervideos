@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# install java env
+sudo aptitude install -y default-jre
+sudo aptitude install -y default-jdk
+
 # install git
 sudo aptitude install -y git
 
@@ -26,3 +30,12 @@ sudo npm install -g js-beautify
 sudo npm install -g web-component-tester
 sudo npm install -g web-component-tester-istanbul
 sudo npm install -g eslint-html-reporter
+
+#install chrome
+
+echo "deb http://dl.google.com/linux/deb/ stable non-free main" >> /etc/apt/sources.list
+
+sudo wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+sudo apt-get update
+sudo apt-get install google-chrome-stable
+
