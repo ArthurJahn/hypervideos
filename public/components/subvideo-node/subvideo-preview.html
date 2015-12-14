@@ -43,7 +43,7 @@
     <div id="wrapper"
       on-mouseover="onHover"
       on-mouseout="onHout"
-      on-tap="watchSubvideo">
+      on-tap="changeSubvideo">
       <div class="thumbnail">
         <iron-icon id="play"
         class="animated fadeIn"
@@ -65,6 +65,9 @@
           type: Object,
           value: null,
           observer: "subvideoChanged"
+        },
+        url: {
+          type: String
         }
       },
       attached: function() {
@@ -81,10 +84,14 @@
       subvideoChanged: function() {
         if(this.subvideo){
           this.id = "_"+this.subvideo._id;
+          this.fire("get-url");
         }
       },
-      watchSubvideo: function() {
-        this.fire('watch-subvideo');
+      changeSubvideo: function() {
+        this.fire('change-source',{
+          url: this.url,
+          subvideo: this.subvideo
+        });
       }
     });
   </script>

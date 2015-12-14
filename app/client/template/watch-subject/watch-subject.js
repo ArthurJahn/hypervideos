@@ -31,10 +31,10 @@ Template.watchSubject.events({
     });
     e.target.hypervideos = hypervideos;
 
-    //FIX_ME: calculate hypervideo to be seen at first
     e.target.hypervideo = hypervideos[0];
     Template.watchSubject.visitHypervideo(hypervideos[0]._id);
   },
+
   'get-subvideos hyper-player': function (e, template) {
     var hypervideo = Hypervideo.findOne({
       _id: e.target.hypervideo._id
@@ -52,11 +52,22 @@ Template.watchSubject.events({
       _id: e.target.hypervideo._id
     });
 
-    //FIX-ME: calculate next subvideo to be played
     var subvideo = hypervideo.subvideos()[0];
-    var sourceSubvideo = subvideo.get();
-    sourceSubvideo.source = subvideo.media().url();
-    e.target.subvideo = sourceSubvideo;
+    e.target.url = subvideo.media().url();
+    e.target.subvideo = subvideo.get();
+    Template.watchSubject.visitSubvideo(hypervideo._id, subvideo._id);
+  },
+
+  'visit-subvideo hyper-player': function (e, template) {
+    var hypervideo = Hypervideo.findOne({
+      _id: e.target.hypervideo._id
+    });
+    Template.watchSubject.visitSubvideo(hypervideo._id, e.target.subvideo._id);
+  },
+
+  'get-url subvideo-preview': function (e, template) {
+    var subvideo = Subvideo.findOne({_id:e.target.subvideo._id});
+    e.target.url = subvideo.media().url();
   },
 });
 
@@ -67,4 +78,14 @@ Template.watchSubject.visitHypervideo = function (hypervideoId) {
     hypervideoId: hypervideoId
   });
   visitHypervideo.save();
+  Template.mainMenu.showValidationErrors(visitHypervideo);
+};
+
+Template.watchSubject.visitSubvideo = function (hypervideoId, subvideoId) {
+  var visitedHypervideo = VisitedHypervideo.findOne({
+    hypervideoId: hypervideoId
+  });
+  visitedHypervideo.addWatchedSubvideo(subvideoId);
+  visitedHypervideo.save();
+  Template.mainMenu.showValidationErrors(visitedHypervideo);
 };

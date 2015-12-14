@@ -58,14 +58,15 @@
         },
         subvideo: {
           type: Object,
-          observer: 'subvideoChanged'
+          observer: 'subvideoChanged',
+          notify: true
         },
         notes: {
           type: String,
         },
         hypervideo: {
           type: Object,
-          observer: "hypervideoChanged",
+          observer: 'hypervideoChanged',
           notify: true
         },
         subvideos: {
@@ -88,6 +89,9 @@
             return [];
           }
         },
+        url: {
+          type: String,
+        }
       },
       hypervideoChanged: function() {
         this.fire('get-subvideos');
@@ -98,9 +102,10 @@
         this.fire('get-source-subvideo');
       },
       subvideoChanged: function() {
-        this.$.video.src = this.subvideo.source;
+        this.$.video.src = this.url;
         this.$.video.load();
         this.$.video.play();
+        this.fire('visit-subvideo');
       }
     });
   </script>

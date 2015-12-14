@@ -46,7 +46,9 @@
       <hyper-player id="player"
         hypervideo="{{hypervideo}}"
         subvideos="{{subvideos}}"
-        questions="{{questions}}">
+        questions="{{questions}}"
+        url="{{url}}"
+        subvideo="{{subvideo}}">
       </hyper-player>
       <div class="tabs-container ">
         <paper-tabs selected="{{selected}}" noink>
@@ -62,7 +64,7 @@
           </div>
           <div id="subvideosTab" class="animated fadeIn">
             <template is="dom-repeat" items="{{subvideos}}" as="subvideo">
-              <subvideo-preview subvideo="{{subvideo}}"></subvideo-preview>
+              <subvideo-preview subvideo="{{subvideo}}" on-change-source="watchSubvideo"></subvideo-preview>
             </template>
           </div>
           <div id="mapTab" class="animated fadeIn">
@@ -78,6 +80,10 @@
       is: 'subject-player',
       properties: {
         hypervideo: {
+          type: Object,
+          notify: true
+        },
+        subvideo: {
           type: Object,
           notify: true
         },
@@ -112,6 +118,10 @@
         selected: {
           type: Number,
           value: 2
+        },
+        url: {
+          type: String,
+          notify: true
         }
       },
       attached: function() {
@@ -127,6 +137,12 @@
           self.fire('get-hypervideos');
         }
       },
+      watchSubvideo: function (e) {
+        if(this.url !== e.detail.url) {
+          this.url = e.detail.url;
+          this.subvideo = e.detail.subvideo;
+        }
+      }
     });
   </script>
 </dom-module>

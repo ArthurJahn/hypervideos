@@ -31,3 +31,11 @@ Template.mainMenu.events({
     });
   }
 });
+
+Template.mainMenu.showValidationErrors = function (model) {
+  document.querySelector('#notify').message = '';
+  var errors = model.getValidationErrors();
+  for (var key in errors) {
+    document.querySelector('#notify').message = errors[key + ''];
+  }
+};

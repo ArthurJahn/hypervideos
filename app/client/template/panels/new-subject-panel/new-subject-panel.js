@@ -40,7 +40,7 @@ Template.newSubjectPanel.events({
       subject.save();
       e.target.subject = subject.get();
     }
-    Template.newSubjectPanel.showValidationErrors(subject);
+    Template.mainMenu.showValidationErrors(subject);
   },
   'subject-changed subject-composer-area': function (e, template) {
     var id = e.target.subject._id;
@@ -48,8 +48,7 @@ Template.newSubjectPanel.events({
       _id: id
     });
     subject.setName(e.target.subject.name);
-
-    Template.newSubjectPanel.showValidationErrors(subject);
+    Template.mainMenu.showValidationErrors(subject);
   },
   'subject-deleted subject-composer-area': function (e, template) {
     var subject = Subject.findOne(e.target.subject._id);
@@ -102,7 +101,7 @@ Template.newSubjectPanel.events({
       hypervideo.save();
       e.target.hypervideo = hypervideo.get();
     }
-    Template.newSubjectPanel.showValidationErrors(hypervideo);
+    Template.mainMenu.showValidationErrors(hypervideo);
   },
   'hypervideo-changed hypervideo-node': function (e, template) {
     var hypervideo = Hypervideo.findOne(e.target.hypervideo._id);
@@ -110,7 +109,7 @@ Template.newSubjectPanel.events({
     hypervideo.set('col', e.target.hypervideo.col);
     hypervideo.set('row', e.target.hypervideo.row);
     hypervideo.save();
-    Template.newSubjectPanel.showValidationErrors(hypervideo);
+    Template.mainMenu.showValidationErrors(hypervideo);
   },
   'hypervideo-deleted hypervideo-node': function (e, template) {
     var subject = Subject.findOne(e.target.hypervideo.subjectId);
@@ -160,8 +159,8 @@ Template.newSubjectPanel.events({
   // ======================== Subvideo Controll Events =======================//
   'subvideo-created subvideo-node': function (e, template) {
     var node = e.target;
-    var x = node._x,
-      y = node._y;
+    var x = node._x;
+    var y = node._y;
     var mediaId = node.mediaId;
     var name = node._name;
     var hypervideoId = node.hypervideoId;
@@ -175,8 +174,7 @@ Template.newSubjectPanel.events({
     subvideo.owner = Meteor.userId();
     subvideo.save();
     node.subvideo = subvideo.get();
-
-    Template.newSubjectPanel.showValidationErrors(subvideo);
+    Template.mainMenu.showValidationErrors(subvideo);
   },
   'subvideo-changed subvideo-composer': function (e, template) {
     if (e.target.subvideo) {
@@ -185,7 +183,7 @@ Template.newSubjectPanel.events({
       subvideo.set('description', e.target.subvideo.description);
       subvideo.set('visibility', e.target.subvideo.visibility);
       subvideo.save();
-      Template.newSubjectPanel.showValidationErrors(subvideo);
+      Template.mainMenu.showValidationErrors(subvideo);
     }
   },
 
@@ -200,8 +198,8 @@ Template.newSubjectPanel.events({
   // ======================== Question Controll Events =======================//
   'question-created question-node': function (e, template) {
     var node = e.target;
-    var x = node._x,
-      y = node._y;
+    var x = node._x;
+    var y = node._y;
     var name = node._name;
     var hypervideoId = node.hypervideoId;
     var question = new Question({
@@ -213,7 +211,7 @@ Template.newSubjectPanel.events({
     question.owner = Meteor.userId();
     question.save();
     node.question = question.get();
-    Template.newSubjectPanel.showValidationErrors(question);
+    Template.mainMenu.showValidationErrors(question);
   },
   'question-changed question-composer': function (e, template) {
     if (e.target.question) {
@@ -223,7 +221,7 @@ Template.newSubjectPanel.events({
       question.set('answers', e.target.question.answers);
       question.set('visibility', e.target.question.visibility);
       question.save();
-      Template.newSubjectPanel.showValidationErrors(question);
+      Template.mainMenu.showValidationErrors(question);
     }
   },
 

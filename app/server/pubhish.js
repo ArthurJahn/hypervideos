@@ -31,6 +31,10 @@ Meteor.publishComposite('fullSubject', function (subjectId) {
         return Hypervideo.find({
           subjectId: subject._id
         }, {
+          sort: {
+            col: 1,
+            row: 1
+          },
           transform: null
         });
       },
@@ -39,11 +43,11 @@ Meteor.publishComposite('fullSubject', function (subjectId) {
           return Subvideo.find({
             hypervideoId: hypervideo._id
           }, {
+            transform: null,
             sort: {
-              col: -1,
-              row: -1
+              x: 1,
+              y: 1
             },
-            transform: null
           });
         }
       }, {
@@ -51,7 +55,11 @@ Meteor.publishComposite('fullSubject', function (subjectId) {
           return Question.find({
             hypervideoId: hypervideo._id
           }, {
-            transform: null
+            transform: null,
+            sort: {
+              x: 1,
+              y: 1
+            },
           });
         }
       }, {
