@@ -38,14 +38,12 @@
     }
   </style>
   <template>
-    <div id="wrapper"
-      on-mouseover="onHover"
-      on-mouseout="onHout">
+    <div id="wrapper">
       <div class="info">
         <h4>{{question.name}}</h4>
         <span>{{question.description}}</span>
       </div>
-      <paper-radio-group selected="0">
+      <paper-radio-group selected="{{selectedName}}">
         <template is="dom-repeat" items="{{question.answers}}" as="answer">
           <paper-radio-button name="{{answer}}">{{answer}}</paper-radio-button>
         </template>
@@ -66,15 +64,19 @@
           value: null,
           observer: "questionChanged"
         },
-        selection: {
+        selectedName: {
           type: String,
+          observer: "questionChanged"
+        },
+        currentAnswer: {
+          type: String,
+          observer: "answerChanged"
+        },
+      },
+      answerChanged: function() {
+        if(this.currentAnswer){
+          console.log(this.currentAnswer);
         }
-      },
-      attached: function() {
-      },
-      onHover: function() {
-      },
-      onHout: function() {
       },
       questionChanged: function() {
         if(this.question){
@@ -82,7 +84,10 @@
         }
       },
       submitAnswer: function() {
-        this.fire('answer-submited');
+        this.fire('answer-submited',{
+          answer: this.currentAnswer,
+          questionId: this.question._id
+        });
       }
     });
   </script>

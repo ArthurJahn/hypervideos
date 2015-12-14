@@ -4,7 +4,6 @@ VisitedHypervideo = Astro.Class({
   name: 'VisitedHypervideo',
   collection: VisitedHypervideos,
   fields: {
-
     // id that interconnects this visited hypervideo
     // with its subject and user that is watching
     // the subject
@@ -19,7 +18,10 @@ VisitedHypervideo = Astro.Class({
     // be collected to analise subject's completion
     hypervideoId: {
       type: 'string',
-      validator: Validators.required(),
+      validator: [
+        Validators.required(),
+        Validators.unique()
+      ]
     },
 
     // if all subvideos were watched,

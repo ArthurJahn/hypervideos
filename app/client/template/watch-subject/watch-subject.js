@@ -35,6 +35,15 @@ Template.watchSubject.events({
     Template.watchSubject.visitHypervideo(hypervideos[0]._id);
   },
 
+  'answer-submited subject-player': function(e, template) {
+    var hypervideo = Hypervideo.findOne({
+      _id: e.target.hypervideo._id
+    });
+    var questionId = e.original.detail.questionId;
+    var answer = e.original.detail.answer;
+    Template.watchSubject.addQuestion(hypervideo._id, questionId, answer);
+  },
+
   'get-subvideos hyper-player': function (e, template) {
     var hypervideo = Hypervideo.findOne({
       _id: e.target.hypervideo._id
@@ -85,7 +94,23 @@ Template.watchSubject.visitSubvideo = function (hypervideoId, subvideoId) {
   var visitedHypervideo = VisitedHypervideo.findOne({
     hypervideoId: hypervideoId
   });
+  if (!visitedHypervideo) {
+    var libSubject = LibrarySubject.findOne();
+    visitedHypervideo = new VisitedHypervideo({
+      librarySubjectId: libSubject._id,
+      hypervideoId: hypervideoId
+    });
+  }
   visitedHypervideo.addWatchedSubvideo(subvideoId);
+  visitedHypervideo.save();
+  Template.mainMenu.showValidationErrors(visitedHypervideo);
+};
+
+Template.watchSubject.answerQuestion = function (hypervideoId, questionId, answer) {
+  var visitedHypervideo = VisitedHypervideo.findOne({
+    hypervideoId: hypervideoId
+  });
+  visitedHypervideo.addQuestion(questionId, answer)
   visitedHypervideo.save();
   Template.mainMenu.showValidationErrors(visitedHypervideo);
 };
