@@ -2,78 +2,109 @@
 
 # SCRIPT TO RUN METEOR APP WITH DIFFERENT FLAGS
 
-# -k or --kadira 
+# -k or --kadira
 # kadira profiler breaks CI meteor tests, in order
 # to fix this, kadira dependencies are created
 # when script is ran to provide an overall system
 # analysis, like memory and resources' usage.
 # This flag ignores all others.
 
-# -d or --development
-# development mode runs application with velocity 
+# -t or --test
+# test mode runs application with velocity
 # enabled, html test report will be presented.
+# after tests ran, app will be terminated.
 
 # -p or --production
 # production mode prevents velocity and tests to
 # be run, minifies source code and compile libs.
 
-# -s or --shadow
-# this flag runs vulcanized with shadow dom and 
-# things are still not working properly with this.
+# -s or --shady
+# this flag runs vulcanized with shady dom and
+# things are still not working properly without
+# this.
 
-    echo "lalala"
+# without any flags, the app will run in
+# development mode, with velocity html report
+# and polymer shadow dom.
+
 for i in "$@"
 do
 case $i in
-    -k |-kadira )
+    -k | --kadira )
     KADIRA=YES
     shift
     ;;
-    -s |--shadow )
-    SHADOW="${i#*=}"
+    -s | --shady )
+    SHADY=YES
     shift
     ;;
-    -p |--production )
-    LIBPATH="${i#*=}"
-    shift 
-    ;;
-    -d |--development )
-    LIBPATH="${i#*=}"
+    -p | --production )
+    PROD=YES
     shift
     ;;
-    --default)
-    DEFAULT=YES
+    -t | --test )
+    TEST=YES
     shift
     ;;
     *)
-            # unknown option
-    echo "lalala"
+        # unknown option
     ;;
 esac
 done
 
 BASEDIR=$(dirname $0)
 
-cd $BASEDIR
+cd $BASEDIR/..
 
 if [[ $KADIRA ]]; then
-    cat ../.meteor/packages > packages
+    mkdir .tmp
+    cat .meteor/packages > .tmp/packages
 
-    echo "meteorhacks:kadira-profiler" >> ../.meteor/packages
+    echo "meteorhacks:kadira-profiler" >> .meteor/packages
 
     echo "Kadira.connect('4xE5gtZb8rAqKrNz2', '7344a831-c1a1-4965-8628-7ad3f1cd83a4');" > ../app/server/kadira.js
 
     remove() {
-        rm ../app/server/kadira.js
-        rm ../.meteor/packages
-        cp packages ../.meteor/
-        rm packages
+        rm app/server/kadira.js
+        rm .meteor/packages
+        cp .tmp/packages ../.meteor/
+        rm -rf .tmp
     }
 
     # trap to remove kadira's dependencies on script termination
     trap remove INT
 
     # run meteor
-    meteor --production 
+    meteor --production
+else
+    undo() {
+        if [[ $SHADY ]]; then
+            cp .tmp/config.vulcanize config.vulcanize
+            rm -rf .tmp
+        fi
+    }
+    # if shadow enabled, configure vulcanize to use shadow DOM.
+    if [[ $SHADY ]]; then
+        mkdir .tmp
+        cat config.vulcanize > .tmp/config.vulcanize
+        sed -iold '/"useShadowDom": true,/d' config.vulcanize
+        rm config.vulcanizeold
+    fi
+
+    # then, if prod or test enabled, run meteor with flags.
+    if [[ $PROD ]]; then
+        trap undo INT
+
+        VULCANIZE=true meteor --production
+    else
+        if [[ $TEST ]]; then
+            VULCANIZE=true meteor --test
+            undo
+        else
+            # if not prod and not test, simply run meteor...
+            trap undo INT
+
+            VULCANIZE=true meteor
+        fi
+    fi
 fi
-# TODO: finish other options
