@@ -1,0 +1,79 @@
+#!/bin/bash
+
+# SCRIPT TO RUN METEOR APP WITH DIFFERENT FLAGS
+
+# -k or --kadira 
+# kadira profiler breaks CI meteor tests, in order
+# to fix this, kadira dependencies are created
+# when script is ran to provide an overall system
+# analysis, like memory and resources' usage.
+# This flag ignores all others.
+
+# -d or --development
+# development mode runs application with velocity 
+# enabled, html test report will be presented.
+
+# -p or --production
+# production mode prevents velocity and tests to
+# be run, minifies source code and compile libs.
+
+# -s or --shadow
+# this flag runs vulcanized with shadow dom and 
+# things are still not working properly with this.
+
+    echo "lalala"
+for i in "$@"
+do
+case $i in
+    -k |-kadira )
+    KADIRA=YES
+    shift
+    ;;
+    -s |--shadow )
+    SHADOW="${i#*=}"
+    shift
+    ;;
+    -p |--production )
+    LIBPATH="${i#*=}"
+    shift 
+    ;;
+    -d |--development )
+    LIBPATH="${i#*=}"
+    shift
+    ;;
+    --default)
+    DEFAULT=YES
+    shift
+    ;;
+    *)
+            # unknown option
+    echo "lalala"
+    ;;
+esac
+done
+
+BASEDIR=$(dirname $0)
+
+cd $BASEDIR
+
+if [[ $KADIRA ]]; then
+    cat ../.meteor/packages > packages
+
+    echo "meteorhacks:kadira-profiler" >> ../.meteor/packages
+
+    echo "Kadira.connect('4xE5gtZb8rAqKrNz2', '7344a831-c1a1-4965-8628-7ad3f1cd83a4');" > ../app/server/kadira.js
+
+    remove() {
+        rm ../app/server/kadira.js
+        rm ../.meteor/packages
+        cp packages ../.meteor/
+        rm packages
+    }
+
+    # trap to remove kadira's dependencies on script termination
+    trap remove INT
+
+    # run meteor
+    meteor --production 
+fi
+# TODO: finish other options
