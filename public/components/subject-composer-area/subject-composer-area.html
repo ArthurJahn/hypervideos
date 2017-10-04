@@ -316,7 +316,7 @@
         self.deleting = false;
       },
       emptyComposer: function() {
-        var nodes = this.$.hypers.querySelectorAll('hypervideo-node');
+        var nodes = this.$.hypers.shadowRoot.querySelectorAll('hypervideo-node');
         this.empty = (nodes.length < 1);
         this._toggleActionButtons();
       },
@@ -441,7 +441,7 @@
       },
       _findHypervideoNode: function(id) {
         var self = this;
-        return self.$.hypers.querySelector('#_'+id);
+        return self.$.hypers.shadowRoot.querySelector('#_'+id);
       },
       _resetConnecting: function(){
         var self = this;
