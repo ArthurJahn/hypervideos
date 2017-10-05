@@ -44,7 +44,7 @@
         });
         gridNode.className += self.gridClass;
         gridNode._bounds = self.bounds;
-        self.$.container.appendChild(gridNode);
+        Polymer.dom(self.$.container).appendChild(gridNode);
         this.setNodePos(gridNode);
       },
       removeGridChild: function(gridNode) {

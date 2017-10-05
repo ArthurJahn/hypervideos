@@ -87,10 +87,11 @@ Template.newSubjectPanel.events({
     e.target.subject.connections = subject.connections;
   },
   // ======================= Hypervideo Controll Events ======================//
-  'hypervideo-created hypervideo-node': function (e, template) {
-    var col = e.target._col,
-      row = e.target._row;
-    var subjectId = e.target._subjectId;
+  'hypervideo-created subject-composer-area': function (e, template) {
+    var hypervideoNode = e.originalEvent.path[0];
+    var col = hypervideoNode._col,
+      row = hypervideoNode._row;
+    var subjectId = hypervideoNode._subjectId;
     var hypervideo = new Hypervideo({
       col: col,
       row: row,
@@ -99,29 +100,31 @@ Template.newSubjectPanel.events({
     hypervideo.owner = Meteor.userId();
     if (hypervideo.validate()) {
       hypervideo.save();
-      e.target.hypervideo = hypervideo.get();
+      hypervideoNode.hypervideo = hypervideo.get();
     }
     Template.mainMenu.showValidationErrors(hypervideo);
   },
-  'hypervideo-changed hypervideo-node': function (e, template) {
-    var hypervideo = Hypervideo.findOne(e.target.hypervideo._id);
-    hypervideo.set('name', e.target.hypervideo.name);
-    hypervideo.set('col', e.target.hypervideo.col);
-    hypervideo.set('row', e.target.hypervideo.row);
+  'hypervideo-changed subject-composer-area': function (e, template) {
+    var hypervideoNode = e.originalEvent.path[0];
+    var hypervideo = Hypervideo.findOne(hypervideoNode.hypervideo._id);
+    hypervideo.set('name', hypervideoNode.hypervideo.name);
+    hypervideo.set('col', hypervideoNode.hypervideo.col);
+    hypervideo.set('row', hypervideoNode.hypervideo.row);
     hypervideo.save();
     Template.mainMenu.showValidationErrors(hypervideo);
   },
-  'hypervideo-deleted hypervideo-node': function (e, template) {
-    var subject = Subject.findOne(e.target.hypervideo.subjectId);
+  'hypervideo-deleted subject-composer-area': function (e, template) {
+    var hypervideoNode = e.originalEvent.path[0];
+    var subject = Subject.findOne(hypervideoNode.hypervideo.subjectId);
     if (subject) {
-      subject.removeHypervideo(e.target.hypervideo._id);
+      subject.removeHypervideo(hypervideoNode.hypervideo._id);
     }
   },
-  'upload-videos hypervideo-composer-area': function (e, template) {
-    var composer = e.target;
-    FS.Utility.eachFile(e, function (file) {
+  'upload-videos subject-composer-area': function (e, template) {
+    var composer = e.originalEvent.path[0];
+    Array.from(composer.files).forEach(function (file) {
       var tmpfile = new FS.File(file);
-      tmpfile.hypervideoId = e.target.hypervideo._id;
+      tmpfile.hypervideoId = composer.hypervideo._id;
       tmpfile.owner = Meteor.userId();
       Videos.insert(tmpfile, function (err, fileObj) {
         if (err) {
@@ -135,30 +138,32 @@ Template.newSubjectPanel.events({
       });
     });
   },
-  'connection-created hypervideo-composer-area': function (e, template) {
+  'video-connection-created subject-composer-area': function (e, template) {
     e.stopPropagation();
-    var id = e.target.hypervideo._id;
+    var composer = e.originalEvent.path[0];
+    var id = composer.hypervideo._id;
     var hypervideo = Hypervideo.findOne({
       _id: id
     });
-    var conn = e.target._connection;
+    var conn = composer._connection;
     var result = hypervideo.addConnection(conn);
     if (!result) {
-      e.target._connection = null;
+      composer._connection = null;
     }
   },
-  'connection-removed hypervideo-composer-area': function (e, template) {
-    var id = e.target.hypervideo._id;
+  'video-connection-removed subject-composer-area': function (e, template) {
+    var composer = e.originalEvent.path[0];
+    var id = composer.hypervideo._id;
     var hypervideo = Hypervideo.findOne({
       _id: id
     });
-    hypervideo.removeConnection(e.target._connection);
+    hypervideo.removeConnection(composer._connection);
     e.stopPropagation();
   },
 
   // ======================== Subvideo Controll Events =======================//
-  'subvideo-created subvideo-node': function (e, template) {
-    var node = e.target;
+  'subvideo-created subject-composer-area': function (e, template) {
+    var node = e.originalEvent.path[0];
     var x = node._x;
     var y = node._y;
     var mediaId = node.mediaId;
@@ -176,28 +181,30 @@ Template.newSubjectPanel.events({
     node.subvideo = subvideo.get();
     Template.mainMenu.showValidationErrors(subvideo);
   },
-  'subvideo-changed subvideo-composer': function (e, template) {
-    if (e.target.subvideo) {
-      var subvideo = Subvideo.findOne(e.target.subvideo._id);
-      subvideo.set('name', e.target.subvideo.name);
-      subvideo.set('description', e.target.subvideo.description);
-      subvideo.set('visibility', e.target.subvideo.visibility);
+  'subvideo-changed subject-composer-area': function (e, template) {
+    var node = e.originalEvent.path[0];
+    if (node.subvideo) {
+      var subvideo = Subvideo.findOne(node.subvideo._id);
+      subvideo.set('name', node.subvideo.name);
+      subvideo.set('description', node.subvideo.description);
+      subvideo.set('visibility', node.subvideo.visibility);
       subvideo.save();
       Template.mainMenu.showValidationErrors(subvideo);
     }
   },
 
-  'subvideo-deleted subvideo-composer': function (e, template) {
-    if (e.target.subvideo) {
-      var subvideo = Subvideo.findOne(e.target.subvideo._id);
+  'subvideo-deleted subject-composer-area': function (e, template) {
+    var node = e.originalEvent.path[0];
+    if (node.subvideo) {
+      var subvideo = Subvideo.findOne(node.subvideo._id);
       subvideo.remove();
-      e.target.subvideo = null;
+      node.subvideo = null;
     }
   },
 
   // ======================== Question Controll Events =======================//
-  'question-created question-node': function (e, template) {
-    var node = e.target;
+  'question-created subject-composer-area': function (e, template) {
+    var node = e.originalEvent.path[0];
     var x = node._x;
     var y = node._y;
     var name = node._name;
@@ -213,23 +220,25 @@ Template.newSubjectPanel.events({
     node.question = question.get();
     Template.mainMenu.showValidationErrors(question);
   },
-  'question-changed question-composer': function (e, template) {
-    if (e.target.question) {
-      var question = Question.findOne(e.target.question._id);
-      question.set('name', e.target.question.name);
-      question.set('description', e.target.question.description);
-      question.set('answers', e.target.question.answers);
-      question.set('visibility', e.target.question.visibility);
+  'question-changed subject-composer-area': function (e, template) {
+    var node = e.originalEvent.path[0];
+    if (node.question) {
+      var question = Question.findOne(node.question._id);
+      question.set('name', node.question.name);
+      question.set('description', node.question.description);
+      question.set('answers', node.question.answers);
+      question.set('visibility', node.question.visibility);
       question.save();
       Template.mainMenu.showValidationErrors(question);
     }
   },
 
-  'question-deleted question-composer': function (e, template) {
-    if (e.target.question) {
-      var question = Question.findOne(e.target.question._id);
+  'question-deleted subject-composer-area': function (e, template) {
+    var node = e.originalEvent.path[0];
+    if (node.question) {
+      var question = Question.findOne(node.question._id);
       question.remove();
-      e.target.question = null;
+      node.question = null;
     }
   },
 });

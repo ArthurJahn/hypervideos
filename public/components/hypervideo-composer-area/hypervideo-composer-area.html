@@ -260,7 +260,7 @@
       },
       connectIdChanged: function (newConnectId) {
         var nodes = 'subvideo-node, connection-node, question-node';
-        var list = this.querySelectorAll(nodes);
+        var list = Polymer.dom(this).querySelectorAll(nodes);
         var length = list.length;
         for(var i=0; i<length; i++) {
           var element = list[i];
@@ -307,8 +307,8 @@
         }
         var subvideoNode = new SubvideoNode(options);
         self._addNodeListeners(subvideoNode);
-        self.$.nodesFrame.appendChild(subvideoNode);
-        var subvideosList = self.$.nodesFrame.querySelectorAll('subvideo-node');
+        Polymer.dom(self.$.nodesFrame).appendChild(subvideoNode);
+        var subvideosList = Polymer.dom(self.$.nodesFrame).querySelectorAll('subvideo-node');
         self.subvideoNodes = Array.prototype.slice.call(subvideosList);
 
         pos = self._nextNodePos();
@@ -316,13 +316,12 @@
         options.y = pos.y;
         var questionNode = new QuestionNode(options);
         self._addNodeListeners(questionNode);
-        self.$.nodesFrame.appendChild(questionNode);
-        var questionsList = self.$.nodesFrame.querySelectorAll('question-node');
+        Polymer.dom(self.$.nodesFrame).appendChild(questionNode);
+        var questionsList = Polymer.dom(self.$.nodesFrame).querySelectorAll('question-node');
         self.questionNodes = Array.prototype.slice.call(questionsList);
       },
       _nodesCount: function() {
-        var self = this;
-        var list = self.querySelectorAll('subvideo-node, question-node');
+        var list = Polymer.dom(this).querySelectorAll('subvideo-node, question-node');
         return list.length;
       },
       _nextNodePos: function() {
@@ -338,13 +337,13 @@
         var self = this;
         if(firstId !== secondId) {
           this._connection = {first: firstId, second: secondId};
-          this.fire('connection-created');
+          this.fire('video-connection-created');
           if(this._connection){
             var connNode = new ConnectionNode(this._connection);
             connNode.addEventListener('detached', function(ev){
               self._connectionListener(this);
             });
-            self.$.conns.appendChild(connNode);
+            Polymer.dom(self.$.conns).appendChild(connNode);
             self._resetConnecting();
           }
           self._resetConnecting();
@@ -357,7 +356,7 @@
         var self = this;
         var canvasScale = 3;
         var lineWidth = 4;
-        var connections = self.$.conns.querySelectorAll('connection-node');
+        var connections = Polymer.dom(self.$.conns).querySelectorAll('connection-node');
         var canvas = self.$.canvas;
         canvas.width  = canvasScale * canvas.offsetWidth;
         canvas.height = canvasScale * canvas.offsetHeight;
@@ -385,7 +384,7 @@
       },
       _findNode: function(id) {
         var self = this;
-        return self.$.nodesFrame.querySelector('#_'+id);
+        return Polymer.dom(self.$.nodesFrame).querySelector('#_'+id);
       },
       _resetConnecting: function(){
         var self = this;
@@ -413,10 +412,10 @@
       _deletingListener: function() {
         var self = this;
 
-        var subvideosList = self.$.nodesFrame.querySelectorAll('subvideo-node');
+        var subvideosList = Polymer.dom(self.$.nodesFrame).querySelectorAll('subvideo-node');
         self.subvideoNodes = Array.prototype.slice.call(subvideosList);
 
-        var questionsList = self.$.nodesFrame.querySelectorAll('question-node');
+        var questionsList = Polymer.dom(self.$.nodesFrame).querySelectorAll('question-node');
         self.questionNodes = Array.prototype.slice.call(questionsList);
       },
       _addNodeListeners: function(node) {
@@ -435,19 +434,19 @@
       _connectionListener: function(connInstance) {
         var self = this;
         this._connection = connInstance.connection;
-        this.fire('connection-removed');
+        this.fire('video-connection-removed');
         self._drawConnections();
       },
       _showConnection: function(connection, firstPos, secondPos) {
         var self = this;
         var xmid = (firstPos.x + secondPos.x)/2;
         var ymid = (firstPos.y + secondPos.y)/2;
-        var list = self.querySelectorAll('connection-node');
+        var list = Polymer.dom(self).querySelectorAll('connection-node');
         for(var i=0; i<list.length; i++) {
           var connNode = list[i];
           if(connNode.connection === connection) {
-              connNode.setPos(xmid, ymid);
-              return;
+            connNode.setPos(xmid, ymid);
+            return;
           }
         }
       }

@@ -273,13 +273,12 @@
         this.emptyComposer();
       },
       connectIdChanged: function (newConnectId) {
-        var list = this.$.nodes.querySelectorAll(
-          'hypervideo-node, connection-node');
-        var length = list.length;
-        for(var i=0; i<length; i++) {
-          var element = list[i];
+        var connections = Array.from(Polymer.dom(self.$.conns).querySelectorAll('connection-node'));
+        var list = Array.from(this.$.hypers.shadowRoot.querySelectorAll('hypervideo-node'));
+        list.push.apply(list, connections);
+        list.forEach(function(element) {
           element.connectId = newConnectId;
-        }
+        });
       },
       draggingChanged: function (newDragging) {
         var self = this;
@@ -371,7 +370,7 @@
             connNode.addEventListener('detached', function(e){
               self._connectionListener(this);
             });
-            self.$.conns.appendChild(connNode);
+            Polymer.dom(self.$.conns).appendChild(connNode);
             self._resetConnecting();
             this._connection = null;
           }
@@ -381,7 +380,7 @@
       },
       _drawConnections: function() {
         var self = this;
-        var connections = self.$.conns.querySelectorAll('connection-node');
+        var connections = Polymer.dom(self.$.conns).querySelectorAll('connection-node');
 
         var canvas = self.$.canvas;
         canvas.width  = self._canvasScale * canvas.offsetWidth;
@@ -440,10 +439,9 @@
         self.dragging = hnInstance.dragging;
       },
       _findHypervideoNode: function(id) {
-        var self = this;
-        return self.$.hypers.shadowRoot.querySelector('#_'+id);
+        return this.$.hypers.shadowRoot.querySelector(`#_${id}`);
       },
-      _resetConnecting: function(){
+      _resetConnecting: function() {
         var self = this;
         self.connectId = null;
         self._firstId = null;
@@ -498,8 +496,8 @@
         // Remove hypervideo-nodes in DOM
         // Remove connection-nodes in DOM
         self.$.subjectName.value = '';
-        var nodes = self.$.hypers.querySelectorAll('hypervideo-node');
-        var conns = self.$.conns.querySelectorAll('connection-node');
+        var nodes = self.$.hypers.shadowRoot.querySelectorAll('hypervideo-node');
+        var conns = Polymer.dom(self.$.conns).querySelectorAll('connection-node');
         for (var i = 0; i < nodes.length; i++) {
           var node = nodes[i];
           self.$.hypers.removeGridChild(node);
@@ -536,7 +534,7 @@
             connNode.addEventListener('detached', function(ev){
               self._connectionListener(this);
             });
-            self.$.conns.appendChild(connNode);
+            Polymer.dom(self.$.conns).appendChild(connNode);
             self._resetConnecting();
           });
         }

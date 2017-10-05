@@ -14,12 +14,37 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
-
 <!-- Custom implemented components -->
 <link rel="import" href="../../components/hypervideo-composer-area/hypervideo-composer-area.html">
 
 <dom-module id="hypervideo-node">
   <style is="custom-style">
+    @keyframes shake {
+      from, to {
+        transform: translate3d(0, 0, 0);
+      }
+
+      10%, 30%, 50%, 70%, 90% {
+        transform: translate3d(-5px, 0, 0);
+      }
+
+      20%, 40%, 60%, 80% {
+        transform: translate3d(5px, 0, 0);
+      }
+    }
+    .shake {
+      animation-name: shake;
+    }
+    .animated {
+      -webkit-animation-duration: 1s;
+      animation-duration: 1s;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
+    }
+    .animated.infinite {
+      -webkit-animation-iteration-count: infinite;
+      animation-iteration-count: infinite;
+    }
     #wrapper {
       position: absolute;
     }
@@ -225,7 +250,7 @@
           this.$.icon.style.background = "#FFC107";
           this._togglePreview();
           if (this.connectId === this.hypervideoId) {
-            if(!this._shaking){
+            if(!this._shaking) {
               this._shaking = true;
               this.$.icon.className = className.concat(" animated infinite shake");
             }
@@ -279,7 +304,6 @@
       },
       onEditTap: function(e) {
         this._openComposer();
-
       },
       onHover: function(e) {
         this.showIcons();
